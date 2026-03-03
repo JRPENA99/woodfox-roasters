@@ -1,0 +1,164 @@
+:root{
+  --bg: #0f0f10;
+  --ink: #f2e6d6;
+  --ink-soft: rgba(242,230,214,.78);
+  --cream: #f2e9dc;
+  --line: rgba(242,230,214,.14);
+  --shadow: 0 20px 60px rgba(0,0,0,.45);
+  --radius: 18px;
+  --max: 1100px;
+  --accent: #d77a2b;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  color: var(--ink);
+  background: var(--bg);
+}
+a{ color: inherit; text-decoration: none; }
+.container{ width: min(var(--max), calc(100% - 48px)); margin: 0 auto; }
+.narrow{ width: min(760px, calc(100% - 48px)); }
+.section{ padding: 84px 0; }
+
+.section-light{
+  background: linear-gradient(180deg, #f2e9dc, #ece2d2);
+  color: #1b1a18;
+}
+.section-dark{
+  background: radial-gradient(1200px 600px at 20% 10%, rgba(255,255,255,.06), transparent 60%),
+              radial-gradient(900px 500px at 85% 30%, rgba(215,122,43,.08), transparent 55%),
+              #0f0f10;
+}
+
+.eyebrow{
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 12px;
+  opacity: .75;
+  margin: 0 0 12px;
+}
+
+h1, h2, h3{
+  font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+  font-weight: 500;
+  letter-spacing: .01em;
+  margin: 0 0 12px;
+}
+h1{
+  font-size: clamp(44px, 6vw, 78px);
+  line-height: .95;
+}
+h2{
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.05;
+}
+.lead{
+  font-size: 18px;
+  line-height: 1.65;
+  opacity: .92;
+  margin: 0;
+}
+
+.nav-wrap{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(15,15,16,.88), rgba(15,15,16,.35));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.nav{
+  width: min(var(--max), calc(100% - 48px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.brand-mark{
+  width: 34px; height: 28px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(242,230,214,.25);
+  border-radius: 10px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.hero{
+  position: relative;
+  min-height: 88vh;
+  display: grid;
+  align-items: end;
+  padding-top: 68px;
+}
+.hero-bg{
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(1200px 600px at 70% 30%, rgba(0,0,0,.10), rgba(0,0,0,.86)),
+    url("https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=2400&q=80");
+  background-size: cover;
+  background-position: center;
+}
+.hero-overlay{
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(15,15,16,.25) 0%, rgba(15,15,16,.86) 70%, #0f0f10 100%);
+}
+.hero-content{
+  position: relative;
+  padding: 90px 0 64px;
+}
+.hero-sub{
+  margin-top: 16px;
+  max-width: 560px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.btn{
+  display: inline-flex;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(242,230,214,.18);
+  background: rgba(242,230,214,.12);
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn:hover{ background: rgba(242,230,214,.18); }
+
+.cards{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+.card{
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(255,255,255,.03);
+}
+.card-img{
+  height: 210px;
+  background-size: cover;
+  background-position: center;
+}
+.img-beans-1{ background-image: url("https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1600&q=80"); }
+.img-beans-2{ background-image: url("https://images.unsplash.com/photo-1507133750040-4a8f57021571?auto=format&fit=crop&w=1600&q=80"); }
+.img-beans-3{ background-image: url("https://images.unsplash.com/photo-1459755486867-b55449bb39ff?auto=format&fit=crop&w=1600&q=80"); }
+
+@media (max-width: 900px){
+  .cards{ grid-template-columns: 1fr; }
+}
