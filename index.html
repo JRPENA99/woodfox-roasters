@@ -1,196 +1,236 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Woodfox Roasters</title>
-  <meta name="description" content="Small-batch roasting. Fresh distribution. Wholesale supply and pop-up coffee events." />
+  <meta
+    name="description"
+    content="Woodfox Roasters — small-batch roasting, fresh distribution, wholesale supply, and pop-up coffee experiences."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- NAV -->
-  <header class="nav-wrap">
-    <nav class="nav">
-      <a class="brand" href="#">
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="brand">
         <span class="brand-mark">WF</span>
         <span class="brand-text">WOODFOX ROASTERS</span>
       </a>
 
-      <div class="nav-links">
+      <nav class="nav-links">
         <a href="#roasts">Roasts</a>
         <a href="#wholesale">Wholesale</a>
         <a href="#events">Pop-Ups</a>
-        <a href="#contact" class="pill">Contact</a>
-      </div>
-    </nav>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
   </header>
 
   <main>
 
-    <!-- HERO -->
     <section class="hero">
-      <div class="hero-bg"></div>
       <div class="hero-overlay"></div>
-
-      <div class="hero-content container">
-        <div class="hero-left">
-          <h1>Roasted<br>by Fire.</h1>
-
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>Roasted by Fire.</h1>
           <p class="hero-sub">
-            Small-batch coffee with a wild edge — built for daily ritual, crafted for partners who care about freshness.
+            Small-batch coffee with a wild edge — built for daily ritual
+            and crafted for partners who care about freshness.
           </p>
 
           <div class="hero-actions">
-            <a class="btn" href="#roasts">Explore Roasts</a>
-            <a class="btn btn-outline" href="#wholesale">Wholesale Inquiries</a>
-            <a class="btn btn-ghost" href="#contact">Join the List</a>
+            <a href="#roasts" class="btn btn-primary">Explore Roasts</a>
+            <a href="#wholesale" class="btn btn-secondary">Wholesale Supply</a>
+            <a href="#footer" class="btn btn-secondary">Join the List</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
-    <section class="section section-light" id="about">
-      <div class="container narrow">
-        <p class="eyebrow">About The Roastery</p>
+    <section class="about-band">
+      <div class="container about-inner">
+        <p class="eyebrow">About the Roastery</p>
         <h2>Crafted by Fire. Delivered Fresh.</h2>
-        <p class="lead">
+        <p class="about-text">
           Roasted in small batches, carefully monitored, and delivered fresh.
           Consistent profiles. Simple ordering. Built for cafés, offices, and events.
         </p>
       </div>
     </section>
 
-    <!-- ROASTS -->
-    <section class="section" id="roasts">
+    <section class="roasts-wholesale" id="roasts">
       <div class="container">
         <div class="section-head">
           <p class="eyebrow">Our Roasts</p>
-          <h2>Balanced blends and seasonal drops.</h2>
+          <h2>Balanced blends &amp; seasonal drops.</h2>
         </div>
 
-        <div class="cards">
-          <article class="card">
-            <div class="card-img img-beans-1"></div>
+        <div class="roast-grid">
+          <article class="roast-card">
+            <div class="card-image">
+              <img src="images/beans.jpg" alt="Woodfox House Blend coffee beans" />
+            </div>
             <div class="card-body">
               <h3>Woodfox House Blend</h3>
-              <p>Smooth &amp; Balanced</p>
-              <a class="mini-btn" href="#contact">Inquire</a>
+              <ul class="notes">
+                <li>Chocolate</li>
+                <li>Caramel</li>
+                <li>Balanced finish</li>
+              </ul>
+              <a href="#contact" class="card-btn">Inquire</a>
             </div>
           </article>
 
-          <article class="card">
-            <div class="card-img img-beans-2"></div>
+          <article class="roast-card">
+            <div class="card-image">
+              <img src="images/latte.jpg" alt="Ember Dark roast coffee" />
+            </div>
             <div class="card-body">
               <h3>Ember Dark</h3>
-              <p>Bold &amp; Smoky</p>
-              <a class="mini-btn" href="#contact">Inquire</a>
+              <ul class="notes">
+                <li>Bold</li>
+                <li>Smoky</li>
+                <li>Roasted walnut</li>
+              </ul>
+              <a href="#contact" class="card-btn">Inquire</a>
             </div>
           </article>
 
-          <article class="card">
-            <div class="card-img img-beans-3"></div>
+          <article class="roast-card">
+            <div class="card-image">
+              <img src="images/cup-beans.jpg" alt="Firelight roast coffee" />
+            </div>
             <div class="card-body">
-              <h3>Foxlight</h3>
-              <p>Bright &amp; Crisp</p>
-              <span class="badge">Coming Soon</span>
+              <h3>Firelight</h3>
+              <ul class="notes">
+                <li>Bright</li>
+                <li>Crisp</li>
+                <li>Coming soon</li>
+              </ul>
+              <a href="#contact" class="card-btn">Inquire</a>
             </div>
           </article>
         </div>
-      </div>
-    </section>
 
-    <!-- WHOLESALE -->
-    <section class="section section-dark" id="wholesale">
-      <div class="container split">
-        <div>
-          <p class="eyebrow">Wholesale Coffee Supply</p>
-          <h2>Fresh roasted coffee, delivered on a reliable schedule.</h2>
-          <p class="lead">
-            Wholesale partners get consistent roast profiles, clear ordering, and quick turnaround.
-            We keep it simple and we keep it fresh.
-          </p>
-          <a class="btn" href="#contact">Partner With Us</a>
-        </div>
+        <div class="wholesale-block" id="wholesale">
+          <div class="wholesale-copy">
+            <p class="eyebrow">Wholesale Coffee Supply</p>
+            <h2>Fresh roasted coffee. Delivered on a reliable schedule.</h2>
+            <ul class="wholesale-list">
+              <li>Consistent roast profiles</li>
+              <li>Clear ordering</li>
+              <li>Reliable delivery</li>
+            </ul>
+            <a href="#contact" class="btn btn-primary">Partner With Us</a>
+          </div>
 
-        <div class="photo photo-roaster">
-          <div class="photo-overlay"></div>
-          <p class="photo-caption">Small-batch roasting • Fresh distribution</p>
+          <div class="wholesale-media">
+            <img src="images/wholesale-coffee.jpg" alt="Wholesale coffee service and fresh roasted coffee" />
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- EVENTS -->
-    <section class="section section-light" id="events">
+    <section class="events-section" id="events">
       <div class="container">
-        <div class="section-head">
-          <p class="eyebrow">Pop-ups &amp; Events</p>
+        <div class="section-head section-head--center">
+          <p class="eyebrow">Events &amp; Community</p>
           <h2>Bring Woodfox to your space.</h2>
         </div>
 
         <div class="event-grid">
-          <div class="event">
-            <h3>Markets</h3>
-            <p>Seasonal pop-ups with rotating featured roasts.</p>
-          </div>
-          <div class="event">
-            <h3>Private Events</h3>
-            <p>Small gatherings, weddings, or corporate mornings.</p>
-          </div>
-          <div class="event">
-            <h3>Collabs</h3>
-            <p>Menu drops, café weekends, and creative partnerships.</p>
-          </div>
+          <article class="event-card">
+            <div class="event-image">
+              <img src="images/market.jpg" alt="Woodfox coffee market pop-up" />
+            </div>
+            <div class="event-body">
+              <h3>Markets</h3>
+              <p>Seasonal pop-ups with rotating roasts.</p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-image">
+              <img src="images/private-event.jpg" alt="Private coffee event" />
+            </div>
+            <div class="event-body">
+              <h3>Private Events</h3>
+              <p>Small gatherings, weddings, and corporate mornings.</p>
+            </div>
+          </article>
+
+          <article class="event-card">
+            <div class="event-image">
+              <img src="images/collab.jpg" alt="Woodfox coffee collaboration event" />
+            </div>
+            <div class="event-body">
+              <h3>Collabs</h3>
+              <p>Café takeovers and menu partnerships.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="events-action">
+          <a href="#contact" class="btn btn-primary">Inquire Here</a>
         </div>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section class="section" id="contact">
-      <div class="container narrow">
-        <p class="eyebrow">Contact</p>
-        <h2>Let’s talk coffee.</h2>
-        <p class="lead">Wholesale, events, or general questions — send a note and we’ll reply.</p>
+    <section class="contact-section" id="contact">
+      <div class="container contact-wrap">
+        <div class="contact-copy">
+          <p class="eyebrow">Contact</p>
+          <h2>Let’s talk coffee.</h2>
+          <p>
+            Wholesale partners, events, or general questions — send a note and
+            we’ll reply shortly.
+          </p>
+        </div>
 
-        <form class="form">
-          <div class="row">
-            <label>
-              Name
-              <input type="text" placeholder="Your name" required />
-            </label>
-            <label>
-              Email
-              <input type="email" placeholder="you@email.com" required />
-            </label>
+        <form class="contact-form">
+          <div class="form-row">
+            <input type="text" name="name" placeholder="Name" />
+            <input type="email" name="email" placeholder="Email" />
           </div>
-
-          <label>
-            Message
-            <textarea rows="5" placeholder="Tell us what you need" required></textarea>
-          </label>
-
-          <button class="btn" type="submit">Send Message</button>
-          <p class="fineprint">No spam. Just coffee.</p>
+          <textarea name="message" rows="6" placeholder="Message"></textarea>
+          <button type="submit" class="btn btn-primary">Send Message</button>
         </form>
       </div>
     </section>
 
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div>
-        <div class="footer-brand">WOODFOX ROASTERS</div>
-        <div class="fineprint">Small-batch roasting • Fresh distribution</div>
+  <footer class="site-footer" id="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h3>WOODFOX<br>ROASTERS</h3>
+        <p>Small-batch roasting • Fresh distribution</p>
+        <p>Houston, Texas</p>
       </div>
+
       <div class="footer-links">
         <a href="#roasts">Roasts</a>
         <a href="#wholesale">Wholesale</a>
         <a href="#events">Pop-Ups</a>
         <a href="#contact">Contact</a>
       </div>
+
+      <div class="footer-join">
+        <p>Stay updated on new drops &amp; events</p>
+        <form class="join-form">
+          <input type="email" placeholder="Enter your email" />
+          <button type="submit">Join</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© 2025 Woodfox Roasters • Crafted by Fire</p>
     </div>
   </footer>
 
