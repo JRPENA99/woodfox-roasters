@@ -444,8 +444,13 @@ url("hero-coffee.jpg") right center / cover no-repeat;
 .events-section {
   position: relative;
   padding: 110px 0 120px;
+
   background:
-    linear-gradient(180deg, #0a0908 0%, #090807 100%);
+    radial-gradient(circle at 20% 20%, rgba(169, 99, 43, 0.18), transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(120, 60, 25, 0.16), transparent 35%),
+    linear-gradient(180deg, #0b0908 0%, #080706 100%);
+}.events-section h2 {
+  text-shadow: 0 6px 20px rgba(0,0,0,0.45);
 }
 
 .events-section::before {
@@ -770,49 +775,8 @@ url("hero-coffee.jpg") right center / cover no-repeat;
 
 /* mobile site */
 
+/* mobile site */
 
-@media (max-width: 768px) {
-  .hero {
-    min-height: 78vh;
-    background-position: 68% center;
-    background-size: cover;
-  }
-
-  .hero-inner {
-    min-height: 78vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 24px;
-  }
-
-  .hero-text {
-    max-width: 320px;
-    margin-top: 40px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .hero-text h1 {
-    font-size: 2.6rem;
-    line-height: 0.95;
-    margin-bottom: 14px;
-  }
-
-  .hero-text p,
-  .subtitle,
-  .hero-copy {
-    font-size: 0.98rem;
-    line-height: 1.6;
-  }
-
-  .hero-actions,
-  .hero-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-}
 .hero {
   position: relative;
 }
@@ -835,4 +799,53 @@ url("hero-coffee.jpg") right center / cover no-repeat;
 .hero-text {
   position: relative;
   z-index: 2;
+}
+
+@media (max-width: 768px) {
+
+  .hero {
+    min-height: 72vh;
+    background-position: 70% center;
+    background-size: cover;
+  }
+
+  .hero-inner {
+    min-height: 72vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 110px 24px 24px;
+    position: relative;
+  }
+
+  .hero-text {
+    position: relative;
+    left: 0;
+    margin: 0;
+    max-width: 260px;
+    z-index: 3;
+    transform: none;
+  }
+
+  .hero-text h1 {
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .hero-text p,
+  .subtitle,
+  .hero-copy {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .hero-buttons,
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
 }
