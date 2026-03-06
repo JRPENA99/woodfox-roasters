@@ -145,6 +145,7 @@ url("hero-coffee.jpg") right center / cover no-repeat;
 
 .hero-copy {
   max-width: 620px;
+  margin-left: 120px;
 }
 
 .hero h1 {
