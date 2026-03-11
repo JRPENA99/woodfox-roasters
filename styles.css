@@ -786,3 +786,14 @@ rgba(0,0,0,.5)
 z-index:-1;
 
 }
+
+.brand img {
+  height: 28px;   /* adjust as needed */
+  width: auto;
+  display: block;
+}
+
+.brand img {
+  height: 34px;
+}
+
