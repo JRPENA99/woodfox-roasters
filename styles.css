@@ -797,3 +797,39 @@ z-index:-1;
   height: 34px;
 }
 
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Give logo its own space */
+.brand {
+  flex: 0 0 auto;
+}
+
+/* Allow navs to flex */
+.nav-left,
+.nav-right {
+  flex: 1;
+}
+
+/* Align nav text */
+.nav-left {
+  justify-content: flex-start;
+}
+
+.nav-right {
+  justify-content: flex-end;
+}
+
+.brand img {
+  height: 64px;
+  width: auto;
+  display: block;
+}
