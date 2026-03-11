@@ -788,14 +788,12 @@ z-index:-1;
 }
 
 .brand img {
-  height: 28px;   /* adjust as needed */
+  height: 20px;   /* adjust as needed */
   width: auto;
   display: block;
 }
 
-.brand img {
-  height: 34px;
-}
+
 
 .header-inner {
   display: grid;
@@ -808,10 +806,7 @@ z-index:-1;
   justify-content: space-between;
 }
 
-/* Give logo its own space */
-.brand {
-  flex: 0 0 auto;
-}
+
 
 /* Allow navs to flex */
 .nav-left,
@@ -826,10 +821,4 @@ z-index:-1;
 
 .nav-right {
   justify-content: flex-end;
-}
-
-.brand img {
-  height: 64px;
-  width: auto;
-  display: block;
 }
