@@ -54,15 +54,16 @@ img {
 .brand {
   display: flex;
   justify-content: center;
-  margin-bottom: 18px;
-  text-decoration: none;
+  align-items: center;
+  height: 120px;     /* header logo zone height */
+  overflow: hidden;
+  margin-bottom: 12px;
 }
 
 .brand img {
-  height: 120px;      /* 🔥 change this for size */
+  height: 220px;     /* controls logo size */
   width: auto;
-  max-width: 90vw;
-  display: block;
+  transform: translateY(-38%);
 }
 
 /* Nav row */
