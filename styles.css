@@ -672,7 +672,7 @@ img {
   }
 
   .header-inner {
-  height: 120px;
+  height: 110px;
     padding: 18px 16px;
     flex-direction: column;
     gap: 14px;
@@ -684,9 +684,11 @@ img {
     order: -1;
   }
 
-  .brand img {
-    height: 95px;
-  }
+ .brand img {
+  height: 72px;   /* ← ideal size */
+  width: auto;
+  display: block;
+}
 
   .nav {
     justify-content: center;
