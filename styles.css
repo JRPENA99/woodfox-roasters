@@ -64,7 +64,7 @@ img {
   position: relative;
   width: min(100%, 1600px);
   margin: 0 auto;
-  height: 104px;
+  height: 120px;
   padding: 0 28px;
   display: flex;
   align-items: center;
@@ -106,11 +106,7 @@ img {
   text-decoration: none;
 }
 
-.brand img {
-  height: 110px;   /* BIG logo */
-  width: auto;
-  display: block;
-}
+
 
 
 
@@ -213,6 +209,10 @@ img {
     rgba(0, 0, 0, 0.25)
   );
 }
+
+
+
+
 
 /* PRODUCTS */
 .products-section {
@@ -342,6 +342,10 @@ img {
 .gallery-card.small {
   aspect-ratio: 0.85 / 1;
 }
+
+
+
+
 
 /* ABOUT PAGE */
 .about-page {
@@ -521,6 +525,10 @@ img {
   border-radius: 999px;
 }
 
+
+
+
+
 /* CONTACT PAGE */
 .contact-page {
   background: #f3f0ea;
@@ -677,7 +685,7 @@ img {
   }
 
   .brand img {
-    height: 42px;
+    height: 95px;
   }
 
   .nav {
