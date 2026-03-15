@@ -677,17 +677,17 @@ img {
     flex-direction: column;
     gap: 14px;
   }
-
-  .brand {
-    position: static;
-    transform: none;
-    order: -1;
-  }
-
- .brand img {
-  height: 72px;   /* ← ideal size */
+.brand img {
+  height: 70px;        /* slightly smaller */
   width: auto;
   display: block;
+}
+
+.brand {
+  position: absolute;
+  left: 50%;
+  top: 58%;            /* pushes logo DOWN a bit */
+  transform: translate(-50%, -50%);
 }
 
   .nav {
