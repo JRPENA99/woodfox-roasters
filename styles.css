@@ -787,3 +787,12 @@ img {
   font-weight: 500;
   letter-spacing: 1px;
 }
+
+header {
+  padding: 35px 50px;
+}
+
+.brand img {
+  height: 160px;   /* ← change this number */
+  width: auto;
+}
