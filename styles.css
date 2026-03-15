@@ -686,7 +686,7 @@ img {
 .brand {
   position: absolute;
   left: 50%;
-  top: 58%;            /* pushes logo DOWN a bit */
+  top: 65%;              /* ⬅ moves logo DOWN */
   transform: translate(-50%, -50%);
 }
 
