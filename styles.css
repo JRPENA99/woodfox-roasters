@@ -55,13 +55,13 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;     /* header logo zone height */
+  height: 200px;     /* header logo zone height */
   overflow: hidden;
   margin-bottom: 12px;
 }
 
 .brand img {
-  height: 320px;     /* controls logo size */
+  height: 100px;     /* controls logo size */
   width: auto;
   transform: translateY(-38%);
 }
