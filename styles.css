@@ -42,8 +42,8 @@ img {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #ece8d8;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: #111;        /* black */
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 /* top strip */
@@ -88,7 +88,7 @@ img {
 }
 
 .nav a {
-  color: #111;
+  color: #fff;
   text-decoration: none;
   font-size: 11px;
   font-weight: 700;
@@ -107,7 +107,7 @@ img {
 }
 
 .brand img {
-  height: 68px;
+  height: 110px;   /* BIG logo */
   width: auto;
   display: block;
 }
@@ -664,7 +664,7 @@ img {
   }
 
   .header-inner {
-    height: auto;
+  height: 120px;
     padding: 18px 16px;
     flex-direction: column;
     gap: 14px;
