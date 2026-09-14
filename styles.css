@@ -106,7 +106,12 @@ img {
   text-decoration: none;
 }
 
-
+.brand img {
+  height: 70px;
+  width: auto;
+  display: block;
+  transform: translateY(10px);
+}
 
 
 
