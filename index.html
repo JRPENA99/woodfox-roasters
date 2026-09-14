@@ -1,224 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Woodfox Roasters</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Woodfox Coffee</title>
+
   <meta
     name="description"
-    content="Woodfox Roasters — specialty coffee, clean design, and fresh roasted coffee for daily ritual."
+    content="Woodfox Coffee specializes in Mexican specialty coffee, cultivated in Mexico and roasted fresh in Houston."
   />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="stylesheet" href="home-v2.css" />
 </head>
+
+
 <body>
 
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="site-header">
+
+    <div class="header-inner">
+
+      <nav class="nav nav-left">
+        <a href="#coffee">Coffee</a>
+        <a href="#origins">Origins</a>
+        <a href="about.html">Our Story</a>
+      </nav>
 
 
+      <a href="index.html" class="brand" aria-label="Woodfox Coffee Home">
+        <span class="brand-main">WOODFOX</span>
+        <span class="brand-sub">COFFEE</span>
+      </a>
 
-<header class="site-header">
 
+      <nav class="nav nav-right">
+        <a href="contact.html">Wholesale</a>
+        <a href="contact.html">Contact</a>
 
+        <a href="#" class="shop-link">
+          Shop
+        </a>
+      </nav>
 
-  <div class="header-inner">
+    </div>
 
-    <!-- LEFT NAV -->
-    <nav class="nav nav-left">
-      <a href="about.html">ABOUT US</a>
-      <a href="#shop">SHOP</a>
-      <a href="#beans">BEANS</a>
-      <a href="contact.html">WHOLESALE</a>
-    </nav>
-
-    <!-- CENTER LOGO -->
-    <a href="index.html" class="brand">
-      <img src="woodfox-header-logo.png" alt="Woodfox Roasters Logo">
-    </a>
-
-    <!-- RIGHT NAV -->
-    <nav class="nav nav-right">
-      <a href="#cart">CART (0)</a>
-      <a href="#en">EN</a>
-      <a href="#es">ES</a>
-    </nav>
-
-  </div>
-</header>
-
+  </header>
 
 
 
   <main>
-    <section class="hero-section">
-      <div class="hero-copy">
-        <h1>
-         ROASTED <br />
-          IN HOUSTON.<br />
-        </h1>
-        <p class="hero-sub">
-          A brand of specialty coffee. Roasted fresh for daily ritual,
-          local supply, and clean modern coffee experiences.
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+      <video
+        class="hero-video"
+        autoplay
+        muted
+        loop
+        playsinline
+      >
+   <source src="hero-harvest.mp4" type="video/mp4" />
+      </video>
+
+
+      <div class="hero-overlay"></div>
+
+
+      <div class="hero-watermark" aria-hidden="true">
+        WOODFOX
+      </div>
+
+
+      <div class="hero-content">
+
+        <p class="eyebrow">
+          From Mexico to Houston
         </p>
-<a href="about.html" class="hero-btn">ABOUT US</a>
+
+        <h1>
+          Coffee rooted<br />
+          in Mexico.
+        </h1>
+
+        <p class="hero-description">
+          Specialty coffee from Mexico, developed and roasted fresh in Houston.
+        </p>
+
+
+        <div class="hero-actions">
+
+          <a href="#coffee" class="button button-light">
+            Explore Coffee
+          </a>
+
+          <a href="#origins" class="button button-outline">
+            Our Origins
+          </a>
+
+        </div>
+
       </div>
 
-     
 
-<video autoplay muted loop playsinline class="hero-video">
-  <source src="latte.mp4" type="video/mp4">
-</video>
+      <div class="hero-bottom">
 
+     <span>Sourced in Mexico</span>
+<span class="dot">•</span>
+<span>Developed in Houston</span>
+<span class="dot">•</span>
+<span>Roasted Fresh</span>
 
-
+      </div>
 
     </section>
 
-    <section class="products-section" id="shop">
-      <div class="products-intro">
-    
+
+
+    <!-- =========================
+         BRAND INTRO
+    ========================== -->
+
+    <section class="brand-intro">
+
+      <div class="brand-intro-inner">
+
+        <p class="section-label">
+          Woodfox Coffee
+        </p>
+
+
         <h2>
-          CAREFULLY<br />
-          SELECTED
+          We specialize in<br />
+          Mexican coffee.
         </h2>
+
+
+        <p class="brand-intro-copy">
+         Beginning in Chiapas and Michoacán, we explore the character of Mexico’s coffee-growing regions and develop each roast around the coffee’s origin.
+        </p>
+
+
+        <a href="about.html" class="text-link">
+          Discover Woodfox
+          <span>→</span>
+        </a>
+
       </div>
 
-      <div class="products-grid">
-        <article class="product-card">
-          <div class="product-image-wrap">
-<img src="house_blend.png" alt="WF Roasters House Blend coffee bag" />
-          </div>
-          <div class="product-text">
-            <div class="product-topline">
-              <h3>HOUSE BLEND</h3>
-              <span>from $18</span>
-            </div>
-            <p>Chocolate, toasted nut, caramel</p>
-          </div>
-        </article>
-
-       <article class="product-card">
-
-  <div class="product-image-wrap">
-    <img src="colombian_blend.png" alt="WF Roasters Colombian Coffee">
-  </div>
-
-  <div class="product-text">
-
-    <div class="product-topline">
-      <h3>COLOMBIAN</h3>
-      <span>from $18</span>
-    </div>
-
-    <p>Cocoa, almond, dark sugar</p>
-
-  </div>
-
-</article>
-
-       <article class="product-card">
-
-  <div class="product-image-wrap">
-    <img src="ethiopian_blend.png" alt="WF Roasters Ethiopian Coffee">
-  </div>
-
-  <div class="product-text">
-
-    <div class="product-topline">
-      <h3>ETHIOPIAN</h3>
-      <span>from $18</span>
-    </div>
-
-    <p>Floral, berry, citrus</p>
-
-  </div>
-
-</article>
-
-        <article class="product-card">
-          <div class="product-image-wrap">
-            <img src="images/product-4.jpg" alt="Moon Ride coffee bag" />
-          </div>
-          <div class="product-text">
-            <div class="product-topline">
-              <h3>MOON RIDE</h3>
-              <span>from 18€</span>
-            </div>
-            <p>Chocolate, hazelnut, caramel</p>
-          </div>
-        </article>
-
-        <article class="product-card">
-          <div class="product-image-wrap">
-            <img src="images/product-5.jpg" alt="XXX coffee bag" />
-          </div>
-          <div class="product-text">
-            <div class="product-topline">
-              <h3>XXX</h3>
-              <span>from 20€</span>
-            </div>
-            <p>Rum, cognac, macerated exotic fruits</p>
-          </div>
-        </article>
-
-        <article class="product-card">
-          <div class="product-image-wrap">
-            <img src="images/product-6.jpg" alt="Espresso pack coffee set" />
-          </div>
-          <div class="product-text">
-            <div class="product-topline">
-              <h3>ESPRESSO PACK</h3>
-              <span>from 59€</span>
-            </div>
-            <p>Moon Ride + Suma + XXX</p>
-          </div>
-        </article>
-      </div>
-
-      <div class="shop-cta-wrap">
-        <a href="#" class="shop-cta">Shop</a>
-      </div>
     </section>
-
-    <section class="gallery-strip">
-      <div class="gallery-grid">
-        <div class="gallery-card large">
-          <img src="images/gallery-1.jpg" alt="Coffee texture or marble" />
-        </div>
-        <div class="gallery-card small">
-          <img src="images/gallery-2.jpg" alt="Minimal product detail" />
-        </div>
-      </div>
-    </section>
-
-
- <!-- contact us card CTA -->
- <section class="about-cta" id="contact">
-  <div class="about-cta-inner">
-    <p class="section-label">CONTACT</p>
-    <h2>Questions or need help?</h2>
-    <p>
-      For general questions, support, or anything else, send us a message and
-      we’ll get back to you soon.
-    </p>
-    <a href="mailto:info@woodfoxroasters.com" class="about-btn">Contact Us</a>
-  </div>
-</section>
-
-
-
-
-
-
-
-
-
 
 
   </main>
+
 </body>
+
 </html>
