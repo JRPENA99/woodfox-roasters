@@ -1,0 +1,196 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Photo from '../components/Photo.astro';
+import ListSection from '../components/ListSection.astro';
+
+const values = [
+  {
+    title: 'Curiosity',
+    text: 'Every origin, process and harvest has something to teach. We want to keep tasting, asking and learning.',
+  },
+  {
+    title: 'Intentional growth',
+    text: 'We’d rather grow slowly and do each thing properly than grow quickly and cut corners.',
+  },
+  {
+    title: 'Respect for origin',
+    text: 'Coffee is grown by people, in particular places, under real conditions. The roast should honor that work, not hide it.',
+  },
+  {
+    title: 'Attention to detail',
+    text: 'The small decisions add up: what we buy, how much, how it’s roasted, how it’s described.',
+  },
+];
+---
+
+<Base title="About" description="Woodfox Roasters is a young specialty coffee roasting company, being built carefully around curiosity and respect for origin.">
+  <PageIntro
+    label="About"
+    title="A young roasting company, <em>built carefully.</em>"
+    lede="Woodfox is at the beginning. We’re building it deliberately, around a curiosity about coffee and a respect for where it comes from."
+    image="terraces"
+  />
+
+  <section class="section" aria-labelledby="story-title">
+    <div class="wrap grid-12">
+      <p class="kicker label k"><span class="num">01</span> Where we are</p>
+      <h2 class="lede story-lede" id="story-title" data-reveal>
+        There’s no long family history here, and we won’t pretend otherwise. What there is: a real appreciation for good
+        coffee, and a commitment to doing each part of this properly.
+      </h2>
+      <div class="prose story" data-reveal>
+        <p>
+          Woodfox Roasters is a specialty coffee company in its early days. Right now that means selecting our first
+          coffees, developing a roast for each one, and laying the foundations of a business that can grow without
+          losing what it cares about.
+        </p>
+        <p>
+          We started with a particular interest in Mexican coffee. That curiosity has widened to excellent coffees from
+          wherever they’re grown, chosen by season and quality.
+        </p>
+        <a class="link" href="/sourcing/">Read about our sourcing <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <Photo image="roasterCooling" ratio="21 / 9" sizes="(min-width: 1360px) 1360px, 100vw" class="wide" />
+  </div>
+
+  <section class="section" aria-labelledby="values-title">
+    <div class="wrap">
+      <p class="kicker label"><span class="num">02</span> What guides us</p>
+      <h2 class="h2 values-title" id="values-title" data-reveal>Four things we try to hold onto as we grow.</h2>
+      <ul class="values" role="list">
+        {values.map((v, i) => (
+          <li data-reveal style={`transition-delay:${i * 80}ms`}>
+            <span class="n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="h3">{v.title}</h3>
+            <p class="muted">{v.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section-sm next" aria-label="Continue">
+    <div class="wrap next-grid">
+      <a href="/coffee/" class="next-card">
+        <span class="label muted">Coffee</span>
+        <span class="h3">How we choose coffee</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="/wholesale/" class="next-card">
+        <span class="label muted">Wholesale</span>
+        <span class="h3">Serve Woodfox coffee</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="/contact/" class="next-card">
+        <span class="label muted">Contact</span>
+        <span class="h3">Say hello</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <ListSection source="about" />
+</Base>
+
+<style>
+  .k {
+    grid-column: 1 / -1;
+  }
+  .story-lede {
+    grid-column: 1 / span 7;
+    font-weight: 360;
+  }
+  .story {
+    grid-column: 9 / span 4;
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .story .link {
+    margin-top: 0.75rem;
+  }
+  .wide :global(.frame) {
+    min-height: 240px;
+  }
+  .values-title {
+    max-width: 20ch;
+    margin-bottom: 3rem;
+  }
+  .values {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .values li {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--ink);
+  }
+  .n {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--cherry);
+  }
+  .next {
+    padding-top: 0;
+  }
+  .next-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .next-card {
+    position: relative;
+    display: grid;
+    gap: 0.75rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--paper);
+    text-decoration: none;
+    transition: background 0.3s var(--ease);
+  }
+  .next-card:hover {
+    background: var(--paper-light);
+  }
+  .next-card .arrow {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    transition: transform 0.3s var(--ease);
+  }
+  .next-card:hover .arrow {
+    transform: translateX(4px);
+    color: var(--cherry);
+  }
+  @media (max-width: 960px) {
+    .values {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 2.5rem;
+    }
+  }
+  @media (max-width: 860px) {
+    .story-lede,
+    .story {
+      grid-column: 1 / -1;
+    }
+    .story {
+      margin-top: 2rem;
+    }
+    .next-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .values {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,128 @@
+---
+import Wordmark from './Wordmark.astro';
+import { site, nav, cta } from '../config/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer surface-coffee on-dark">
+  <div class="wrap">
+    <div class="top">
+      <p class="statement">
+        Thoughtfully selected coffee.<br />
+        <em>Roasted with intention.</em>
+      </p>
+      <a href={cta.href} class="link">{cta.label} <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+
+    <hr class="rule" />
+
+    <div class="cols">
+      <a href="/" class="brand" aria-label="Woodfox Roasters, home"><Wordmark /></a>
+
+      <nav class="col" aria-label="Footer">
+        <p class="label muted">Explore</p>
+        <ul role="list">
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="col">
+        <p class="label muted">Contact</p>
+        <ul role="list">
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href="/wholesale/">Wholesale inquiries</a></li>
+          {site.location && <li class="muted">{site.location}</li>}
+        </ul>
+      </div>
+
+      {site.social.length > 0 && (
+        <div class="col">
+          <p class="label muted">Follow</p>
+          <ul role="list">
+            {site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+
+    <div class="bottom muted">
+      <p>© {year} {site.name}</p>
+      <p>Coffee is seasonal. So is this list.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #221812;
+    padding-block: clamp(4rem, 3rem + 5vw, 7rem) 2rem;
+  }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-bottom: clamp(3rem, 2rem + 4vw, 5rem);
+  }
+  .statement {
+    font-family: var(--serif);
+    font-size: var(--step-4);
+    font-weight: 360;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  .statement em {
+    color: #e2a28f;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.6fr 1fr;
+    gap: 2.5rem;
+    padding-block: 3rem;
+  }
+  .brand {
+    text-decoration: none;
+    align-self: start;
+  }
+  .brand :global(.wordmark) {
+    align-items: flex-start;
+  }
+  .col ul {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+  .col a {
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.35s var(--ease);
+    overflow-wrap: break-word;
+  }
+  .col a:hover {
+    background-size: 100% 1px;
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line-light);
+    font-size: var(--step--1);
+  }
+  @media (max-width: 760px) {
+    .cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 480px) {
+    .cols {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

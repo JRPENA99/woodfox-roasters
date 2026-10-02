@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import Photo from '../components/Photo.astro';
+import { site } from '../config/site';
+---
+
+<Base title="Contact" description="Contact Woodfox Roasters for general questions, wholesale inquiries and collaborations.">
+  <section class="contact">
+    <div class="wrap grid-12">
+      <div class="side">
+        <p class="label muted">Contact</p>
+        <h1 class="h1 title">We’d like to <em>hear from you.</em></h1>
+        <p class="body-lg">
+          Questions, wholesale inquiries, collaborations, or a note about coffee. We read every message and reply
+          personally.
+        </p>
+
+        <dl class="details">
+          <div>
+            <dt class="label muted">Email</dt>
+            <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+          </div>
+          <div>
+            <dt class="label muted">Wholesale</dt>
+            <dd><a href="/wholesale/">Wholesale inquiries</a></dd>
+          </div>
+          {site.location && (
+            <div>
+              <dt class="label muted">Based in</dt>
+              <dd>{site.location}</dd>
+            </div>
+          )}
+        </dl>
+
+        <Photo image="cherriesRipe" ratio="3 / 2" sizes="(min-width: 900px) 34vw, 100vw" class="side-photo" />
+      </div>
+
+      <div class="form-col">
+        <InquiryForm variant="contact" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Allow links like /contact/?topic=collaboration to preselect a topic.
+  const topic = new URLSearchParams(location.search).get('topic');
+  if (topic) {
+    const radio = document.querySelector<HTMLInputElement>(`input[name="topic"][value="${CSS.escape(topic)}"]`);
+    if (radio) radio.checked = true;
+  }
+</script>
+
+<style>
+  .contact {
+    padding-block: clamp(3.5rem, 2rem + 6vw, 8rem) var(--section);
+  }
+  .grid-12 {
+    row-gap: 3.5rem;
+    align-items: start;
+  }
+  .side {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 1.75rem;
+  }
+  .title {
+    font-size: var(--step-5);
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .title em {
+    color: var(--cherry);
+  }
+  .details {
+    border-top: 1px solid var(--line);
+  }
+  .details div {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .details dt {
+    padding-top: 0.2rem;
+  }
+  .details a {
+    overflow-wrap: anywhere;
+  }
+  .side-photo {
+    margin-top: 1rem;
+  }
+  .form-col {
+    grid-column: 7 / span 6;
+    padding: clamp(1.5rem, 1rem + 2vw, 3rem);
+    background: var(--paper-light);
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 900px) {
+    .side,
+    .form-col {
+      grid-column: 1 / -1;
+    }
+    .side-photo {
+      display: none;
+    }
+  }
+</style>

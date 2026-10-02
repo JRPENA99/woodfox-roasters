@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found">
+  <section class="section nf">
+    <div class="wrap">
+      <p class="label muted">404</p>
+      <h1 class="h1">This page isn’t in season.</h1>
+      <p class="body-lg">It may have moved, or it never existed. Let’s get you somewhere useful.</p>
+      <div class="links">
+        <a class="btn" href="/">Home</a>
+        <a class="btn btn-ghost" href="/coffee/">Coffee</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf .wrap {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    min-height: 50vh;
+    align-content: center;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+</style>

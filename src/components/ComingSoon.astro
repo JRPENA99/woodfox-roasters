@@ -1,0 +1,140 @@
+---
+/**
+ * Shown wherever coffees would be listed, until the first coffee file is
+ * published in src/content/coffees/. Displays the structure every coffee
+ * will follow, without inventing one.
+ */
+import Photo from './Photo.astro';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+  showLink?: boolean;
+}
+const { headingLevel = 'h2', showLink = true } = Astro.props;
+const Heading = headingLevel;
+
+const fields = ['Country', 'Region', 'Producer', 'Process', 'Variety', 'Tasting notes', 'Roast approach'];
+---
+
+<div class="soon grid-12">
+  <div class="copy" data-reveal>
+    <p class="label status"><span class="dot" aria-hidden="true"></span> In selection</p>
+    <Heading class="h2">The first Woodfox coffees are being chosen now.</Heading>
+    <div class="prose">
+      <p>
+        We’re selecting our first coffees and developing a roast for each one. Nothing will be offered until it’s
+        ready. When it is, each coffee will be listed here with everything we know about it.
+      </p>
+    </div>
+    {showLink && (
+      <a class="link" href="#list">Hear when they’re ready <span class="arrow" aria-hidden="true">→</span></a>
+    )}
+  </div>
+
+  <div class="spec" data-reveal aria-label="What each coffee listing will include" role="group">
+    <div class="spec-photo">
+      <Photo image="greenCoffee" ratio="16 / 10" sizes="(min-width: 900px) 40vw, 100vw" />
+      <p class="spec-tag label">Coffee 01</p>
+    </div>
+    <dl>
+      {fields.map((f) => (
+        <div class="row">
+          <dt class="label">{f}</dt>
+          <dd>To be announced</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</div>
+
+<style>
+  .soon {
+    row-gap: 3rem;
+    align-items: center;
+  }
+  .copy {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--moss);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cherry);
+    box-shadow: 0 0 0 0 rgb(155 31 42 / 0.5);
+    animation: pulse 2.4s infinite;
+  }
+  .spec {
+    grid-column: 7 / span 6;
+    background: var(--paper-light);
+    border: 1px solid var(--line);
+    padding: clamp(1rem, 0.6rem + 1.2vw, 1.75rem);
+  }
+  .spec-photo {
+    position: relative;
+  }
+  .spec-photo :global(img) {
+    filter: saturate(0.85);
+  }
+  .spec-tag {
+    position: absolute;
+    left: 0.9rem;
+    top: 0.9rem;
+    padding: 0.35rem 0.6rem;
+    background: var(--paper-light);
+    font-size: 0.6875rem;
+  }
+  dl {
+    margin-top: 1.25rem;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(8rem, 1fr) 1.4fr;
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .row:last-child {
+    border-bottom: 0;
+  }
+  dt {
+    font-size: 0.6875rem;
+    color: var(--muted);
+    padding-top: 0.2rem;
+  }
+  dd {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  @keyframes pulse {
+    70% {
+      box-shadow: 0 0 0 8px rgb(155 31 42 / 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgb(155 31 42 / 0);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .copy,
+    .spec {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 420px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+</style>

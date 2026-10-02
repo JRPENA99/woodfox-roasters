@@ -1,0 +1,38 @@
+---
+/** Text wordmark carried over from the current Woodfox site. Replace with an SVG logo when one exists. */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span class:list={['wordmark', className]}>
+  <span class="wm-main">Woodfox</span>
+  <span class="wm-sub">Roasters</span>
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  .wm-main {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.625rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    font-variation-settings: 'opsz' 36;
+  }
+  .wm-sub {
+    margin-top: 0.3rem;
+    font-family: var(--sans);
+    font-size: 0.5625rem;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;
+  }
+</style>

@@ -1,0 +1,169 @@
+---
+import Photo from './Photo.astro';
+import { heroVideo } from '../config/site';
+---
+
+<section class="hero on-dark" aria-labelledby="hero-title">
+  <div class="media" aria-hidden="true">
+    <Photo image="heroPoster" eager decorative sizes="100vw" />
+    <video
+      data-hero-video
+      data-src={heroVideo.src}
+      data-type={heroVideo.type}
+      muted
+      loop
+      playsinline
+      preload="none"
+      tabindex="-1"></video>
+  </div>
+  <div class="shade" aria-hidden="true"></div>
+
+  <div class="content wrap">
+    <p class="label eyebrow">Woodfox Roasters</p>
+    <h1 id="hero-title" class="display">
+      Thoughtfully selected.<br />
+      <em>Roasted with intention.</em>
+    </h1>
+  </div>
+
+  <div class="foot wrap">
+    <p class="label">Specialty coffee, chosen by season and quality</p>
+    <div class="foot-actions">
+      <button class="video-btn" type="button" data-video-toggle hidden aria-label="Pause background video">
+        <svg class="i-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="1" width="2.5" height="10" fill="currentColor"></rect><rect x="7.5" y="1" width="2.5" height="10" fill="currentColor"></rect></svg>
+        <svg class="i-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1v10l8-5z" fill="currentColor"></path></svg>
+      </button>
+      <a class="scroll label" href="#intro">Scroll <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    color: var(--paper);
+    background: var(--coffee);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .media,
+  .shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .media :global(.photo) {
+    position: absolute;
+    inset: 0;
+  }
+  .media :global(.frame) {
+    background: var(--coffee);
+  }
+  .media :global(img) {
+    animation: settle 2.4s var(--ease) both;
+  }
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.4s var(--ease);
+  }
+  video:global(.is-playing) {
+    opacity: 1;
+  }
+  .shade {
+    background:
+      linear-gradient(180deg, rgb(20 14 10 / 0.42) 0%, rgb(20 14 10 / 0) 22%),
+      linear-gradient(0deg, rgb(20 14 10 / 0.72) 0%, rgb(20 14 10 / 0.18) 48%, rgb(20 14 10 / 0.06) 100%),
+      linear-gradient(90deg, rgb(20 14 10 / 0.4) 0%, rgb(20 14 10 / 0) 60%);
+  }
+
+  .content {
+    align-self: end;
+    padding-top: calc(var(--header-h) + 3rem);
+    padding-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  }
+  .eyebrow {
+    margin-bottom: 1.5rem;
+    opacity: 0.88;
+  }
+  h1 {
+    max-width: 14ch;
+    font-size: clamp(3rem, 1.8rem + 6vw, 7.5rem);
+    animation: rise 1.4s 0.2s var(--ease) both;
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 330;
+  }
+
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.25rem 1.5rem;
+    border-top: 1px solid rgb(243 238 229 / 0.25);
+  }
+  .foot .label {
+    font-size: 0.6875rem;
+    opacity: 0.85;
+  }
+  .foot-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .scroll {
+    text-decoration: none;
+    font-size: 0.6875rem;
+  }
+  .video-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(243 238 229 / 0.5);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+  .video-btn[hidden] {
+    display: none;
+  }
+  .video-btn:hover {
+    background: rgb(243 238 229 / 0.15);
+  }
+  .video-btn .i-play,
+  .video-btn[data-state='paused'] .i-pause {
+    display: none;
+  }
+  .video-btn[data-state='paused'] .i-play {
+    display: block;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  @keyframes settle {
+    from {
+      transform: scale(1.06);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .foot > .label {
+      max-width: 22ch;
+    }
+  }
+</style>

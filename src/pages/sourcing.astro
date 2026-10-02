@@ -1,0 +1,244 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Photo from '../components/Photo.astro';
+import HarvestCalendar from '../components/HarvestCalendar.astro';
+import ListSection from '../components/ListSection.astro';
+---
+
+<Base
+  title="Sourcing"
+  description="How Woodfox Roasters sources coffee: by quality and season, in quantities that keep it fresh, from producing regions around the world."
+>
+  <PageIntro
+    label="Sourcing"
+    title="We follow the harvest, <em>not a fixed map.</em>"
+    lede="Woodfox selects coffees from producing regions around the world, based on quality, season and what makes sense for a roaster of our size. This is how we think about it."
+    image="hillside"
+  />
+
+  <!-- 01 Agricultural -->
+  <section class="section" aria-labelledby="agri-title">
+    <div class="wrap grid-12 split">
+      <div class="text">
+        <p class="kicker label"><span class="num">01</span> Coffee is agricultural</p>
+        <h2 class="h2" id="agri-title" data-reveal>A crop first. Every harvest is a little different.</h2>
+        <div class="prose" data-reveal>
+          <p>
+            Coffee’s quality depends on weather, altitude, soil, plant variety, careful picking and careful processing.
+            The same farm can produce a different coffee from one year to the next.
+          </p>
+          <p>
+            We think the most honest way to source is to treat it that way: taste each season’s coffee for what it is,
+            and choose accordingly.
+          </p>
+        </div>
+      </div>
+      <div class="pic" data-reveal>
+        <Photo image="dryingBeds" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" caption="Coffee drying after harvest." />
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Seasons -->
+  <section class="section surface-light" aria-labelledby="season-title">
+    <div class="wrap grid-12">
+      <div class="season-text">
+        <p class="kicker label"><span class="num">02</span> Seasonality</p>
+        <h2 class="h2" id="season-title" data-reveal>Different origins come into season at different times.</h2>
+        <div class="prose" data-reveal>
+          <p>
+            Harvests move around the coffee-growing world through the year. Following them lets us offer coffees when
+            they’re fresh, instead of stretching one origin across every month.
+          </p>
+        </div>
+      </div>
+      <div class="season-cal" data-reveal>
+        <HarvestCalendar />
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Statement -->
+  <section class="section statement-sec" aria-labelledby="quality-title">
+    <div class="wrap">
+      <p class="kicker label"><span class="num">03</span> Quality before a fixed lineup</p>
+      <h2 class="statement" id="quality-title" data-reveal>
+        We’d rather offer a coffee because it’s excellent this season than because it fits a promise we made last
+        year.
+      </h2>
+    </div>
+  </section>
+
+  <!-- 04 Scale -->
+  <section class="section-sm" aria-labelledby="scale-title">
+    <div class="wrap grid-12 split reverse">
+      <div class="pic" data-reveal>
+        <Photo image="greenCoffee" ratio="5 / 4" sizes="(min-width: 900px) 46vw, 100vw" caption="Green coffee, before roasting." />
+      </div>
+      <div class="text">
+        <p class="kicker label"><span class="num">04</span> Buying at our scale</p>
+        <h2 class="h2" id="scale-title" data-reveal>The right amount of the right coffee.</h2>
+        <div class="prose" data-reveal>
+          <p>
+            Many green-coffee lots are sold in volumes built for much larger roasters. Rather than buy more than we can
+            roast while it’s fresh, we choose excellent coffees in quantities that suit where Woodfox is today.
+          </p>
+          <p>
+            It keeps the coffee fresh and the lineup honest, and it leaves room to grow into larger commitments as
+            demand develops.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Mexico -->
+  <section class="section mexico surface-coffee on-dark" aria-labelledby="mexico-title">
+    <div class="wrap grid-12 split">
+      <div class="text">
+        <p class="kicker label"><span class="num">05</span> Mexico</p>
+        <h2 class="h2" id="mexico-title" data-reveal>Mexico remains close to us.</h2>
+        <div class="prose" data-reveal>
+          <p>
+            Woodfox began with a particular interest in Mexican coffee, especially from regions such as Chiapas and
+            Michoacán. That interest hasn’t gone anywhere.
+          </p>
+          <p>
+            We hope to feature Mexican coffees whenever the right lots are available at the right scale, alongside
+            excellent coffees from Central America, South America, Africa and beyond.
+          </p>
+        </div>
+      </div>
+      <div class="pic" data-reveal>
+        <Photo image="cherriesBranch" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Transparency -->
+  <section class="section" aria-labelledby="honest-title">
+    <div class="wrap">
+      <p class="kicker label"><span class="num">06</span> Transparency</p>
+      <h2 class="h2 honest-title" id="honest-title" data-reveal>What we’ll tell you, and what we won’t claim.</h2>
+      <div class="honest">
+        <div data-reveal>
+          <h3 class="h3">What we’ll tell you</h3>
+          <p class="muted">
+            For every coffee: where it was grown, as specifically as we can say, how it was processed, the variety when
+            known, and the producer or cooperative when that information is available and verified. If we don’t know
+            something, we’ll say so.
+          </p>
+        </div>
+        <div data-reveal>
+          <h3 class="h3">What we won’t claim</h3>
+          <p class="muted">
+            We won’t describe a coffee as direct trade, or suggest a relationship with a farm, unless it’s true and we
+            can stand behind it. If those relationships develop as Woodfox grows, we’ll share them plainly.
+          </p>
+        </div>
+      </div>
+      <div class="next">
+        <a class="link" href="/coffee/">See our approach to coffee <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <ListSection source="sourcing" />
+</Base>
+
+<style>
+  .split {
+    row-gap: 3rem;
+    align-items: center;
+  }
+  .split .text {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .split .text .kicker {
+    margin-bottom: 0;
+  }
+  .split .pic {
+    grid-column: 8 / span 5;
+  }
+  .split.reverse .pic {
+    grid-column: 1 / span 6;
+  }
+  .split.reverse .text {
+    grid-column: 8 / span 5;
+  }
+  .mexico .split .pic :global(.frame) {
+    background: var(--coffee-2);
+  }
+
+  .season-text {
+    grid-column: 1 / span 4;
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+  .season-text .kicker {
+    margin-bottom: 0;
+  }
+  .season-cal {
+    grid-column: 6 / span 7;
+  }
+
+  .statement {
+    font-family: var(--serif);
+    font-weight: 360;
+    font-size: var(--step-4);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 27ch;
+    text-wrap: balance;
+  }
+  .statement-sec {
+    border-block: 1px solid var(--line);
+  }
+
+  .honest-title {
+    max-width: 22ch;
+    margin-bottom: 3rem;
+  }
+  .honest {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem clamp(2rem, 5vw, 5rem);
+  }
+  .honest > div {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .next {
+    margin-top: 3.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .split .text,
+    .split .pic,
+    .split.reverse .text,
+    .split.reverse .pic,
+    .season-text,
+    .season-cal {
+      grid-column: 1 / -1;
+    }
+    .split.reverse .pic {
+      order: 2;
+    }
+    .split .pic {
+      max-width: 560px;
+    }
+    .season-cal {
+      margin-top: 2rem;
+    }
+    .honest {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

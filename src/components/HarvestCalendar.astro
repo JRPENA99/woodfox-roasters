@@ -1,0 +1,174 @@
+---
+/**
+ * Approximate harvest windows for a few producing countries. General,
+ * publicly known seasonality, not a statement of what Woodfox buys.
+ * Edit `rows` to add or remove origins.
+ */
+const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+type Row = { name: string; main: number[]; second?: number[] };
+const groups: { region: string; rows: Row[] }[] = [
+  {
+    region: 'Mexico & Central America',
+    rows: [
+      { name: 'Mexico', main: [11, 12, 1, 2, 3] },
+      { name: 'Guatemala', main: [12, 1, 2, 3] },
+      { name: 'Honduras', main: [11, 12, 1, 2, 3, 4] },
+    ],
+  },
+  {
+    region: 'South America',
+    rows: [
+      { name: 'Colombia', main: [10, 11, 12, 1], second: [4, 5, 6] },
+      { name: 'Peru', main: [5, 6, 7, 8, 9] },
+      { name: 'Brazil', main: [5, 6, 7, 8, 9] },
+    ],
+  },
+  {
+    region: 'Africa',
+    rows: [
+      { name: 'Ethiopia', main: [10, 11, 12, 1] },
+      { name: 'Kenya', main: [10, 11, 12], second: [6, 7, 8] },
+    ],
+  },
+];
+
+const describe = (m: number[]) => {
+  // Months are listed in harvest order, so first and last give the range.
+  return `${monthNames[m[0] - 1]}–${monthNames[m[m.length - 1] - 1]}`;
+};
+---
+
+<div class="cal">
+  <table>
+    <caption class="sr-only">Typical coffee harvest periods by country</caption>
+    <thead>
+      <tr>
+        <th scope="col"><span class="sr-only">Country</span></th>
+        <th scope="col" class="months-head">
+          <span class="sr-only">Harvest period</span>
+          <span class="months" aria-hidden="true">{months.map((m) => <span>{m}</span>)}</span>
+        </th>
+      </tr>
+    </thead>
+    {groups.map((g) => (
+      <tbody>
+        <tr class="group">
+          <th scope="rowgroup" colspan="2" class="label muted">{g.region}</th>
+        </tr>
+        {g.rows.map((r) => (
+          <tr>
+            <th scope="row" class="name">{r.name}</th>
+            <td>
+              <span class="sr-only">
+                Main harvest {describe(r.main)}{r.second ? `; smaller harvest ${describe(r.second)}` : ''}
+              </span>
+              <span class="bar" aria-hidden="true">
+                {months.map((_, i) => {
+                  const m = i + 1;
+                  const state = r.main.includes(m) ? 'main' : r.second?.includes(m) ? 'second' : '';
+                  return <span class="cell" data-state={state} />;
+                })}
+              </span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    ))}
+  </table>
+
+  <div class="legend" aria-hidden="true">
+    <span><i data-state="main"></i> Main harvest</span>
+    <span><i data-state="second"></i> Smaller secondary harvest</span>
+  </div>
+  <p class="caption">
+    Typical periods only. Timing varies with altitude, weather and region, and coffee usually reaches a roaster several
+    months after harvest, once it has been processed, dried, rested and shipped.
+  </p>
+</div>
+
+<style>
+  .cal {
+    --cell-gap: 3px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: 0;
+    text-align: left;
+    font-weight: inherit;
+  }
+  thead th {
+    padding-bottom: 0.75rem;
+  }
+  .months,
+  .bar {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--cell-gap);
+  }
+  .months span {
+    text-align: center;
+    font-size: 0.6875rem;
+    font-weight: 560;
+    color: var(--muted);
+  }
+  .group th {
+    padding: 1.5rem 0 0.6rem;
+    font-size: 0.6875rem;
+  }
+  .name {
+    width: 7.5rem;
+    padding-block: 0.35rem;
+    padding-right: 1rem;
+    font-family: var(--serif);
+    font-size: var(--step-1);
+  }
+  td {
+    vertical-align: middle;
+  }
+  .cell,
+  .legend i {
+    height: 14px;
+    background: rgb(31 27 23 / 0.07);
+  }
+  .cal [data-state='main'] {
+    background: var(--cherry);
+  }
+  .cal [data-state='second'] {
+    background: #d9a39a;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.75rem;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .legend i {
+    display: inline-block;
+    width: 22px;
+  }
+  .caption {
+    max-width: 40rem;
+  }
+  @media (max-width: 520px) {
+    .name {
+      width: 5.75rem;
+      font-size: 1rem;
+    }
+    .cal {
+      --cell-gap: 2px;
+    }
+  }
+</style>

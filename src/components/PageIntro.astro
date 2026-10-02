@@ -1,0 +1,68 @@
+---
+/** Opening block for inner pages: label, large title, short lede, optional wide photo. */
+import Photo from './Photo.astro';
+import type { ImageKey } from '../data/images';
+
+interface Props {
+  label: string;
+  title: string;
+  lede?: string;
+  image?: ImageKey;
+  ratio?: string;
+}
+const { label, title, lede, image, ratio = '21 / 9' } = Astro.props;
+---
+
+<section class="intro">
+  <div class="wrap grid-12 text">
+    <p class="label muted eyebrow">{label}</p>
+    <h1 class="h1 title" set:html={title} />
+    {lede && <p class="lede body">{lede}</p>}
+    <slot />
+  </div>
+  {image && (
+    <div class="wrap">
+      <Photo image={image} ratio={ratio} eager sizes="(min-width: 1360px) 1360px, 100vw" class="intro-photo" />
+    </div>
+  )}
+</section>
+
+<style>
+  .intro {
+    padding-top: clamp(3.5rem, 2rem + 6vw, 8rem);
+  }
+  .text {
+    row-gap: 1.75rem;
+    padding-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+  }
+  .eyebrow {
+    grid-column: 1 / -1;
+  }
+  .title {
+    grid-column: 1 / span 9;
+    font-size: var(--step-5);
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .title :global(em) {
+    font-style: italic;
+    color: var(--cherry);
+  }
+  .body {
+    grid-column: 6 / span 6;
+    margin-top: 1rem;
+    color: var(--ink-soft);
+  }
+  .intro-photo :global(.frame) {
+    min-height: 260px;
+  }
+  @media (max-width: 860px) {
+    .title,
+    .body {
+      grid-column: 1 / -1;
+    }
+    .body {
+      margin-top: 0;
+    }
+  }
+</style>

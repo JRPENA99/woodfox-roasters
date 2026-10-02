@@ -1,0 +1,176 @@
+---
+/**
+ * Contact and wholesale form. Endpoints are set in src/config/site.ts.
+ * variant="contact" asks what the message is about;
+ * variant="wholesale" asks for business details instead.
+ */
+import { forms } from '../config/site';
+
+interface Props {
+  variant?: 'contact' | 'wholesale';
+  defaultTopic?: string;
+}
+const { variant = 'contact', defaultTopic = 'general' } = Astro.props;
+const endpoint = variant === 'wholesale' ? forms.wholesale : forms.contact;
+const id = variant;
+
+const topics = [
+  { value: 'general', label: 'General' },
+  { value: 'wholesale', label: 'Wholesale' },
+  { value: 'collaboration', label: 'Collaboration' },
+];
+const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 'Retailer or grocer', 'Other'];
+---
+
+<form
+  class="inquiry"
+  method="post"
+  action={endpoint || undefined}
+  data-form
+  data-endpoint={endpoint}
+  data-success="Thank you. We’ve received your message and will reply personally."
+  novalidate
+>
+  <input type="hidden" name="form" value={variant} />
+
+  {variant === 'contact' && (
+    <fieldset class="field topics">
+      <legend>What’s this about?</legend>
+      <div class="chips">
+        {topics.map((t) => (
+          <label class="chip">
+            <input type="radio" name="topic" value={t.value} checked={t.value === defaultTopic} />
+            <span>{t.label}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  )}
+
+  <div class="grid">
+    <div class="field">
+      <label for={`${id}-name`}>Name</label>
+      <input class="input" id={`${id}-name`} name="name" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for={`${id}-email`}>Email</label>
+      <input class="input" id={`${id}-email`} name="email" type="email" autocomplete="email" required />
+    </div>
+
+    {variant === 'wholesale' && (
+      <>
+        <div class="field">
+          <label for={`${id}-business`}>Business name</label>
+          <input class="input" id={`${id}-business`} name="business" autocomplete="organization" required />
+        </div>
+        <div class="field">
+          <label for={`${id}-type`}>Type of business</label>
+          <select class="input" id={`${id}-type`} name="business_type" required>
+            <option value="" disabled selected>Select one</option>
+            {businessTypes.map((b) => <option>{b}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for={`${id}-city`}>City <span class="hint">(optional)</span></label>
+          <input class="input" id={`${id}-city`} name="city" autocomplete="address-level2" />
+        </div>
+        <div class="field">
+          <label for={`${id}-website`}>Website or Instagram <span class="hint">(optional)</span></label>
+          <input class="input" id={`${id}-website`} name="website" />
+        </div>
+      </>
+    )}
+  </div>
+
+  <div class="field">
+    <label for={`${id}-message`}>
+      {variant === 'wholesale' ? 'Tell us about your coffee program' : 'Message'}
+      {variant === 'wholesale' && <span class="hint hint-block">How you serve coffee today, rough volume, what you’re looking for.</span>}
+    </label>
+    <textarea class="input" id={`${id}-message`} name="message" rows="5" required></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="btn" type="submit">{variant === 'wholesale' ? 'Start the conversation' : 'Send message'}</button>
+    <p class="form-status" role="status" aria-live="polite" data-status></p>
+  </div>
+
+  <div aria-hidden="true" style="position:absolute;left:-9999px"><input type="text" name="company_website" tabindex="-1" autocomplete="off" /></div>
+</form>
+
+<style>
+  .inquiry {
+    position: relative;
+    display: grid;
+    gap: 2rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 2rem;
+  }
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  legend {
+    padding: 0;
+    margin-bottom: 0.9rem;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .chip {
+    position: relative;
+    cursor: pointer;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 1.15rem;
+    border: 1px solid var(--line);
+    border-color: rgb(31 27 23 / 0.3);
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .chip:hover span {
+    border-color: var(--ink);
+  }
+  .chip input:checked + span {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .chip input:focus-visible + span {
+    outline: 2px solid var(--cherry);
+    outline-offset: 3px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+  .actions .form-status {
+    flex: 1 1 16rem;
+  }
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .actions .btn {
+      width: 100%;
+    }
+  }
+</style>

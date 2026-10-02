@@ -1,0 +1,179 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { site } from '../config/site';
+
+const partners = [
+  ['Cafés', 'Seasonal coffees for espresso and filter, with a lineup that changes as the harvests do.'],
+  ['Restaurants', 'A coffee that holds its own at the end of a carefully made meal.'],
+  ['Offices', 'Better coffee for teams who notice the difference.'],
+  ['Hospitality', 'Hotels and guest experiences where details matter.'],
+  ['Retailers', 'Shops and grocers looking for a thoughtfully sourced coffee on the shelf.'],
+  ['Others', 'If coffee matters to what you do, we’re happy to talk.'],
+];
+
+const steps = [
+  ['Tell us about your business', 'How you serve coffee today, roughly how much, and what you’re hoping to change.'],
+  ['We start a conversation', 'We’ll reply personally to talk through what you need and whether Woodfox is a good fit.'],
+  ['Coffee and details', 'As our coffees become available, we’ll work through options, quantities and practicalities together.'],
+];
+---
+
+<Base title="Wholesale" description="Wholesale coffee from Woodfox Roasters for cafés, restaurants, offices, hospitality and retailers. Start a conversation.">
+  <PageIntro
+    label="Wholesale"
+    title="Coffee for businesses that <em>care what they serve.</em>"
+    lede="We’re opening conversations with cafés, restaurants, offices, hospitality and retail partners who want to serve seasonal, carefully roasted coffee."
+    image="roaster"
+  >
+    <div class="intro-cta">
+      <a class="btn" href="#inquiry">Start a conversation</a>
+    </div>
+  </PageIntro>
+
+  <section class="section" aria-labelledby="who-title">
+    <div class="wrap">
+      <p class="kicker label"><span class="num">01</span> Who it’s for</p>
+      <h2 class="h2 who-title" id="who-title" data-reveal>Partners who see coffee as part of what they offer.</h2>
+      <ul class="partners" role="list">
+        {partners.map(([t, d]) => (
+          <li data-reveal>
+            <h3 class="h3">{t}</h3>
+            <p class="muted">{d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section surface-coffee on-dark" aria-labelledby="how-title">
+    <div class="wrap grid-12">
+      <div class="how-head">
+        <p class="kicker label"><span class="num">02</span> How it starts</p>
+        <h2 class="h2" id="how-title" data-reveal>Simple, and personal.</h2>
+        <p class="body-lg" data-reveal>
+          We’re early, and for the right partner that’s a good thing: you’ll be talking directly with the people building
+          Woodfox.
+        </p>
+      </div>
+      <ol class="steps" role="list">
+        {steps.map(([t, d], i) => (
+          <li data-reveal>
+            <span class="n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="h3">{t}</h3>
+              <p class="muted">{d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="inquiry" aria-labelledby="inquiry-title">
+    <div class="wrap grid-12">
+      <div class="form-head">
+        <p class="kicker label"><span class="num">03</span> Inquiry</p>
+        <h2 class="h2" id="inquiry-title">Start the conversation.</h2>
+        <p class="muted">
+          Prefer email? Write to <a href={`mailto:${site.email}?subject=Wholesale%20inquiry`}>{site.email}</a>.
+        </p>
+      </div>
+      <div class="form-col">
+        <InquiryForm variant="wholesale" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro-cta {
+    grid-column: 6 / span 6;
+  }
+  .who-title {
+    max-width: 22ch;
+    margin-bottom: 3rem;
+  }
+  .partners {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 clamp(1.5rem, 3vw, 3rem);
+  }
+  .partners li {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding-block: 1.75rem 2.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .how-head {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+  .how-head .kicker {
+    margin-bottom: 0;
+  }
+  .steps {
+    grid-column: 7 / span 6;
+    display: grid;
+  }
+  .steps li {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--line-light);
+  }
+  .steps li > div {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .n {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: var(--step-1);
+    color: #e2a28f;
+  }
+  .form-head {
+    grid-column: 1 / span 4;
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+  .form-head .kicker {
+    margin-bottom: 0;
+  }
+  .form-head a {
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+  .form-col {
+    grid-column: 6 / span 7;
+  }
+  @media (max-width: 960px) {
+    .partners {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 860px) {
+    .intro-cta,
+    .how-head,
+    .steps,
+    .form-head,
+    .form-col {
+      grid-column: 1 / -1;
+    }
+    .steps,
+    .form-col {
+      margin-top: 2.5rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .partners {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

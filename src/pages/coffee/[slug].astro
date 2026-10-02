@@ -1,0 +1,150 @@
+---
+/**
+ * Individual coffee page, generated for every published file in
+ * src/content/coffees/. The Buy button links to `buyUrl` (a Stripe
+ * Payment Link or Shopify checkout URL) — see docs/COMMERCE.md.
+ */
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import ListSection from '../../components/ListSection.astro';
+import { getCoffees, coffeeFacts, statusLabel, type Coffee } from '../../data/coffees';
+
+export async function getStaticPaths() {
+  const coffees = await getCoffees();
+  return coffees.map((coffee) => ({ params: { slug: coffee.id }, props: { coffee } }));
+}
+
+const { coffee } = Astro.props as { coffee: Coffee };
+const c = coffee.data;
+const { Content } = await render(coffee);
+const facts = coffeeFacts(c);
+const canBuy = c.status === 'available' && Boolean(c.buyUrl);
+---
+
+<Base title={`${c.name}, ${c.country}`} description={c.summary ?? `${c.name} from ${c.country}, roasted by Woodfox Roasters.`} image={c.image}>
+  <article class="section coffee">
+    <div class="wrap grid-12">
+      <div class="media">
+        {c.image ? (
+          <Photo image={{ src: c.image, alt: c.imageAlt ?? `${c.name}, ${c.country}` }} ratio="4 / 5" eager sizes="(min-width: 900px) 46vw, 100vw" />
+        ) : (
+          <div class="no-image" aria-hidden="true"><span>{c.country}</span></div>
+        )}
+      </div>
+
+      <div class="info">
+        <a class="back label muted" href="/coffee/">← All coffee</a>
+        <p class="label muted">{[c.region, c.country].filter(Boolean).join(', ')}</p>
+        <h1 class="h1">{c.name}</h1>
+        {c.notes.length > 0 && <p class="notes lede">{c.notes.join(', ')}</p>}
+
+        <div class="buy">
+          {canBuy ? (
+            <a class="btn" href={c.buyUrl} rel="noopener">Buy{c.price ? ` — ${c.price}` : ''}{c.size ? ` / ${c.size}` : ''}</a>
+          ) : (
+            <span class="btn" aria-disabled="true">{statusLabel[c.status]}</span>
+          )}
+          {!canBuy && <a class="link" href="#list">Get notified <span class="arrow" aria-hidden="true">→</span></a>}
+        </div>
+
+        {facts.length > 0 && (
+          <dl class="facts">
+            {facts.map(([k, v]) => (
+              <div>
+                <dt class="label muted">{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        {c.roast && (
+          <div class="roast">
+            <h2 class="label">Roast approach</h2>
+            <p>{c.roast}</p>
+          </div>
+        )}
+
+        <div class="prose story">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <ListSection source={`coffee-${coffee.id}`} />
+</Base>
+
+<style>
+  .grid-12 {
+    row-gap: 3rem;
+    align-items: start;
+  }
+  .media {
+    grid-column: 1 / span 6;
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+  .no-image {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background: var(--paper-deep);
+    font-family: var(--serif);
+    font-size: var(--step-4);
+    font-style: italic;
+    color: var(--muted);
+  }
+  .info {
+    grid-column: 8 / span 5;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .back {
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+  .notes {
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .buy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-block: 1rem;
+  }
+  .facts {
+    border-top: 1px solid var(--line);
+  }
+  .facts div {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .facts dt {
+    padding-top: 0.2rem;
+  }
+  .roast {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .story:empty {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .media,
+    .info {
+      grid-column: 1 / -1;
+    }
+    .media {
+      position: static;
+      order: 2;
+    }
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+/**
+ * Responsive photograph.
+ * Pass an image key from src/data/images.ts, or a Photo object.
+ * Unsplash placeholders get a resized srcset automatically. Local files
+ * in /public are served as-is, so export them at a sensible size
+ * (about 2400px on the long edge, ~80% JPEG/WebP quality).
+ */
+import { images, type ImageKey, type Photo } from '../data/images';
+
+interface Props {
+  image: ImageKey | Photo;
+  sizes?: string;
+  /** CSS aspect-ratio for the frame, e.g. "4 / 5". Omit to fill the parent's height. */
+  ratio?: string;
+  caption?: string;
+  class?: string;
+  eager?: boolean;
+  /** Use an empty alt when the photo is purely decorative next to text that says the same thing. */
+  decorative?: boolean;
+}
+
+const { image, sizes = '100vw', ratio, caption, class: className, eager = false, decorative = false } = Astro.props;
+const photo: Photo = typeof image === 'string' ? images[image] : image;
+
+const isUnsplash = photo.src.startsWith('https://images.unsplash.com/');
+const widths = [480, 800, 1200, 1600, 2200];
+const build = (w: number) => `${photo.src}?auto=format&fit=crop&w=${w}&q=72`;
+const src = isUnsplash ? build(1600) : photo.src;
+const srcset = isUnsplash ? widths.map((w) => `${build(w)} ${w}w`).join(', ') : undefined;
+---
+
+<figure class:list={['photo', { 'photo--fill': !ratio }, className]}>
+  <div class="frame" style={ratio ? `aspect-ratio: ${ratio}` : undefined}>
+    <img
+      src={src}
+      srcset={srcset}
+      sizes={srcset ? sizes : undefined}
+      alt={decorative ? '' : photo.alt}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : undefined}
+      decoding="async"
+      style={photo.position ? `object-position: ${photo.position}` : undefined}
+    />
+  </div>
+  {caption && <figcaption class="caption">{caption}</figcaption>}
+</figure>

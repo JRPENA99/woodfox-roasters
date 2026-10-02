@@ -1,0 +1,72 @@
+---
+import Photo from './Photo.astro';
+import { statusLabel, type Coffee } from '../data/coffees';
+
+interface Props {
+  coffee: Coffee;
+}
+const { coffee } = Astro.props;
+const c = coffee.data;
+const href = `/coffee/${coffee.id}/`;
+const origin = [c.region, c.country].filter(Boolean).join(', ');
+---
+
+<article class="card">
+  <a href={href} class="card-link">
+    {c.image ? (
+      <Photo image={{ src: c.image, alt: c.imageAlt ?? `${c.name}, ${c.country}` }} ratio="4 / 5" sizes="(min-width: 900px) 33vw, 100vw" />
+    ) : (
+      <div class="no-image" aria-hidden="true"><span>{c.country}</span></div>
+    )}
+    <div class="meta">
+      <p class="label muted">{origin}</p>
+      <h3 class="h3 name">{c.name}</h3>
+      {c.notes.length > 0 && <p class="notes">{c.notes.join(' · ')}</p>}
+      <p class="status label" data-status={c.status}>{statusLabel[c.status]}{c.price && c.status === 'available' ? ` — ${c.price}` : ''}</p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card-link {
+    display: grid;
+    gap: 1.25rem;
+    text-decoration: none;
+  }
+  .card-link :global(img) {
+    transition: transform 0.9s var(--ease);
+  }
+  .card-link:hover :global(img) {
+    transform: scale(1.03);
+  }
+  .card-link:hover .name {
+    color: var(--cherry);
+  }
+  .no-image {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background: var(--paper-deep);
+    font-family: var(--serif);
+    font-size: var(--step-3);
+    font-style: italic;
+    color: var(--muted);
+  }
+  .meta {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .name {
+    transition: color 0.2s;
+  }
+  .notes {
+    color: var(--ink-soft);
+  }
+  .status {
+    margin-top: 0.25rem;
+    color: var(--moss);
+  }
+  .status[data-status='sold-out'] {
+    color: var(--muted);
+  }
+</style>

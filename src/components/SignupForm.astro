@@ -1,0 +1,70 @@
+---
+/** Email list signup. The endpoint is set in src/config/site.ts (forms.newsletter). */
+import { forms } from '../config/site';
+
+interface Props {
+  id?: string;
+  source?: string;
+}
+const { id = 'signup', source = 'site' } = Astro.props;
+---
+
+<form class="signup" method="post" action={forms.newsletter || undefined} data-form data-endpoint={forms.newsletter} novalidate>
+  <input type="hidden" name="source" value={source} />
+  <div class="row">
+    <div class="field">
+      <label for={`${id}-email`}>Email address</label>
+      <input
+        class="input"
+        id={`${id}-email`}
+        type="email"
+        name="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        required
+        aria-describedby={`${id}-status`}
+      />
+    </div>
+    <button class="btn" type="submit">Notify me</button>
+  </div>
+  <p class="fine muted">Occasional notes on new coffees and launch news. No more than that. Unsubscribe anytime.</p>
+  <p class="form-status" id={`${id}-status`} role="status" aria-live="polite" data-status></p>
+  <!-- Honeypot for basic spam protection; hidden from people. -->
+  <div aria-hidden="true" style="position:absolute;left:-9999px"><input type="text" name="company_website" tabindex="-1" autocomplete="off" /></div>
+</form>
+
+<style>
+  .signup {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    max-width: 34rem;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 1.25rem;
+  }
+  .fine {
+    font-size: var(--step--1);
+  }
+  :global(.surface-coffee) .btn {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+  :global(.surface-coffee) .btn:hover {
+    background: var(--cherry);
+    color: var(--paper);
+    border-color: var(--cherry);
+  }
+  @media (max-width: 520px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
+</style>

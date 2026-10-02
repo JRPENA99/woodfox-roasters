@@ -1,0 +1,420 @@
+---
+import Base from '../layouts/Base.astro';
+import HomeHero from '../components/HomeHero.astro';
+import Photo from '../components/Photo.astro';
+import ComingSoon from '../components/ComingSoon.astro';
+import CoffeeCard from '../components/CoffeeCard.astro';
+import ListSection from '../components/ListSection.astro';
+import { getCoffees } from '../data/coffees';
+
+const coffees = (await getCoffees()).slice(0, 3);
+
+const criteria = [
+  ['Quality', 'Clean, sweet and balanced in the cup. Everything else comes after that.'],
+  ['Character', 'Coffees with something distinct to say: a particular fruit, sweetness or texture.'],
+  ['Season', 'Coffee is harvested once or twice a year. We buy close to when it’s at its best.'],
+  ['Availability', 'We work with what is genuinely available, not what fits a fixed lineup.'],
+  ['Freshness', 'Quantities we can roast through while the green coffee is still vibrant.'],
+  ['Roast fit', 'It has to suit the way we roast: carefully, to show the coffee rather than cover it.'],
+];
+
+const journey = [
+  {
+    image: 'handPicking',
+    step: 'Origin',
+    title: 'Grown, picked, processed',
+    text: 'Most of what makes a coffee taste the way it does is decided on the farm and at the mill, long before it reaches us.',
+  },
+  {
+    image: 'roasterCooling',
+    step: 'Roasting',
+    title: 'Roasted with intention',
+    text: 'We develop a roast for each coffee, aiming for clarity and sweetness so its origin still comes through.',
+  },
+  {
+    image: 'brewing',
+    step: 'Cup',
+    title: 'Brewed while it’s fresh',
+    text: 'The last step is yours. Fresh coffee, brewed with a little care, shows what the farm and the roast were reaching for.',
+  },
+] as const;
+---
+
+<Base overlayHeader>
+  <HomeHero />
+
+  <!-- 01 Introduction -->
+  <section class="section intro" id="intro" aria-labelledby="intro-title">
+    <div class="wrap grid-12">
+      <p class="kicker label intro-kicker"><span class="num">01</span> Woodfox</p>
+      <h2 class="intro-statement" id="intro-title" data-reveal>
+        Woodfox is a young roasting company built around a simple idea: <em>start with coffee worth roasting,</em> then
+        roast it to show what it is.
+      </h2>
+      <div class="intro-aside prose" data-reveal>
+        <p>
+          We choose coffees for how they taste and when they’re at their best, not to fill a fixed menu. The lineup
+          will change with the harvests, and we think that’s how it should be.
+        </p>
+        <a class="link" href="/about/">About Woodfox <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 How we choose -->
+  <section class="section-sm choose" aria-labelledby="choose-title">
+    <div class="wrap grid-12">
+      <div class="choose-photo" data-reveal>
+        <Photo image="cherriesRipe" ratio="4 / 5" sizes="(min-width: 900px) 42vw, 100vw" />
+      </div>
+      <div class="choose-text">
+        <p class="kicker label"><span class="num">02</span> How we choose</p>
+        <h2 class="h2" id="choose-title" data-reveal>Every coffee earns its place, one harvest at a time.</h2>
+        <ol class="criteria" role="list">
+          {criteria.map(([title, text], i) => (
+            <li data-reveal>
+              <span class="c-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="c-title">{title}</h3>
+              <p class="c-text">{text}</p>
+            </li>
+          ))}
+        </ol>
+        <a class="link" href="/coffee/">Our approach to coffee <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Origin -->
+  <section class="origin" aria-labelledby="origin-title">
+    <div class="origin-media on-dark">
+      <Photo image="valley" sizes="100vw" />
+      <div class="origin-shade" aria-hidden="true"></div>
+      <div class="wrap origin-head">
+        <p class="kicker label"><span class="num">03</span> Origin</p>
+        <h2 class="h1" id="origin-title" data-reveal>Coffee is grown before it is roasted.</h2>
+      </div>
+    </div>
+    <div class="wrap grid-12 origin-body">
+      <p class="lede origin-lede" data-reveal>
+        Every coffee begins as fruit on a plant, shaped by altitude, weather, soil and the people who grow and process
+        it.
+      </p>
+      <div class="prose origin-prose" data-reveal>
+        <p>
+          We look across coffee-growing regions in Latin America, Africa and beyond, and choose by quality and season
+          rather than by a single country.
+        </p>
+        <p>
+          Mexico, where the idea for Woodfox began, remains close to us. We hope to feature Mexican coffees whenever the
+          right lots are available at the right scale.
+        </p>
+        <a class="link" href="/sourcing/">How we source <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Journey -->
+  <section class="section journey" aria-labelledby="journey-title">
+    <div class="wrap">
+      <div class="journey-head">
+        <p class="kicker label"><span class="num">04</span> From origin to cup</p>
+        <h2 class="h2" id="journey-title" data-reveal>Three stages. We try to respect all of them.</h2>
+      </div>
+      <ol class="steps" role="list">
+        {journey.map((s, i) => (
+          <li class="step" data-reveal style={`transition-delay:${i * 120}ms`}>
+            <Photo image={s.image} ratio="3 / 4" sizes="(min-width: 900px) 30vw, 100vw" />
+            <div class="step-meta">
+              <p class="label muted"><span class="step-n">{String(i + 1).padStart(2, '0')}</span> {s.step}</p>
+              <h3 class="h3">{s.title}</h3>
+              <p class="muted">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 05 Coffee -->
+  <section class="section surface-deep coffee" aria-labelledby="coffee-title">
+    <div class="wrap">
+      <p class="kicker label"><span class="num">05</span> Coffee</p>
+      {coffees.length > 0 ? (
+        <>
+          <div class="coffee-head">
+            <h2 class="h2" id="coffee-title">Current coffees</h2>
+            <a class="link" href="/coffee/">All coffees <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+          <div class="coffee-grid">
+            {coffees.map((c) => <CoffeeCard coffee={c} />)}
+          </div>
+        </>
+      ) : (
+        <>
+          <h2 class="sr-only" id="coffee-title">Upcoming coffees</h2>
+          <ComingSoon headingLevel="h3" />
+        </>
+      )}
+    </div>
+  </section>
+
+  <!-- 06 Wholesale -->
+  <section class="section wholesale" aria-labelledby="wholesale-title">
+    <div class="wrap grid-12">
+      <div class="ws-text" data-reveal>
+        <p class="kicker label"><span class="num">06</span> Wholesale</p>
+        <h2 class="h1" id="wholesale-title">For cafés, restaurants, offices and shops.</h2>
+        <p class="body-lg">
+          Woodfox is beginning conversations with businesses that care about what they serve. If that sounds like you,
+          we’d like to hear about your coffee program.
+        </p>
+        <a class="btn" href="/wholesale/">Wholesale inquiries</a>
+      </div>
+      <div class="ws-photos">
+        <Photo image="dryingBeds" ratio="1 / 1" sizes="(min-width: 900px) 24vw, 50vw" class="ws-a" />
+        <Photo image="roaster" ratio="3 / 4" sizes="(min-width: 900px) 24vw, 50vw" class="ws-b" />
+      </div>
+    </div>
+  </section>
+
+  <ListSection source="home" />
+</Base>
+
+<style>
+  /* 01 */
+  .intro {
+    padding-bottom: calc(var(--section) * 0.7);
+  }
+  .intro-kicker {
+    grid-column: 1 / -1;
+  }
+  .intro-statement {
+    grid-column: 1 / span 10;
+    font-family: var(--serif);
+    font-weight: 360;
+    font-size: var(--step-4);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .intro-statement em {
+    color: var(--cherry);
+  }
+  .intro-aside {
+    grid-column: 7 / span 5;
+    margin-top: clamp(2rem, 1rem + 3vw, 4rem);
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  /* 02 */
+  .choose .grid-12 {
+    row-gap: 3rem;
+    align-items: start;
+  }
+  .choose-photo {
+    grid-column: 1 / span 5;
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+  }
+  .choose-text {
+    grid-column: 7 / span 6;
+    display: grid;
+    gap: 2.5rem;
+    justify-items: start;
+  }
+  .choose-text .kicker {
+    margin-bottom: -1rem;
+  }
+  .criteria {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2rem;
+  }
+  .criteria li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1rem;
+    row-gap: 0.4rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .c-num {
+    grid-row: span 2;
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--cherry);
+    line-height: 1.6;
+  }
+  .c-title {
+    font-family: var(--serif);
+    font-size: var(--step-1);
+    font-weight: 450;
+  }
+  .c-text {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  /* 03 */
+  .origin-media {
+    position: relative;
+    height: min(88vh, 860px);
+    min-height: 480px;
+    color: var(--paper);
+    display: flex;
+    align-items: flex-end;
+    isolation: isolate;
+  }
+  .origin-media > :global(.photo) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .origin-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgb(20 14 10 / 0.62) 0%, rgb(20 14 10 / 0.05) 55%);
+  }
+  .origin-head {
+    padding-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  }
+  .origin-head .kicker .num {
+    color: #f0c4b5;
+  }
+  .origin-head h2 {
+    max-width: 13ch;
+  }
+  .origin-body {
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) 0;
+    row-gap: 2rem;
+  }
+  .origin-lede {
+    grid-column: 1 / span 6;
+  }
+  .origin-prose {
+    grid-column: 8 / span 5;
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .origin-prose .link {
+    margin-top: 0.75rem;
+  }
+
+  /* 04 */
+  .journey-head {
+    max-width: 40rem;
+    margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  }
+  .step:nth-child(2) {
+    margin-top: clamp(0rem, 6vw, 6rem);
+  }
+  .step-meta {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    max-width: 24rem;
+  }
+  .step-n {
+    color: var(--cherry);
+    margin-right: 0.35rem;
+  }
+
+  /* 05 */
+  .coffee-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .coffee-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem 2rem;
+  }
+
+  /* 06 */
+  .wholesale .grid-12 {
+    align-items: center;
+    row-gap: 3rem;
+  }
+  .ws-text {
+    grid-column: 1 / span 6;
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+  .ws-text .kicker {
+    margin-bottom: 0;
+  }
+  .ws-photos {
+    grid-column: 8 / span 5;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+  .ws-photos :global(.ws-a) {
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .intro-statement,
+    .intro-aside,
+    .choose-photo,
+    .choose-text,
+    .origin-lede,
+    .origin-prose,
+    .ws-text,
+    .ws-photos {
+      grid-column: 1 / -1;
+    }
+    .choose-photo {
+      position: static;
+      max-width: 520px;
+    }
+    .choose-photo :global(.frame) {
+      aspect-ratio: 4 / 3 !important;
+    }
+    .steps,
+    .coffee-grid {
+      grid-template-columns: 1fr;
+    }
+    .step:nth-child(2) {
+      margin-top: 0;
+    }
+    .steps {
+      gap: 3rem;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 1.25rem;
+      align-items: end;
+    }
+    .step-meta {
+      margin-top: 0;
+    }
+  }
+  @media (max-width: 600px) {
+    .criteria {
+      grid-template-columns: 1fr;
+    }
+    .step {
+      grid-template-columns: 1fr;
+    }
+    .step :global(.frame) {
+      aspect-ratio: 4 / 3 !important;
+    }
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+/** Calm email-list section. Anchored at #list so the header CTA can link to it from any page. */
+import SignupForm from './SignupForm.astro';
+import Photo from './Photo.astro';
+
+interface Props {
+  source?: string;
+}
+const { source = 'site' } = Astro.props;
+---
+
+<section class="list surface-coffee on-dark" id="list" aria-labelledby="list-title">
+  <div class="wrap grid-12">
+    <div class="photo-col" data-reveal>
+      <Photo image="handful" ratio="4 / 5" sizes="(min-width: 900px) 34vw, 100vw" />
+    </div>
+    <div class="text" data-reveal>
+      <p class="kicker label"><span class="num">—</span> The Woodfox list</p>
+      <h2 class="h1" id="list-title">Hear when the first coffees are ready.</h2>
+      <p class="body-lg">
+        One short note when a new coffee is released, and the occasional update as Woodfox grows. That’s all.
+      </p>
+      <SignupForm id={`signup-${source}`} source={source} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .list {
+    padding-block: var(--section);
+  }
+  .grid-12 {
+    align-items: center;
+    row-gap: 3rem;
+  }
+  .photo-col {
+    grid-column: 1 / span 5;
+  }
+  .text {
+    grid-column: 7 / span 6;
+    display: grid;
+    gap: 1.75rem;
+  }
+  .kicker {
+    margin-bottom: 0;
+  }
+  @media (max-width: 900px) {
+    .photo-col {
+      grid-column: 1 / span 12;
+      max-width: 420px;
+    }
+    .text {
+      grid-column: 1 / -1;
+      order: -1;
+    }
+  }
+</style>

@@ -1,0 +1,236 @@
+---
+import Wordmark from './Wordmark.astro';
+import { nav, cta } from '../config/site';
+
+interface Props {
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+const left = nav.slice(0, 3);
+const right = nav.slice(3);
+---
+
+<header class:list={['site-header', { 'is-overlay': overlay }]} data-header>
+  <div class="bar wrap">
+    <nav class="nav nav-left" aria-label="Primary">
+      {left.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <a href="/" class="brand" aria-label="Woodfox Roasters, home">
+      <Wordmark />
+    </a>
+
+    <div class="nav nav-right">
+      <nav aria-label="Secondary">
+        {right.map((item) => (
+          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+      <a href={cta.href} class="cta">{cta.label}</a>
+    </div>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+      <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+      <span class="menu-text">Menu</span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Mobile">
+      <ul role="list">
+        <li><a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a></li>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a href={cta.href} class="btn mobile-cta">{cta.label}</a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    color: var(--ink);
+    background: rgb(243 238 229 / 0.94);
+    backdrop-filter: saturate(1.2) blur(10px);
+    -webkit-backdrop-filter: saturate(1.2) blur(10px);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.35s var(--ease), color 0.35s var(--ease), border-color 0.35s var(--ease);
+  }
+  .site-header.is-overlay {
+    position: fixed;
+    inset-inline: 0;
+    background: transparent;
+    color: var(--paper);
+    border-bottom-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .site-header.is-overlay.is-scrolled,
+  .site-header.is-overlay.menu-open {
+    background: rgb(243 238 229 / 0.96);
+    color: var(--ink);
+    border-bottom-color: var(--line);
+  }
+
+  .bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: var(--header-h);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
+  }
+  .nav nav {
+    display: contents;
+  }
+  .nav-right {
+    justify-content: flex-end;
+  }
+  .nav a {
+    position: relative;
+    font-size: 0.75rem;
+    font-weight: 560;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-block: 0.5rem;
+  }
+  .nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.2rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease);
+  }
+  .nav a:hover::after,
+  .nav a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+  .nav .cta {
+    padding: 0.7rem 1.1rem;
+    border: 1px solid currentColor;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .nav .cta::after {
+    display: none;
+  }
+  .nav .cta:hover {
+    background: var(--cherry);
+    border-color: var(--cherry);
+    color: var(--paper);
+  }
+
+  .brand {
+    text-decoration: none;
+    padding: 0.5rem;
+  }
+
+  .menu-btn {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    justify-self: end;
+    min-height: 44px;
+    padding: 0 0 0 0.75rem;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 560;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .menu-icon {
+    display: grid;
+    gap: 6px;
+    width: 22px;
+  }
+  .menu-icon span {
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease);
+  }
+  .menu-open .menu-icon span:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+  .menu-open .menu-icon span:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 2rem var(--gutter) 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+  }
+  .mobile-menu[hidden] {
+    display: none;
+  }
+  .mobile-menu ul {
+    display: grid;
+  }
+  .mobile-menu li {
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-menu li a {
+    display: block;
+    padding: 0.85rem 0;
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    font-weight: 380;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  .mobile-menu li a[aria-current='page'] {
+    font-style: italic;
+    color: var(--cherry);
+  }
+  .mobile-cta {
+    margin-top: 2rem;
+    width: 100%;
+  }
+
+  @media (max-width: 960px) {
+    .bar {
+      grid-template-columns: auto 1fr;
+    }
+    .nav {
+      display: none;
+    }
+    .brand {
+      grid-column: 1;
+      grid-row: 1;
+      padding-left: 0;
+    }
+    .brand :global(.wordmark) {
+      align-items: flex-start;
+    }
+    .menu-btn {
+      display: inline-flex;
+      grid-column: 2;
+    }
+  }
+</style>
