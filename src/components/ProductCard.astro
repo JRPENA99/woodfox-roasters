@@ -1,0 +1,111 @@
+---
+import BagArt from './BagArt.astro';
+import { money, fromPrice, subscription, type Product } from '../data/products';
+
+interface Props {
+  product: Product;
+}
+const { product: p } = Astro.props;
+const multi = p.sizes.length > 1;
+---
+
+<article class="product" data-category={p.category}>
+  <a href={`/shop/${p.id}/`} class="link-wrap">
+    <div class="media">
+      <BagArt name={p.name} colors={p.colors} />
+      {p.subscribable && <span class="badge label">Subscribe &amp; save {subscription.discount * 100}%</span>}
+    </div>
+    <div class="meta">
+      <div class="row">
+        <h3 class="name">{p.name}</h3>
+        <p class="price">{multi ? 'From ' : ''}{money(fromPrice(p))}</p>
+      </div>
+      <p class="notes muted">{p.notes.join(' · ')}</p>
+    </div>
+  </a>
+  <button
+    class="quick label"
+    type="button"
+    data-add
+    data-id={p.id}
+    data-size={p.sizes[0].id}
+    aria-label={`Add ${p.name}, ${p.sizes[0].label}, to cart`}
+  >
+    + Add {p.sizes[0].label}
+  </button>
+</article>
+
+<style>
+  .product {
+    position: relative;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .link-wrap {
+    display: grid;
+    gap: 1rem;
+    text-decoration: none;
+  }
+  .media {
+    position: relative;
+    overflow: hidden;
+  }
+  .media :global(.bag-art) {
+    transition: transform 0.8s var(--ease);
+  }
+  .link-wrap:hover :global(.bag-art) {
+    transform: scale(1.025);
+  }
+  .badge {
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    background: var(--paper-light);
+    font-size: 0.625rem;
+    color: var(--moss);
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .name {
+    font-family: var(--serif);
+    font-weight: 420;
+    font-size: var(--step-1);
+    transition: color 0.2s;
+  }
+  .link-wrap:hover .name {
+    color: var(--cherry);
+  }
+  .price {
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+  .notes {
+    font-size: 0.875rem;
+    margin-top: 0.2rem;
+  }
+  .quick {
+    justify-self: start;
+    min-height: 40px;
+    padding: 0 0.9rem;
+    background: none;
+    border: 1px solid rgb(31 27 23 / 0.3);
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .quick:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .quick[data-added] {
+    background: var(--moss);
+    border-color: var(--moss);
+    color: var(--paper);
+  }
+</style>

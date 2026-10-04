@@ -21,6 +21,7 @@ npm run preview    # serve the production build locally
 | Pages (one file per page) | `src/pages/` — `index.astro`, `coffee/`, `sourcing.astro`, `about.astro`, `wholesale.astro`, `contact.astro`, `404.astro` |
 | Site settings: email, location, navigation, form endpoints, hero video | `src/config/site.ts` |
 | Every photo (one list) | `src/data/images.ts` |
+| Shop products, prices, subscription discount | `src/data/products.ts` (see `docs/COMMERCE.md`) |
 | Coffees (one Markdown file each) | `src/content/coffees/` — start from `_TEMPLATE.md` |
 | Shared pieces (header, footer, forms, cards) | `src/components/` |
 | Colors, fonts, spacing, buttons | `src/styles/global.css` (variables at the top) |

@@ -31,13 +31,16 @@ const right = nav.slice(3);
           <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
         ))}
       </nav>
-      <a href={cta.href} class="cta">{cta.label}</a>
+      <a href="/checkout/" class="cta cart-link" aria-label="Cart" aria-current={isCurrent('/checkout/') ? 'page' : undefined}>Cart <span class="cart-count" data-cart-count>0</span></a>
     </div>
 
+    <div class="mobile-actions">
+      <a href="/checkout/" class="cart-mobile label" aria-label="Cart">Cart <span class="cart-count" data-cart-count>0</span></a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
       <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
       <span class="menu-text">Menu</span>
     </button>
+    </div>
   </div>
 
   <div class="mobile-menu" id="mobile-menu" data-menu hidden>
@@ -143,6 +146,36 @@ const right = nav.slice(3);
     padding: 0.5rem;
   }
 
+  .mobile-actions {
+    display: none;
+    align-items: center;
+    gap: 1.25rem;
+    justify-self: end;
+  }
+  .cart-mobile {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    text-decoration: none;
+  }
+  .cart-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    padding: 0 0.3rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.625rem;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+  .cart-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
   .menu-btn {
     display: none;
     align-items: center;
@@ -228,9 +261,27 @@ const right = nav.slice(3);
     .brand :global(.wordmark) {
       align-items: flex-start;
     }
+    .mobile-actions {
+      display: flex;
+      grid-column: 2;
+    }
     .menu-btn {
       display: inline-flex;
-      grid-column: 2;
+    }
+  }
+  @media (max-width: 400px) {
+    .menu-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    .mobile-actions {
+      gap: 0.9rem;
+    }
+    .brand :global(.wm-main) {
+      font-size: 1.375rem;
     }
   }
 </style>

@@ -1,0 +1,291 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import BagArt from '../../components/BagArt.astro';
+import { products, categories, subscription } from '../../data/products';
+
+const pct = Math.round(subscription.discount * 100);
+---
+
+<Base title="Shop" description="Shop Woodfox Coffee: seasonal filter and espresso coffees, sets and subscriptions.">
+  <section class="intro">
+    <div class="wrap">
+      <p class="label muted">Shop</p>
+      <div class="intro-row">
+        <h1 class="h1 title">Coffee, <em>by the season.</em></h1>
+        <p class="body-lg lede">
+          A small, changing lineup chosen for quality and freshness. Buy a bag, or subscribe and save {pct}%.
+        </p>
+      </div>
+      <p class="notice">
+        <strong>Preview</strong>
+        <span>
+          Our first coffees are still with the roaster. Products, prices and images here are placeholders to show how the
+          shop will work, and checkout is not taking payments yet.
+        </span>
+      </p>
+    </div>
+  </section>
+
+  <section class="section-sm" aria-labelledby="products-title">
+    <div class="wrap">
+      <div class="toolbar">
+        <h2 class="sr-only" id="products-title">Products</h2>
+        <div class="filters" role="group" aria-label="Filter products">
+          {categories.map((c, i) => (
+            <button type="button" class="chip" data-filter={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>
+          ))}
+        </div>
+        <p class="muted count" data-count aria-live="polite">{products.length} products</p>
+      </div>
+
+      <div class="grid" data-grid>
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="sub surface-coffee on-dark" aria-labelledby="sub-title">
+    <div class="wrap grid-12">
+      <div class="sub-art">
+        <div class="stack">
+          <BagArt name="Seasonal Filter" colors={['#e9dfcf', '#2f221a']} label="Every 2 weeks" class="b1" />
+          <BagArt name="Seasonal Espresso" colors={['#3d2d22', '#f3eee5']} label="Every 4 weeks" class="b2" />
+        </div>
+      </div>
+      <div class="sub-text">
+        <p class="kicker label"><span class="num">—</span> Subscription</p>
+        <h2 class="display" id="sub-title">Subscribe &amp; save <em>{pct}%</em></h2>
+        <p class="body-lg">
+          Fresh coffee on your schedule. Choose a coffee and how often it arrives, and we’ll take {pct}% off every
+          delivery.
+        </p>
+        <ul class="perks" role="list">
+          <li><span class="n">01</span> Pick any coffee marked “Subscribe &amp; save”</li>
+          <li><span class="n">02</span> Every 2, 4 or 6 weeks</li>
+          <li><span class="n">03</span> Skip, pause or cancel when you need to</li>
+        </ul>
+        <a class="btn btn-light" href="/shop/seasonal-filter/?plan=subscribe">Start a subscription</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section how" aria-labelledby="how-title">
+    <div class="wrap">
+      <p class="kicker label"><span class="num">—</span> How it works</p>
+      <h2 class="h2" id="how-title">Simple, and secure.</h2>
+      <ol class="steps" role="list">
+        <li>
+          <span class="n">01</span>
+          <h3 class="h3">Choose your coffee</h3>
+          <p class="muted">Pick a size and grind, or leave it whole bean.</p>
+        </li>
+        <li>
+          <span class="n">02</span>
+          <h3 class="h3">Once, or on repeat</h3>
+          <p class="muted">Buy a single bag, or subscribe and save {pct}% on every delivery.</p>
+        </li>
+        <li>
+          <span class="n">03</span>
+          <h3 class="h3">Pay securely</h3>
+          <p class="muted">Payment happens on our payment provider’s secure checkout. We never see your card details.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-grid] .product');
+  const countEl = document.querySelector('[data-count]');
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      let n = 0;
+      cards.forEach((card) => {
+        const show = f === 'all' || card.dataset.category === f;
+        card.hidden = !show;
+        if (show) n++;
+      });
+      if (countEl) countEl.textContent = `${n} product${n === 1 ? '' : 's'}`;
+    }),
+  );
+</script>
+
+<style>
+  .intro {
+    padding-top: clamp(3rem, 2rem + 5vw, 6.5rem);
+  }
+  .intro .wrap {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .intro-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2rem;
+    align-items: end;
+  }
+  .title {
+    font-size: var(--step-5);
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .title em {
+    color: var(--cherry);
+  }
+  .lede {
+    max-width: 30rem;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip {
+    min-height: 40px;
+    padding: 0 1.05rem;
+    border: 1px solid rgb(31 27 23 / 0.3);
+    border-radius: 999px;
+    background: none;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .chip:hover {
+    border-color: var(--ink);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .count {
+    font-size: var(--step--1);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.5rem clamp(1rem, 2.5vw, 2rem);
+  }
+  .grid :global(.product[hidden]) {
+    display: none;
+  }
+
+  .sub {
+    padding-block: var(--section);
+  }
+  .sub .grid-12 {
+    align-items: center;
+    row-gap: 3rem;
+  }
+  .sub-art {
+    grid-column: 1 / span 5;
+  }
+  .stack {
+    position: relative;
+    aspect-ratio: 1 / 1;
+  }
+  .stack :global(.bag-art) {
+    position: absolute;
+    width: 66%;
+    background: transparent;
+  }
+  .stack :global(.b1) {
+    left: 0;
+    top: 0;
+    transform: rotate(-4deg);
+  }
+  .stack :global(.b2) {
+    right: 0;
+    bottom: 0;
+    transform: rotate(5deg);
+  }
+  .sub-text {
+    grid-column: 7 / span 6;
+    display: grid;
+    gap: 1.6rem;
+    justify-items: start;
+  }
+  .sub-text .kicker {
+    margin-bottom: 0;
+  }
+  .sub-text h2 em {
+    font-style: italic;
+    color: #e2a28f;
+  }
+  .perks {
+    display: grid;
+    width: 100%;
+    max-width: 30rem;
+  }
+  .perks li {
+    display: flex;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--line-light);
+  }
+  .n {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--cherry);
+  }
+  .sub .n {
+    color: #e2a28f;
+  }
+
+  .how .h2 {
+    margin-bottom: 2.5rem;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .steps li {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 960px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 860px) {
+    .intro-row {
+      grid-template-columns: 1fr;
+    }
+    .sub-art,
+    .sub-text {
+      grid-column: 1 / -1;
+    }
+    .sub-art {
+      max-width: 420px;
+    }
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

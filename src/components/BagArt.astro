@@ -1,0 +1,45 @@
+---
+/**
+ * Placeholder product image: a simple drawn coffee bag in the product's colours.
+ * Replace with real photography by adding an `image` to the product later.
+ */
+interface Props {
+  name: string;
+  colors: [string, string];
+  label?: string;
+  class?: string;
+}
+const { name, colors, label = 'Placeholder', class: className } = Astro.props;
+const [bg, ink] = colors;
+const words = name.split(' ');
+---
+
+<div class:list={['bag-art', className]} role="img" aria-label={`Placeholder illustration of a ${name} bag`}>
+  <svg viewBox="0 0 400 500" aria-hidden="true">
+    <ellipse cx="200" cy="452" rx="118" ry="10" fill="rgb(31 27 23 / 0.10)"></ellipse>
+    <path d="M100 92 L300 92 L312 444 Q312 450 306 450 L94 450 Q88 450 88 444 Z" fill={bg} stroke="rgb(31 27 23 / 0.12)"></path>
+    <path d="M100 92 L300 92 L302 124 L98 124 Z" fill="rgb(0 0 0 / 0.06)"></path>
+    <path d="M104 70 L296 70 L300 92 L100 92 Z" fill={bg} stroke="rgb(31 27 23 / 0.12)"></path>
+    <line x1="112" y1="81" x2="288" y2="81" stroke={ink} stroke-opacity="0.25" stroke-dasharray="3 5"></line>
+    <text x="200" y="182" text-anchor="middle" fill={ink} font-family="'Source Serif 4 Variable', Georgia, serif" font-weight="600" font-size="30" letter-spacing="1.5">WOODFOX</text>
+    <text x="200" y="204" text-anchor="middle" fill={ink} font-family="'Inter Variable', Arial, sans-serif" font-weight="600" font-size="9" letter-spacing="5">COFFEE</text>
+    <line x1="150" y1="236" x2="250" y2="236" stroke={ink} stroke-opacity="0.35"></line>
+    {words.map((w, i) => (
+      <text x="200" y={290 + i * 34} text-anchor="middle" fill={ink} font-family="'Source Serif 4 Variable', Georgia, serif" font-style="italic" font-size="30">{w}</text>
+    ))}
+    <text x="200" y="420" text-anchor="middle" fill={ink} fill-opacity="0.6" font-family="'Inter Variable', Arial, sans-serif" font-size="9" letter-spacing="3">{label.toUpperCase()}</text>
+  </svg>
+</div>
+
+<style>
+  .bag-art {
+    aspect-ratio: 4 / 5;
+    background: var(--paper-deep);
+    display: grid;
+    place-items: center;
+  }
+  svg {
+    width: 82%;
+    height: auto;
+  }
+</style>

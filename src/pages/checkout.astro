@@ -1,0 +1,399 @@
+---
+import Base from '../layouts/Base.astro';
+import { checkout } from '../config/site';
+---
+
+<Base title="Cart & checkout" description="Review your Woodfox Coffee order and check out securely.">
+  <section class="section-sm co">
+    <div class="wrap">
+      <p class="label muted">Checkout</p>
+      <h1 class="h1 title">Your cart</h1>
+
+      <div class="empty" data-empty hidden>
+        <p class="lede">Your cart is empty.</p>
+        <a class="btn" href="/shop/">Browse the shop</a>
+      </div>
+
+      <div class="layout" data-filled hidden>
+        <div class="lines-col">
+          <ul class="lines" role="list" data-lines></ul>
+          <div class="sub-nudge" data-nudge hidden>
+            <p><strong>Save <span data-nudge-pct></span>% with a subscription.</strong> Switch any eligible coffee to a regular delivery below.</p>
+          </div>
+          <a class="link" href="/shop/">← Keep shopping</a>
+        </div>
+
+        <aside class="summary" aria-labelledby="summary-title">
+          <h2 class="label" id="summary-title">Order summary</h2>
+          <dl class="totals">
+            <div><dt>Subtotal</dt><dd data-subtotal></dd></div>
+            <div data-savings-row hidden><dt>Subscription savings</dt><dd class="save" data-savings></dd></div>
+            <div><dt>Shipping</dt><dd class="muted">Calculated at payment</dd></div>
+            <div class="total"><dt>Total</dt><dd data-total></dd></div>
+          </dl>
+
+          <button class="btn pay" type="button" data-pay data-provider={checkout.provider} data-endpoint={checkout.endpoint} data-currency={checkout.currency}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="1"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+            Continue to secure payment
+          </button>
+          <p class="pay-status" role="status" aria-live="polite" data-pay-status></p>
+
+          <ul class="trust muted" role="list">
+            <li>Payment is handled by our payment provider’s secure, hosted checkout. We never see or store your card details.</li>
+            <li>Subscriptions can be skipped, paused or cancelled.</li>
+          </ul>
+
+          <p class="notice">
+            <strong>Preview</strong>
+            <span>Checkout isn’t live yet. Products and prices are placeholders, and no payment will be taken.</span>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { getCart, setQty, addLine, keyOf, unitPrice, type Line } from '../scripts/cart';
+  import { getProduct, money, grinds, subscription } from '../data/products';
+
+  const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const linesEl = $('[data-lines]');
+  const pay = $<HTMLButtonElement>('[data-pay]');
+  const payStatus = $('[data-pay-status]');
+  const pct = Math.round(subscription.discount * 100);
+  $('[data-nudge-pct]').textContent = String(pct);
+
+  const freqLabel = (id: string | null) => subscription.frequencies.find((f) => f.id === id)?.label ?? '';
+  const grindLabel = (id: string | null) => grinds.find((g) => g.id === id)?.label ?? '';
+
+  const swatch = (bg: string, ink: string, name: string) =>
+    `<div class="sw" style="background:${bg};color:${ink}" aria-hidden="true"><span>W</span><small>${name}</small></div>`;
+
+  function lineHTML(l: Line) {
+    const p = getProduct(l.id)!;
+    const size = p.sizes.find((s) => s.id === l.size) ?? p.sizes[0];
+    const key = keyOf(l);
+    const meta = [size.label, grindLabel(l.grind)].filter(Boolean).join(' · ');
+    const subControl = p.subscribable
+      ? `<label class="sub-toggle"><span class="label">Delivery</span>
+           <select class="input" data-plan="${key}">
+             <option value="once"${!l.sub ? ' selected' : ''}>One-time purchase</option>
+             ${subscription.frequencies.map((f) => `<option value="${f.id}"${l.sub === f.id ? ' selected' : ''}>Subscribe · ${f.label} (−${pct}%)</option>`).join('')}
+           </select></label>`
+      : '';
+    return `<li class="line">
+      <a href="/shop/${p.id}/" class="thumb">${swatch(p.colors[0], p.colors[1], p.name)}</a>
+      <div class="line-info">
+        <div class="line-top">
+          <div>
+            <a class="line-name" href="/shop/${p.id}/">${p.name}</a>
+            <p class="muted small">${meta}${l.sub ? ` · <span class="subtag">Subscription, ${freqLabel(l.sub).toLowerCase()}</span>` : ''}</p>
+          </div>
+          <p class="line-price">${money(unitPrice(l) * l.qty)}${l.sub ? `<br><s class="muted small">${money(size.price * l.qty)}</s>` : ''}</p>
+        </div>
+        <div class="line-controls">
+          <div class="qty" role="group" aria-label="Quantity for ${p.name}">
+            <button type="button" data-q="${key}" data-d="-1" aria-label="Decrease">−</button>
+            <span aria-live="polite">${l.qty}</span>
+            <button type="button" data-q="${key}" data-d="1" aria-label="Increase">+</button>
+          </div>
+          ${subControl}
+          <button type="button" class="remove" data-remove="${key}">Remove</button>
+        </div>
+      </div>
+    </li>`;
+  }
+
+  function render() {
+    const lines = getCart();
+    $('[data-empty]').hidden = lines.length > 0;
+    $('[data-filled]').hidden = lines.length === 0;
+    if (!lines.length) return;
+    linesEl.innerHTML = lines.map(lineHTML).join('');
+
+    const full = lines.reduce((t, l) => {
+      const p = getProduct(l.id)!;
+      const size = p.sizes.find((s) => s.id === l.size) ?? p.sizes[0];
+      return t + size.price * l.qty;
+    }, 0);
+    const total = lines.reduce((t, l) => t + unitPrice(l) * l.qty, 0);
+    const savings = full - total;
+    $('[data-subtotal]').textContent = money(full);
+    $('[data-savings-row]').hidden = savings <= 0;
+    $('[data-savings]').textContent = `−${money(savings)}`;
+    $('[data-total]').textContent = money(total);
+    $('[data-nudge]').hidden = lines.some((l) => l.sub) || !lines.some((l) => getProduct(l.id)?.subscribable);
+  }
+
+  linesEl.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const q = t.closest<HTMLElement>('[data-q]');
+    const r = t.closest<HTMLElement>('[data-remove]');
+    if (q) {
+      const line = getCart().find((l) => keyOf(l) === q.dataset.q);
+      if (line) setQty(q.dataset.q!, line.qty + Number(q.dataset.d));
+    }
+    if (r) setQty(r.dataset.remove!, 0);
+  });
+
+  linesEl.addEventListener('change', (e) => {
+    const sel = (e.target as HTMLElement).closest<HTMLSelectElement>('[data-plan]');
+    if (!sel) return;
+    const lines = getCart();
+    const line = lines.find((l) => keyOf(l) === sel.dataset.plan);
+    if (!line) return;
+    setQty(keyOf(line), 0);
+    addLine({ ...line, sub: sel.value === 'once' ? null : sel.value });
+  });
+
+  document.addEventListener('cart:change', render);
+  render();
+
+  pay.addEventListener('click', async () => {
+    const lines = getCart();
+    if (!lines.length) return;
+    if (pay.dataset.provider !== 'endpoint' || !pay.dataset.endpoint) {
+      payStatus.textContent =
+        'Checkout isn’t connected yet, so no payment was taken. When it’s live, this button opens our secure payment page.';
+      return;
+    }
+    pay.disabled = true;
+    payStatus.textContent = 'Opening secure checkout…';
+    try {
+      const items = lines.map((l) => {
+        const p = getProduct(l.id)!;
+        const size = p.sizes.find((s) => s.id === l.size) ?? p.sizes[0];
+        return {
+          id: l.id,
+          size: l.size,
+          grind: l.grind,
+          quantity: l.qty,
+          subscription: l.sub,
+          price: l.sub ? size.stripeSubscriptionPrice : size.stripePrice,
+        };
+      });
+      const res = await fetch(pay.dataset.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, currency: pay.dataset.currency }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error();
+      location.href = data.url;
+    } catch {
+      payStatus.textContent = 'Something went wrong opening checkout. Please try again.';
+      pay.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .title {
+    margin: 0.75rem 0 2.5rem;
+  }
+  .empty {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    padding-block: 2rem 4rem;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .layout[hidden],
+  .empty[hidden] {
+    display: none;
+  }
+  .lines-col {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+  .lines {
+    width: 100%;
+    border-top: 1px solid var(--line);
+  }
+  .lines :global(.line) {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 1.25rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .lines :global(.sw) {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    gap: 0.2rem;
+    border: 1px solid var(--line);
+  }
+  .lines :global(.sw span) {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  .lines :global(.sw small) {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.6875rem;
+    padding-inline: 0.3rem;
+  }
+  .lines :global(.line-info) {
+    min-width: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .lines :global(.line-top) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+  .lines :global(.line-top > div) {
+    min-width: 0;
+  }
+  .lines :global(.line-name) {
+    font-family: var(--serif);
+    font-size: var(--step-1);
+    text-decoration: none;
+  }
+  .lines :global(.small) {
+    font-size: 0.875rem;
+  }
+  .lines :global(.subtag) {
+    color: var(--moss);
+  }
+  .lines :global(.line-price) {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .lines :global(.line-controls) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+  .lines :global(.qty) {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgb(31 27 23 / 0.3);
+  }
+  .lines :global(.qty button) {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .lines :global(.qty span) {
+    min-width: 1.75rem;
+    text-align: center;
+  }
+  .lines :global(.sub-toggle) {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .lines :global(.sub-toggle .label) {
+    font-size: 0.625rem;
+    color: var(--muted);
+  }
+  .lines :global(.sub-toggle .input) {
+    min-height: 38px;
+    padding-block: 0.4rem;
+    font-size: 0.875rem;
+    width: auto;
+    max-width: 100%;
+  }
+  .lines :global(.remove) {
+    margin-left: auto;
+    background: none;
+    border: 0;
+    padding: 0.5rem 0;
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .sub-nudge {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    background: var(--moss-pale);
+    color: var(--ink);
+    font-size: 0.9375rem;
+  }
+  .sub-nudge[hidden] {
+    display: none;
+  }
+
+  .summary {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+    background: var(--paper-light);
+    border: 1px solid var(--line);
+  }
+  .totals div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    font-size: 0.9375rem;
+  }
+  .totals .save {
+    color: var(--moss);
+  }
+  .totals .total {
+    margin-top: 0.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--serif);
+    font-size: var(--step-1);
+  }
+  .pay {
+    width: 100%;
+  }
+  .pay-status {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .pay-status:empty {
+    display: none;
+  }
+  .trust {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    padding-left: 1rem;
+    list-style: disc;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .summary {
+      position: static;
+    }
+  }
+  @media (max-width: 480px) {
+    .lines :global(.line) {
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 1rem;
+    }
+    .lines :global(.sub-toggle),
+    .lines :global(.sub-toggle .input) {
+      width: 100%;
+    }
+  }
+</style>

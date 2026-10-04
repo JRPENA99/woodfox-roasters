@@ -23,6 +23,7 @@ export const site = {
 };
 
 export const nav = [
+  { label: 'Shop', href: '/shop/' },
   { label: 'Coffee', href: '/coffee/' },
   { label: 'Sourcing', href: '/sourcing/' },
   { label: 'About', href: '/about/' },
@@ -50,4 +51,19 @@ export const forms = {
 export const heroVideo = {
   src: '/media/video/hero-harvest-1080.mp4',
   type: 'video/mp4',
+};
+
+/**
+ * Checkout. The cart lives in the visitor's browser; payment happens on the
+ * provider's secure hosted page. See docs/COMMERCE.md.
+ *
+ *   provider: 'none'     — prototype: checkout explains that payment isn't live yet
+ *   provider: 'endpoint' — POSTs the cart as JSON to `endpoint` (e.g. a small
+ *                          serverless function that creates a Stripe Checkout
+ *                          Session) and redirects to the URL it returns.
+ */
+export const checkout = {
+  provider: 'none' as 'none' | 'endpoint',
+  endpoint: '',
+  currency: 'USD',
 };

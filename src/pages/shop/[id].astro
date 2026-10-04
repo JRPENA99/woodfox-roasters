@@ -1,0 +1,390 @@
+---
+import Base from '../../layouts/Base.astro';
+import BagArt from '../../components/BagArt.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, grinds, subscription, money, type Product } from '../../data/products';
+
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { id: product.id }, props: { product } }));
+}
+
+const { product: p } = Astro.props as { product: Product };
+const pct = Math.round(subscription.discount * 100);
+const related = products.filter((x) => x.id !== p.id).slice(0, 3);
+const first = p.sizes[0];
+---
+
+<Base title={p.name} description={`${p.name} — ${p.tagline}`}>
+  <section class="section-sm pdp">
+    <div class="wrap grid-12">
+      <div class="gallery">
+        <BagArt name={p.name} colors={p.colors} />
+      </div>
+
+      <div class="info">
+        <a class="back label muted" href="/shop/">← Shop</a>
+        <p class="label muted">{p.roast !== '—' ? `${p.roast} roast` : 'Gift'}</p>
+        <h1 class="h1">{p.name}</h1>
+        <p class="lede tag">{p.tagline}</p>
+        <p class="price-line"><span class="price" data-price>{money(first.price)}</span> <span class="was muted" data-was hidden></span></p>
+
+        <form class="buy" data-product={p.id} novalidate>
+          {p.sizes.length > 1 && (
+            <fieldset class="opt">
+              <legend class="label">Size</legend>
+              <div class="seg">
+                {p.sizes.map((s, i) => (
+                  <label>
+                    <input type="radio" name="size" value={s.id} checked={i === 0} data-price={s.price} />
+                    <span>{s.label}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
+          {p.sizes.length === 1 && <input type="hidden" name="size" value={first.id} data-price={first.price} />}
+
+          {p.grinds && (
+            <div class="opt field">
+              <label class="label" for="grind">Grind</label>
+              <select class="input" id="grind" name="grind">
+                {grinds.map((g) => <option value={g.id}>{g.label}</option>)}
+              </select>
+            </div>
+          )}
+
+          {p.subscribable && (
+            <fieldset class="opt plans">
+              <legend class="label">Purchase</legend>
+              <label class="plan">
+                <input type="radio" name="plan" value="once" checked />
+                <span class="plan-body">
+                  <span class="plan-title">One-time purchase</span>
+                  <span class="muted" data-plan-once>{money(first.price)}</span>
+                </span>
+              </label>
+              <label class="plan">
+                <input type="radio" name="plan" value="subscribe" />
+                <span class="plan-body">
+                  <span class="plan-title">Subscribe &amp; save {pct}% <span class="pill">Best value</span></span>
+                  <span class="muted" data-plan-sub>{money(Math.round(first.price * (1 - subscription.discount)))} per delivery</span>
+                </span>
+              </label>
+              <div class="freq field" data-freq hidden>
+                <label class="label" for="freq">Deliver</label>
+                <select class="input" id="freq" name="freq">
+                  {subscription.frequencies.map((f, i) => <option value={f.id} selected={i === 1}>{f.label}</option>)}
+                </select>
+                <p class="hint">Skip, pause or cancel when you need to.</p>
+              </div>
+            </fieldset>
+          )}
+
+          <div class="actions">
+            <div class="qty" aria-label="Quantity" role="group">
+              <button type="button" data-step="-1" aria-label="Decrease quantity">−</button>
+              <input type="number" name="qty" value="1" min="1" max="20" inputmode="numeric" aria-label="Quantity" />
+              <button type="button" data-step="1" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="btn add" type="submit">Add to cart</button>
+          </div>
+        </form>
+
+        <p class="notice">
+          <strong>Preview</strong>
+          <span>Placeholder product. Details and pricing will be updated when our first coffees are ready.</span>
+        </p>
+
+        <div class="details">
+          <p>{p.description}</p>
+          {p.notes.length > 0 && (
+            <dl>
+              <div><dt class="label muted">Notes</dt><dd>{p.notes.join(', ')}</dd></div>
+              {p.roast !== '—' && <div><dt class="label muted">Roast</dt><dd>{p.roast}</dd></div>}
+              <div><dt class="label muted">Sizes</dt><dd>{p.sizes.map((s) => s.label).join(' / ')}</dd></div>
+            </dl>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section surface-deep" aria-labelledby="related-title">
+    <div class="wrap">
+      <h2 class="h2 rel-title" id="related-title">You might also like</h2>
+      <div class="related">
+        {related.map((r) => <ProductCard product={r} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { addLine, toast } from '../../scripts/cart';
+  import { getProduct, money, subscription } from '../../data/products';
+
+  const form = document.querySelector<HTMLFormElement>('form[data-product]');
+  if (form) {
+    const product = getProduct(form.dataset.product!)!;
+    const priceEl = document.querySelector('[data-price]')!;
+    const wasEl = document.querySelector<HTMLElement>('[data-was]')!;
+    const freq = form.querySelector<HTMLElement>('[data-freq]');
+    const qty = form.querySelector<HTMLInputElement>('input[name="qty"]')!;
+
+    // Deep link: /shop/…/?plan=subscribe preselects the subscription.
+    if (new URLSearchParams(location.search).get('plan') === 'subscribe') {
+      const r = form.querySelector<HTMLInputElement>('input[name="plan"][value="subscribe"]');
+      if (r) r.checked = true;
+    }
+
+    const state = () => {
+      const fd = new FormData(form);
+      const sizeId = String(fd.get('size'));
+      const size = product.sizes.find((s) => s.id === sizeId) ?? product.sizes[0];
+      const sub = fd.get('plan') === 'subscribe';
+      return { size, sub, freq: String(fd.get('freq') || ''), grind: fd.get('grind') ? String(fd.get('grind')) : null };
+    };
+
+    const render = () => {
+      const { size, sub } = state();
+      const discounted = Math.round(size.price * (1 - subscription.discount));
+      priceEl.textContent = money(sub ? discounted : size.price);
+      wasEl.hidden = !sub;
+      wasEl.textContent = money(size.price);
+      const once = form.querySelector('[data-plan-once]');
+      const subEl = form.querySelector('[data-plan-sub]');
+      if (once) once.textContent = money(size.price);
+      if (subEl) subEl.textContent = `${money(discounted)} per delivery`;
+      if (freq) freq.hidden = !sub;
+    };
+
+    form.addEventListener('change', render);
+    form.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((b) =>
+      b.addEventListener('click', () => {
+        qty.value = String(Math.max(1, Math.min(20, (parseInt(qty.value) || 1) + Number(b.dataset.step))));
+      }),
+    );
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const s = state();
+      const n = Math.max(1, Math.min(20, parseInt(qty.value) || 1));
+      addLine({ id: product.id, size: s.size.id, grind: s.grind, qty: n, sub: s.sub ? s.freq : null });
+      toast(`${product.name} (${s.size.label}${s.sub ? ', subscription' : ''}) added.`);
+    });
+    render();
+  }
+</script>
+
+<style>
+  .grid-12 {
+    row-gap: 3rem;
+    align-items: start;
+  }
+  .gallery {
+    grid-column: 1 / span 6;
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+  }
+  .info {
+    grid-column: 8 / span 5;
+    display: grid;
+    gap: 1.1rem;
+  }
+  .back {
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+  .price-line {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    font-size: var(--step-1);
+  }
+  .was {
+    text-decoration: line-through;
+    font-size: 0.9375rem;
+  }
+  .buy {
+    display: grid;
+    gap: 1.5rem;
+    padding-block: 1.5rem;
+    border-block: 1px solid var(--line);
+  }
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  legend {
+    padding: 0;
+    margin-bottom: 0.7rem;
+  }
+  .seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .seg label,
+  .plan {
+    position: relative;
+    cursor: pointer;
+  }
+  .seg input,
+  .plan input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .seg span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 1.2rem;
+    border: 1px solid rgb(31 27 23 / 0.3);
+    font-size: 0.9375rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  .seg input:checked + span {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .seg input:focus-visible + span,
+  .plan input:focus-visible + .plan-body {
+    outline: 2px solid var(--cherry);
+    outline-offset: 3px;
+  }
+  .plans {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .plan-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.1rem 1rem 2.6rem;
+    border: 1px solid rgb(31 27 23 / 0.25);
+    background: var(--paper-light);
+    position: relative;
+    font-size: 0.9375rem;
+  }
+  .plan-body::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    border: 1px solid var(--ink-soft);
+    border-radius: 50%;
+  }
+  .plan input:checked + .plan-body {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .plan input:checked + .plan-body::before {
+    background: var(--cherry);
+    border-color: var(--cherry);
+    box-shadow: inset 0 0 0 3px var(--paper-light);
+  }
+  .plan-title {
+    font-weight: 540;
+  }
+  .pill {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.15rem 0.5rem;
+    background: var(--moss-pale);
+    color: var(--moss);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .freq {
+    margin-top: 0.5rem;
+  }
+  .freq[hidden] {
+    display: none;
+  }
+  .hint {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .qty {
+    display: flex;
+    border: 1px solid rgb(31 27 23 / 0.3);
+  }
+  .qty button {
+    width: 44px;
+    background: none;
+    border: 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  .qty input {
+    width: 3rem;
+    border: 0;
+    background: none;
+    text-align: center;
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  .qty input::-webkit-inner-spin-button {
+    appearance: none;
+  }
+  .add {
+    flex: 1;
+  }
+  .details {
+    display: grid;
+    gap: 1.25rem;
+    color: var(--ink-soft);
+    margin-top: 0.75rem;
+  }
+  .details dl div {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1rem;
+    padding-block: 0.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .rel-title {
+    margin-bottom: 2.5rem;
+  }
+  .related {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  @media (max-width: 900px) {
+    .gallery,
+    .info {
+      grid-column: 1 / -1;
+    }
+    .gallery {
+      position: static;
+      max-width: 520px;
+    }
+    .related {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .related {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

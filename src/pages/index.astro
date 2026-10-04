@@ -158,6 +158,20 @@ const journey = [
     </div>
   </section>
 
+  <!-- Shop / subscription promo -->
+  <section class="promo" aria-labelledby="promo-title">
+    <div class="wrap promo-row">
+      <div>
+        <p class="label muted">Shop &amp; subscriptions</p>
+        <h2 class="h2" id="promo-title">Subscribe and save 15% on every delivery.</h2>
+      </div>
+      <div class="promo-actions">
+        <a class="btn" href="/shop/">Visit the shop</a>
+        <a class="link" href="/shop/seasonal-filter/?plan=subscribe">Start a subscription <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- 06 Wholesale -->
   <section class="section wholesale" aria-labelledby="wholesale-title">
     <div class="wrap grid-12">
@@ -341,6 +355,29 @@ const journey = [
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem 2rem;
+  }
+
+  /* Promo */
+  .promo {
+    border-bottom: 1px solid var(--line);
+    padding-block: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+  .promo-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 2rem;
+  }
+  .promo .h2 {
+    max-width: 18ch;
+    margin-top: 1rem;
+  }
+  .promo-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   /* 06 */
