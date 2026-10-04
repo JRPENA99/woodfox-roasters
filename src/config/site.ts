@@ -1,5 +1,5 @@
 /**
- * Site-wide settings for Woodfox Roasters.
+ * Site-wide settings for Woodfox Coffee.
  *
  * Most "one place to change it" details live here: navigation, contact
  * details, form endpoints and the hero video. Values marked PLACEHOLDER
@@ -7,10 +7,10 @@
  */
 
 export const site = {
-  name: 'Woodfox Roasters',
+  name: 'Woodfox Coffee',
   shortName: 'Woodfox',
   description:
-    'Woodfox Roasters is a young specialty coffee roasting company. Thoughtfully selected coffee, roasted with intention.',
+    'Woodfox Coffee is a young specialty coffee roasting company. Thoughtfully selected coffee, roasted with intention.',
 
   // PLACEHOLDER — confirm the real inbox before launch.
   email: 'hello@woodfoxroasters.com',

@@ -22,7 +22,7 @@ const facts = coffeeFacts(c);
 const canBuy = c.status === 'available' && Boolean(c.buyUrl);
 ---
 
-<Base title={`${c.name}, ${c.country}`} description={c.summary ?? `${c.name} from ${c.country}, roasted by Woodfox Roasters.`} image={c.image}>
+<Base title={`${c.name}, ${c.country}`} description={c.summary ?? `${c.name} from ${c.country}, roasted by Woodfox Coffee.`} image={c.image}>
   <article class="section coffee">
     <div class="wrap grid-12">
       <div class="media">

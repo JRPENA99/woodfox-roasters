@@ -1,6 +1,6 @@
-# Woodfox Roasters — website prototype
+# Woodfox Coffee — website prototype
 
-A fast, static marketing site for Woodfox Roasters, built with [Astro](https://astro.build).
+A fast, static marketing site for Woodfox Coffee, built with [Astro](https://astro.build).
 No database, no backend, no accounts. It builds to plain HTML/CSS with about 3 KB of JavaScript.
 
 ## Run it
