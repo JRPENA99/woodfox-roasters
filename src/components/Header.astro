@@ -1,6 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { nav, cta } from '../config/site';
+import { nav, commerce, site } from '../config/site';
 
 interface Props {
   overlay?: boolean;
@@ -17,11 +17,11 @@ const right = nav.slice(3);
   <div class="bar wrap">
     <nav class="nav nav-left" aria-label="Primary">
       {left.map((item) => (
-        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.short ?? item.label}</a>
       ))}
     </nav>
 
-    <a href="/" class="brand" aria-label="Woodfox Coffee, home">
+    <a href="/" class="brand" aria-label="Woodfox Coffee, home" aria-current={path === '/' ? 'page' : undefined}>
       <Wordmark />
     </a>
 
@@ -31,11 +31,11 @@ const right = nav.slice(3);
           <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
         ))}
       </nav>
-      <a href="/checkout/" class="cta cart-link" aria-label="Cart" aria-current={isCurrent('/checkout/') ? 'page' : undefined}>Cart <span class="cart-count" data-cart-count>0</span></a>
+      {commerce.enabled && <a href="/checkout/" class="cta cart-link" aria-label="Cart" aria-current={isCurrent('/checkout/') ? 'page' : undefined}>Cart <span class="cart-count" data-cart-count>0</span></a>}
     </div>
 
     <div class="mobile-actions">
-      <a href="/checkout/" class="cart-mobile label" aria-label="Cart">Cart <span class="cart-count" data-cart-count>0</span></a>
+      {commerce.enabled && <a href="/checkout/" class="cart-mobile label" aria-label="Cart">Cart <span class="cart-count" data-cart-count>0</span></a>}
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
       <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
       <span class="menu-text">Menu</span>
@@ -52,7 +52,7 @@ const right = nav.slice(3);
         ))}
       </ul>
     </nav>
-    <a href={cta.href} class="btn mobile-cta">{cta.label}</a>
+    <a href={`mailto:${site.email}`} class="btn mobile-cta">Email us</a>
   </div>
 </header>
 
@@ -62,7 +62,7 @@ const right = nav.slice(3);
     top: 0;
     z-index: 50;
     color: var(--ink);
-    background: rgb(243 238 229 / 0.94);
+    background: rgb(245 244 239 / 0.94);
     backdrop-filter: saturate(1.2) blur(10px);
     -webkit-backdrop-filter: saturate(1.2) blur(10px);
     border-bottom: 1px solid var(--line);
@@ -79,7 +79,7 @@ const right = nav.slice(3);
   }
   .site-header.is-overlay.is-scrolled,
   .site-header.is-overlay.menu-open {
-    background: rgb(243 238 229 / 0.96);
+    background: rgb(245 244 239 / 0.96);
     color: var(--ink);
     border-bottom-color: var(--line);
   }

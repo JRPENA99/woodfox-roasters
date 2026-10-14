@@ -1,0 +1,81 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../config/site';
+---
+
+<Legal
+  title="Privacy Policy"
+  description="How Woodfox Coffee Company handles information when you visit woodfoxcoffee.com or contact us."
+  updated="October 14, 2026"
+>
+  <p>
+    This policy explains what information {site.legalName} (“Woodfox Coffee,” “we,” “us”) collects when you visit
+    woodfoxcoffee.com or contact us, and how we use it. We aim to collect as little as possible.
+  </p>
+
+  <h2>Information you choose to send us</h2>
+  <p>
+    Our contact and wholesale forms open your own email app with your message addressed to us. We receive only what
+    you choose to send: typically your name, email address, message and, for wholesale inquiries, your business name,
+    business type, estimated coffee needs and (optionally) phone number.
+  </p>
+  <p>We use this information only to reply to you and, for wholesale inquiries, to discuss a potential partnership.</p>
+
+  <h2>Information collected automatically</h2>
+  <ul>
+    <li>
+      <strong>No analytics or advertising tracking.</strong> This website does not use analytics, advertising pixels or
+      tracking cookies.
+    </li>
+    <li>
+      <strong>Hosting.</strong> The site is hosted on GitHub Pages. Like most web hosts, GitHub may process technical
+      data such as your IP address to deliver the site and keep it secure. See GitHub’s privacy statement for details.
+    </li>
+    <li>
+      <strong>Images.</strong> Some photographs are currently loaded from Unsplash (images.unsplash.com), which receives
+      standard request data such as your IP address when those images load.
+    </li>
+    <li>
+      <strong>Fonts and video</strong> are served from our own site, not from third-party font or video services.
+    </li>
+  </ul>
+
+  <h2>Online ordering (future)</h2>
+  <p>
+    Online ordering is not yet available. When it launches, payments will be processed by a third-party payment
+    provider <mark class="confirm">[owner to confirm provider, e.g. Stripe, Square or Shopify]</mark>. We will never
+    receive or store your full card details. Your cart may be stored in your browser’s local storage on your own device.
+    This policy will be updated before ordering opens.
+  </p>
+
+  <h2>Sharing</h2>
+  <p>
+    We do not sell or rent personal information. We share it only with service providers needed to run our business
+    (for example, our email provider), or when required by law.
+  </p>
+
+  <h2>Retention</h2>
+  <p>
+    We keep correspondence for as long as needed to respond and maintain business records
+    <mark class="confirm">[owner to confirm retention period]</mark>, then delete it.
+  </p>
+
+  <h2>Your choices</h2>
+  <p>
+    You can ask us what information we hold about you, or ask us to correct or delete it, by emailing
+    <a href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+
+  <h2>Children</h2>
+  <p>This website is not directed to children under 13, and we do not knowingly collect their information.</p>
+
+  <h2>Changes</h2>
+  <p>We’ll update this page if our practices change, and revise the date at the top.</p>
+
+  <h2>Contact</h2>
+  <p>
+    {site.legalName}, {site.location}.
+    Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+    {!site.emailConfirmed && <mark class="confirm">[owner to confirm address]</mark>}
+  </p>
+</Legal>

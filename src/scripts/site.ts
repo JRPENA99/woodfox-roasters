@@ -95,9 +95,9 @@ if (video) {
 
 /* Forms ----------------------------------------------------------------- */
 /**
- * Forms post to the endpoint set in src/config/site.ts. While no endpoint
- * is configured (prototype), they validate and show a clear note instead
- * of pretending to send.
+ * Forms post to the endpoint set in src/config/site.ts. With no endpoint they
+ * open the visitor's email app, addressed to the business inbox, with the
+ * submitted fields written out as plain text.
  */
 document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => {
   const status = form.querySelector<HTMLElement>('[data-status]');
@@ -110,7 +110,7 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
 
   const validate = () => {
     let firstInvalid: HTMLElement | null = null;
-    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('[required]').forEach((el) => {
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('[required], [pattern]').forEach((el) => {
       const ok = el.checkValidity();
       el.setAttribute('aria-invalid', String(!ok));
       if (!ok && !firstInvalid) firstInvalid = el;
@@ -137,7 +137,29 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
 
     const endpoint = form.dataset.endpoint;
     if (!endpoint) {
-      say('Thank you. This form is not connected yet, so nothing was sent. It will be before launch.', 'success');
+      const to = form.dataset.mailto;
+      if (!to) return say('This form is not available right now. Please try again later.', 'error');
+      const labels: Record<string, string> = {
+        topic: 'Topic', name: 'Name', email: 'Email', business: 'Business', phone: 'Phone',
+        business_type: 'Business type', estimated_needs: 'Estimated coffee needs', message: 'Message',
+      };
+      const lines: string[] = [];
+      for (const [k, v] of data.entries()) {
+        if (!(k in labels) || typeof v !== 'string' || !v.trim()) continue;
+        // Plain text only; trimmed and length-capped by the inputs' maxlength.
+        const clean = v.replace(/[\u0000-\u0008\u000B-\u001F]/g, '').trim();
+        lines.push(k === 'message' ? `\n${clean}` : `${labels[k]}: ${clean}`);
+      }
+      const business = data.get('business');
+      const subject = `${form.dataset.subject || 'Website inquiry'}${business ? ` – ${String(business).slice(0, 80)}` : ''}`;
+      const href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+      submit?.setAttribute('disabled', '');
+      say('Opening your email app…');
+      window.location.href = href;
+      setTimeout(() => {
+        submit?.removeAttribute('disabled');
+        say(`Your email app should now show your message, ready to send. If nothing opened, email us at ${to}.`, 'success');
+      }, 900);
       return;
     }
 

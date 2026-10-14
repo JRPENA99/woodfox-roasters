@@ -1,48 +1,60 @@
 /**
  * Site-wide settings for Woodfox Coffee.
  *
- * Most "one place to change it" details live here: navigation, contact
- * details, form endpoints and the hero video. Values marked PLACEHOLDER
- * should be confirmed before launch.
+ * One place to change company details, navigation, form delivery, the hero
+ * video and whether online ordering is switched on. Values marked
+ * OWNER TO CONFIRM must be checked before they are relied on.
  */
 
 export const site = {
+  /** Consumer-facing brand. */
   name: 'Woodfox Coffee',
+  /** Registered business name (business plan, §2). */
+  legalName: 'Woodfox Coffee Company',
   shortName: 'Woodfox',
+  url: 'https://woodfoxcoffee.com',
+  tagline: 'Crafted with Intention.',
   description:
-    'Woodfox Coffee is a young specialty coffee roasting company. Thoughtfully selected coffee, roasted with intention.',
+    'Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing and precision roasting. Crafted with intention.',
 
-  // PLACEHOLDER — confirm the real inbox before launch.
-  email: 'hello@woodfoxroasters.com',
+  // OWNER TO CONFIRM — the business plan names hello@woodfoxcoffee.com as the intended
+  // address. Make sure this inbox exists: contact and wholesale forms deliver to it.
+  email: 'hello@woodfoxcoffee.com',
+  emailConfirmed: false,
 
-  // Taken from the current woodfoxroasters.com site. Set to '' to hide.
+  city: 'Houston',
+  region: 'Texas',
   location: 'Houston, Texas',
 
-  // Add real profiles when they exist, e.g. { label: 'Instagram', href: 'https://instagram.com/…' }
+  // Add real profiles once confirmed, e.g. { label: 'Instagram', href: 'https://instagram.com/…' }
   social: [] as { label: string; href: string }[],
 };
 
+/** Main navigation. "Home" is the logo (and appears in the mobile menu). */
 export const nav = [
-  { label: 'Shop', href: '/shop/' },
-  { label: 'Coffee', href: '/coffee/' },
-  { label: 'Sourcing', href: '/sourcing/' },
-  { label: 'About', href: '/about/' },
+  { label: 'Our Coffee', href: '/coffee/' },
+  { label: 'Sourcing & Roasting', short: 'Sourcing', href: '/sourcing/' },
+  { label: 'Our Story', href: '/about/' },
   { label: 'Wholesale', href: '/wholesale/' },
   { label: 'Contact', href: '/contact/' },
 ];
 
-export const cta = { label: 'Join the List', href: '/#list' };
+export const legal = [
+  { label: 'Privacy Policy', href: '/privacy/' },
+  { label: 'Terms & Conditions', href: '/terms/' },
+  { label: 'Shipping Policy', href: '/shipping/' },
+  { label: 'Returns & Refunds', href: '/returns/' },
+];
 
 /**
- * Form endpoints. Leave empty while the site is a prototype: forms will
- * validate and show a "not connected yet" note instead of sending anything.
+ * Form delivery.
  *
- * Any service that accepts a standard HTML form POST works, for example
- * Formspree, Basin, Netlify Forms, or a Kit / Buttondown / Mailchimp
- * embed URL for the email list. See docs/FORMS.md.
+ * With no endpoint set, contact and wholesale forms open the visitor's email
+ * app with their message addressed to `site.email` (a working delivery
+ * method that needs no third-party service). To receive submissions directly,
+ * paste a form-service URL here (Formspree, Basin, etc.). See docs/FORMS.md.
  */
 export const forms = {
-  newsletter: '',
   contact: '',
   wholesale: '',
 };
@@ -54,15 +66,14 @@ export const heroVideo = {
 };
 
 /**
- * Checkout. The cart lives in the visitor's browser; payment happens on the
- * provider's secure hosted page. See docs/COMMERCE.md.
+ * Online ordering. OFF until a payment provider is configured and approved.
  *
- *   provider: 'none'     — prototype: checkout explains that payment isn't live yet
- *   provider: 'endpoint' — POSTs the cart as JSON to `endpoint` (e.g. a small
- *                          serverless function that creates a Stripe Checkout
- *                          Session) and redirects to the URL it returns.
+ * While `enabled` is false the site shows coffees without prices, carts or
+ * checkout, and never suggests that orders are being accepted.
+ * See docs/COMMERCE.md for switching it on (Stripe, Square or Shopify).
  */
-export const checkout = {
+export const commerce = {
+  enabled: false,
   provider: 'none' as 'none' | 'endpoint',
   endpoint: '',
   currency: 'USD',

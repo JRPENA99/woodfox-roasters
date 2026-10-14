@@ -3,53 +3,76 @@ import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Photo from '../components/Photo.astro';
 import HarvestCalendar from '../components/HarvestCalendar.astro';
-import ListSection from '../components/ListSection.astro';
 ---
 
 <Base
-  title="Sourcing"
-  description="How Woodfox Coffee sources coffee: by quality and season, in quantities that keep it fresh, from producing regions around the world."
+  title="Sourcing & Roasting"
+  description="How Woodfox Coffee sources and roasts: careful species selection, high-elevation origins and precise light-to-medium roast profiles."
 >
   <PageIntro
-    label="Sourcing"
-    title="We follow the harvest, <em>not a fixed map.</em>"
-    lede="Woodfox selects coffees from producing regions around the world, based on quality, season and what makes sense for a roaster of our size. This is how we think about it."
+    label="Sourcing & Roasting"
+    title="Three decisions. <em>One cup.</em>"
+    lede="Every Woodfox coffee is shaped by three choices: which coffee species we use, where it’s grown, and how we roast it. Here’s how we approach each one."
     image="hillside"
   />
 
-  <!-- 01 Agricultural -->
-  <section class="section" aria-labelledby="agri-title">
+  <!-- Pillar 1 -->
+  <section class="section" aria-labelledby="p1-title">
     <div class="wrap grid-12 split">
       <div class="text">
-        <p class="kicker label"><span class="num">01</span> Coffee is agricultural</p>
-        <h2 class="h2" id="agri-title" data-reveal>A crop first. Every harvest is a little different.</h2>
+        <p class="kicker label"><span class="num">01</span> Species selection</p>
+        <h2 class="h2" id="p1-title" data-reveal>Not all coffee comes from the same plant.</h2>
         <div class="prose" data-reveal>
           <p>
-            Coffee’s quality depends on weather, altitude, soil, plant variety, careful picking and careful processing.
-            The same farm can produce a different coffee from one year to the next.
+            Most specialty coffee is Arabica, prized for its sweetness, acidity and aromatic range. Robusta, a separate
+            species, is often dismissed, but carefully grown, high-grade specialty Robusta can add body, depth and a
+            richer texture.
           </p>
           <p>
-            We think the most honest way to source is to treat it that way: taste each season’s coffee for what it is,
-            and choose accordingly.
+            We don’t limit ourselves to one species. We choose and combine coffees for what they bring to the cup, and
+            each bag will tell you exactly what’s inside.
           </p>
         </div>
       </div>
       <div class="pic" data-reveal>
-        <Photo image="dryingBeds" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" caption="Coffee drying after harvest." />
+        <Photo image="cherriesBranch" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" caption="Coffee cherries ripening on the plant." />
       </div>
     </div>
   </section>
 
-  <!-- 02 Seasons -->
+  <!-- Pillar 2 -->
+  <section class="section surface-coffee on-dark" aria-labelledby="p2-title">
+    <div class="wrap grid-12 split reverse">
+      <div class="pic" data-reveal>
+        <Photo image="valley" ratio="5 / 4" sizes="(min-width: 900px) 46vw, 100vw" />
+      </div>
+      <div class="text">
+        <p class="kicker label"><span class="num">02</span> Geographic origin</p>
+        <h2 class="h2" id="p2-title" data-reveal>Where it grows shapes how it tastes.</h2>
+        <div class="prose" data-reveal>
+          <p>
+            Altitude, sunlight, rainfall and soil all leave their mark on a coffee. We favour high-elevation growing
+            regions near the equator, such as Ethiopia and Kenya, where slow-ripening cherries tend to develop more
+            complex, distinctive flavours.
+          </p>
+          <p>
+            We’ll always tell you the country and region a coffee comes from, as specifically as we can.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seasonality -->
   <section class="section surface-light" aria-labelledby="season-title">
     <div class="wrap grid-12">
       <div class="season-text">
-        <p class="kicker label"><span class="num">02</span> Seasonality</p>
-        <h2 class="h2" id="season-title" data-reveal>Different origins come into season at different times.</h2>
+        <p class="kicker label"><span class="num">—</span> Seasonality</p>
+        <h3 class="h2" id="season-title" data-reveal>Coffee is a crop, harvested in seasons.</h3>
         <div class="prose" data-reveal>
           <p>
-            Harvests move around the coffee-growing world through the year. Following them lets us offer coffees when
-            they’re fresh, instead of stretching one origin across every month.
+            Each origin is harvested at a different time of year. Following the seasons helps us offer coffees while
+            they’re fresh.
           </p>
         </div>
       </div>
@@ -59,92 +82,57 @@ import ListSection from '../components/ListSection.astro';
     </div>
   </section>
 
-  <!-- 03 Statement -->
-  <section class="section statement-sec" aria-labelledby="quality-title">
-    <div class="wrap">
-      <p class="kicker label"><span class="num">03</span> Quality before a fixed lineup</p>
-      <h2 class="statement" id="quality-title" data-reveal>
-        We’d rather offer a coffee because it’s excellent this season than because it fits a promise we made last
-        year.
-      </h2>
-    </div>
-  </section>
-
-  <!-- 04 Scale -->
-  <section class="section-sm" aria-labelledby="scale-title">
-    <div class="wrap grid-12 split reverse">
-      <div class="pic" data-reveal>
-        <Photo image="greenCoffee" ratio="5 / 4" sizes="(min-width: 900px) 46vw, 100vw" caption="Green coffee, before roasting." />
-      </div>
-      <div class="text">
-        <p class="kicker label"><span class="num">04</span> Buying at our scale</p>
-        <h2 class="h2" id="scale-title" data-reveal>The right amount of the right coffee.</h2>
-        <div class="prose" data-reveal>
-          <p>
-            Many green-coffee lots are sold in volumes built for much larger roasters. Rather than buy more than we can
-            roast while it’s fresh, we choose excellent coffees in quantities that suit where Woodfox is today.
-          </p>
-          <p>
-            It keeps the coffee fresh and the lineup honest, and it leaves room to grow into larger commitments as
-            demand develops.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 Mexico -->
-  <section class="section mexico surface-coffee on-dark" aria-labelledby="mexico-title">
+  <!-- Pillar 3 -->
+  <section class="section" aria-labelledby="p3-title">
     <div class="wrap grid-12 split">
       <div class="text">
-        <p class="kicker label"><span class="num">05</span> Mexico</p>
-        <h2 class="h2" id="mexico-title" data-reveal>Mexico remains close to us.</h2>
+        <p class="kicker label"><span class="num">03</span> Precision roasting</p>
+        <h2 class="h2" id="p3-title" data-reveal>Light to medium, by design.</h2>
         <div class="prose" data-reveal>
           <p>
-            Woodfox began with a particular interest in Mexican coffee, especially from regions such as Chiapas and
-            Michoacán. That interest hasn’t gone anywhere.
+            We roast in small micro-batches and keep our profiles in the light-to-medium range. Roasting lighter lets
+            a coffee’s origin, sweetness and acidity come through, rather than the flavour of the roast itself.
           </p>
           <p>
-            We hope to feature Mexican coffees whenever the right lots are available at the right scale, alongside
-            excellent coffees from Central America, South America, Africa and beyond.
+            Every roast is monitored and recorded with roast-profiling software, so we can repeat what works and refine
+            what doesn’t. Each coffee is cupped for quality before it’s released.
           </p>
         </div>
       </div>
       <div class="pic" data-reveal>
-        <Photo image="cherriesBranch" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" />
+        <Photo image="roasterCooling" ratio="4 / 5" sizes="(min-width: 900px) 40vw, 100vw" caption="Freshly roasted coffee in the cooling tray." />
       </div>
     </div>
   </section>
 
-  <!-- 06 Transparency -->
-  <section class="section" aria-labelledby="honest-title">
+  <!-- Transparency -->
+  <section class="section statement-sec" aria-labelledby="honest-title">
     <div class="wrap">
-      <p class="kicker label"><span class="num">06</span> Transparency</p>
-      <h2 class="h2 honest-title" id="honest-title" data-reveal>What we’ll tell you, and what we won’t claim.</h2>
+      <p class="kicker label"><span class="num">—</span> Transparency</p>
+      <h2 class="statement" id="honest-title" data-reveal>
+        Traceable where we can be. Honest where we can’t.
+      </h2>
       <div class="honest">
         <div data-reveal>
           <h3 class="h3">What we’ll tell you</h3>
           <p class="muted">
-            For every coffee: where it was grown, as specifically as we can say, how it was processed, the variety when
-            known, and the producer or cooperative when that information is available and verified. If we don’t know
-            something, we’ll say so.
+            For every coffee: species, country and region, processing method, roast level and tasting notes, plus the
+            producer or cooperative when that information is available and verified.
           </p>
         </div>
         <div data-reveal>
           <h3 class="h3">What we won’t claim</h3>
           <p class="muted">
-            We won’t describe a coffee as direct trade, or suggest a relationship with a farm, unless it’s true and we
-            can stand behind it. If those relationships develop as Woodfox grows, we’ll share them plainly.
+            We won’t describe a relationship with a farm, a certification or a sourcing programme unless it’s true and
+            we can stand behind it.
           </p>
         </div>
       </div>
       <div class="next">
-        <a class="link" href="/coffee/">See our approach to coffee <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn" href="/coffee/">Explore our coffee</a>
       </div>
     </div>
   </section>
-
-  <ListSection source="sourcing" />
 </Base>
 
 <style>
@@ -169,10 +157,12 @@ import ListSection from '../components/ListSection.astro';
   .split.reverse .text {
     grid-column: 8 / span 5;
   }
-  .mexico .split .pic :global(.frame) {
+  .surface-coffee .pic :global(.frame) {
     background: var(--coffee-2);
   }
-
+  .surface-coffee .kicker .num {
+    color: var(--rust-light);
+  }
   .season-text {
     grid-column: 1 / span 4;
     display: grid;
@@ -185,22 +175,17 @@ import ListSection from '../components/ListSection.astro';
   .season-cal {
     grid-column: 6 / span 7;
   }
-
+  .statement-sec {
+    border-top: 1px solid var(--line);
+  }
   .statement {
     font-family: var(--serif);
     font-weight: 360;
     font-size: var(--step-4);
     line-height: 1.1;
     letter-spacing: -0.02em;
-    max-width: 27ch;
+    max-width: 24ch;
     text-wrap: balance;
-  }
-  .statement-sec {
-    border-block: 1px solid var(--line);
-  }
-
-  .honest-title {
-    max-width: 22ch;
     margin-bottom: 3rem;
   }
   .honest {
@@ -218,7 +203,6 @@ import ListSection from '../components/ListSection.astro';
   .next {
     margin-top: 3.5rem;
   }
-
   @media (max-width: 900px) {
     .split .text,
     .split .pic,

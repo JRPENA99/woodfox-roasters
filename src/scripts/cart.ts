@@ -59,7 +59,8 @@ export function unitPrice(l: Line) {
   const p = getProduct(l.id);
   const size = p?.sizes.find((s) => s.id === l.size) ?? p?.sizes[0];
   if (!size) return 0;
-  return l.sub ? Math.round(size.price * (1 - subscription.discount)) : size.price;
+  const base = size.price ?? 0;
+  return l.sub ? Math.round(base * (1 - subscription.discount)) : base;
 }
 
 export const count = (lines = getCart()) => lines.reduce((n, l) => n + l.qty, 0);
@@ -99,7 +100,7 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
   const p = getProduct(btn.dataset.id || '');
   if (!p) return;
-  addLine({ id: p.id, size: btn.dataset.size || p.sizes[0].id, grind: p.grinds ? 'whole' : null, qty: 1, sub: null });
+  addLine({ id: p.id, size: btn.dataset.size || p.sizes[0].id, grind: 'whole', qty: 1, sub: null });
   btn.dataset.added = '';
   const label = btn.textContent;
   btn.textContent = 'Added ✓';

@@ -5,18 +5,25 @@ import Photo from '../components/Photo.astro';
 import { site } from '../config/site';
 ---
 
-<Base title="Contact" description="Contact Woodfox Coffee for general questions, wholesale inquiries and collaborations.">
+<Base title="Contact" description="Contact Woodfox Coffee Company in Houston, Texas for general questions, wholesale inquiries, events and collaborations.">
   <section class="contact">
     <div class="wrap grid-12">
       <div class="side">
         <p class="label muted">Contact</p>
         <h1 class="h1 title">We’d like to <em>hear from you.</em></h1>
         <p class="body-lg">
-          Questions, wholesale inquiries, collaborations, or a note about coffee. We read every message and reply
-          personally.
+          Questions about our coffee, wholesale, events or collaborations: we read every message and reply personally.
         </p>
 
         <dl class="details">
+          <div>
+            <dt class="label muted">Company</dt>
+            <dd>{site.legalName}</dd>
+          </div>
+          <div>
+            <dt class="label muted">Location</dt>
+            <dd>{site.location}</dd>
+          </div>
           <div>
             <dt class="label muted">Email</dt>
             <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
@@ -25,10 +32,10 @@ import { site } from '../config/site';
             <dt class="label muted">Wholesale</dt>
             <dd><a href="/wholesale/">Wholesale inquiries</a></dd>
           </div>
-          {site.location && (
+          {site.social.length > 0 && (
             <div>
-              <dt class="label muted">Based in</dt>
-              <dd>{site.location}</dd>
+              <dt class="label muted">Follow</dt>
+              <dd>{site.social.map((s, i) => <>{i > 0 && ' · '}<a href={s.href} rel="noopener">{s.label}</a></>)}</dd>
             </div>
           )}
         </dl>

@@ -1,10 +1,12 @@
 ---
 /**
- * Contact and wholesale form. Endpoints are set in src/config/site.ts.
- * variant="contact" asks what the message is about;
- * variant="wholesale" asks for business details instead.
+ * Contact and wholesale form.
+ *
+ * Delivery: if a form-service URL is set in src/config/site.ts (forms.*), the
+ * form posts there. Otherwise it opens the visitor's email app with the
+ * message addressed to site.email. Both paths validate first.
  */
-import { forms } from '../config/site';
+import { forms, site } from '../config/site';
 
 interface Props {
   variant?: 'contact' | 'wholesale';
@@ -17,9 +19,23 @@ const id = variant;
 const topics = [
   { value: 'general', label: 'General' },
   { value: 'wholesale', label: 'Wholesale' },
-  { value: 'collaboration', label: 'Collaboration' },
+  { value: 'collaboration', label: 'Collaboration or event' },
 ];
-const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 'Retailer or grocer', 'Other'];
+const businessTypes = [
+  'Independent coffee shop',
+  'Restaurant',
+  'Specialty grocer or retailer',
+  'Office',
+  'Hotel or hospitality',
+  'Other',
+];
+const needs = [
+  'Not sure yet',
+  'Under 10 lb per month',
+  '10–25 lb per month',
+  '25–50 lb per month',
+  'More than 50 lb per month',
+];
 ---
 
 <form
@@ -28,7 +44,8 @@ const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 
   action={endpoint || undefined}
   data-form
   data-endpoint={endpoint}
-  data-success="Thank you. We’ve received your message and will reply personally."
+  data-mailto={site.email}
+  data-subject={variant === 'wholesale' ? 'Wholesale inquiry' : 'Website inquiry'}
   novalidate
 >
   <input type="hidden" name="form" value={variant} />
@@ -50,33 +67,36 @@ const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 
   <div class="grid">
     <div class="field">
       <label for={`${id}-name`}>Name</label>
-      <input class="input" id={`${id}-name`} name="name" autocomplete="name" required />
+      <input class="input" id={`${id}-name`} name="name" autocomplete="name" maxlength="100" required />
     </div>
     <div class="field">
       <label for={`${id}-email`}>Email</label>
-      <input class="input" id={`${id}-email`} name="email" type="email" autocomplete="email" required />
+      <input class="input" id={`${id}-email`} name="email" type="email" autocomplete="email" maxlength="200" required />
     </div>
 
     {variant === 'wholesale' && (
       <>
         <div class="field">
           <label for={`${id}-business`}>Business name</label>
-          <input class="input" id={`${id}-business`} name="business" autocomplete="organization" required />
+          <input class="input" id={`${id}-business`} name="business" autocomplete="organization" maxlength="150" required />
         </div>
         <div class="field">
-          <label for={`${id}-type`}>Type of business</label>
+          <label for={`${id}-phone`}>Phone <span class="hint">(optional)</span></label>
+          <input class="input" id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" maxlength="30" pattern="[\d\s\+\-\.\(\)]{7,30}" title="Digits, spaces and + ( ) - . only" />
+        </div>
+        <div class="field">
+          <label for={`${id}-type`}>Business type</label>
           <select class="input" id={`${id}-type`} name="business_type" required>
             <option value="" disabled selected>Select one</option>
             {businessTypes.map((b) => <option>{b}</option>)}
           </select>
         </div>
         <div class="field">
-          <label for={`${id}-city`}>City <span class="hint">(optional)</span></label>
-          <input class="input" id={`${id}-city`} name="city" autocomplete="address-level2" />
-        </div>
-        <div class="field">
-          <label for={`${id}-website`}>Website or Instagram <span class="hint">(optional)</span></label>
-          <input class="input" id={`${id}-website`} name="website" />
+          <label for={`${id}-needs`}>Estimated coffee needs</label>
+          <select class="input" id={`${id}-needs`} name="estimated_needs" required>
+            <option value="" disabled selected>Select one</option>
+            {needs.map((n) => <option>{n}</option>)}
+          </select>
         </div>
       </>
     )}
@@ -84,18 +104,24 @@ const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 
 
   <div class="field">
     <label for={`${id}-message`}>
-      {variant === 'wholesale' ? 'Tell us about your coffee program' : 'Message'}
-      {variant === 'wholesale' && <span class="hint hint-block">How you serve coffee today, rough volume, what you’re looking for.</span>}
+      {variant === 'wholesale' ? 'Message' : 'Message'}
+      {variant === 'wholesale' && <span class="hint hint-block">Tell us about your business and how you serve coffee today.</span>}
     </label>
-    <textarea class="input" id={`${id}-message`} name="message" rows="5" required></textarea>
+    <textarea class="input" id={`${id}-message`} name="message" rows="5" maxlength="3000" required></textarea>
   </div>
 
   <div class="actions">
-    <button class="btn" type="submit">{variant === 'wholesale' ? 'Start the conversation' : 'Send message'}</button>
+    <button class="btn" type="submit">{variant === 'wholesale' ? 'Send wholesale inquiry' : 'Send message'}</button>
     <p class="form-status" role="status" aria-live="polite" data-status></p>
   </div>
+  {!endpoint && (
+    <p class="delivery muted">
+      Sending opens your email app with your message ready to go. Prefer to write directly? Email{' '}
+      <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+  )}
 
-  <div aria-hidden="true" style="position:absolute;left:-9999px"><input type="text" name="company_website" tabindex="-1" autocomplete="off" /></div>
+  <div aria-hidden="true" class="hp"><label>Leave this empty <input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label></div>
 </form>
 
 <style>
@@ -107,7 +133,7 @@ const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem 2rem;
+    gap: 2rem;
   }
   fieldset {
     border: 0;
@@ -138,10 +164,12 @@ const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 
     align-items: center;
     min-height: 44px;
     padding: 0.5rem 1.15rem;
-    border: 1px solid var(--line);
-    border-color: rgb(31 27 23 / 0.3);
+    border: 1px solid rgb(28 34 25 / 0.3);
     border-radius: 999px;
     font-size: 0.9375rem;
+    letter-spacing: 0;
+    text-transform: none;
+    font-weight: 450;
     transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
   .chip:hover span {
@@ -164,6 +192,21 @@ const businessTypes = ['Café', 'Restaurant', 'Office', 'Hotel or hospitality', 
   }
   .actions .form-status {
     flex: 1 1 16rem;
+  }
+  .delivery {
+    font-size: var(--step--1);
+    margin-top: -0.75rem;
+  }
+  .delivery a {
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
   @media (max-width: 640px) {
     .grid {

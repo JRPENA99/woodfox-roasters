@@ -1,9 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
-import { checkout } from '../config/site';
+import { commerce, site } from '../config/site';
+const checkout = commerce;
 ---
 
-<Base title="Cart & checkout" description="Review your Woodfox Coffee order and check out securely.">
+<Base title="Cart & checkout" description="Review your Woodfox Coffee order and check out securely." noindex>
+  {!commerce.enabled ? (
+  <section class="section closed">
+    <div class="wrap">
+      <p class="label muted">Checkout</p>
+      <h1 class="h1 title">Online ordering isn’t open yet.</h1>
+      <p class="lede">We’re preparing secure online ordering. No orders or payments are being taken through this website.</p>
+      <div class="closed-actions">
+        <a class="btn" href="/coffee/">See our coffee</a>
+        <a class="link" href={`mailto:${site.email}`}>Email us <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+  ) : (
   <section class="section-sm co">
     <div class="wrap">
       <p class="label muted">Checkout</p>
@@ -51,11 +65,14 @@ import { checkout } from '../config/site';
       </div>
     </div>
   </section>
+  )}
 </Base>
 
 <script>
   import { getCart, setQty, addLine, keyOf, unitPrice, type Line } from '../scripts/cart';
   import { getProduct, money, grinds, subscription } from '../data/products';
+  // Only runs when online ordering is enabled and the cart UI is on the page.
+  if (document.querySelector('[data-lines]')) {
 
   const $ = <T extends HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const linesEl = $('[data-lines]');
@@ -90,7 +107,7 @@ import { checkout } from '../config/site';
             <a class="line-name" href="/shop/${p.id}/">${p.name}</a>
             <p class="muted small">${meta}${l.sub ? ` · <span class="subtag">Subscription, ${freqLabel(l.sub).toLowerCase()}</span>` : ''}</p>
           </div>
-          <p class="line-price">${money(unitPrice(l) * l.qty)}${l.sub ? `<br><s class="muted small">${money(size.price * l.qty)}</s>` : ''}</p>
+          <p class="line-price">${money(unitPrice(l) * l.qty)}${l.sub ? `<br><s class="muted small">${money((size.price ?? 0) * l.qty)}</s>` : ''}</p>
         </div>
         <div class="line-controls">
           <div class="qty" role="group" aria-label="Quantity for ${p.name}">
@@ -115,7 +132,7 @@ import { checkout } from '../config/site';
     const full = lines.reduce((t, l) => {
       const p = getProduct(l.id)!;
       const size = p.sizes.find((s) => s.id === l.size) ?? p.sizes[0];
-      return t + size.price * l.qty;
+      return t + (size.price ?? 0) * l.qty;
     }, 0);
     const total = lines.reduce((t, l) => t + unitPrice(l) * l.qty, 0);
     const savings = full - total;
@@ -170,7 +187,7 @@ import { checkout } from '../config/site';
           grind: l.grind,
           quantity: l.qty,
           subscription: l.sub,
-          price: l.sub ? size.stripeSubscriptionPrice : size.stripePrice,
+          price: l.sub ? size.providerSubscriptionPrice : size.providerPrice,
         };
       });
       const res = await fetch(pay.dataset.endpoint, {
@@ -186,9 +203,24 @@ import { checkout } from '../config/site';
       pay.disabled = false;
     }
   });
+  }
 </script>
 
 <style>
+  .closed .wrap {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    min-height: 40vh;
+    align-content: center;
+  }
+  .closed-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+
   .title {
     margin: 0.75rem 0 2.5rem;
   }
@@ -281,7 +313,7 @@ import { checkout } from '../config/site';
   .lines :global(.qty) {
     display: inline-flex;
     align-items: center;
-    border: 1px solid rgb(31 27 23 / 0.3);
+    border: 1px solid rgb(28 34 25 / 0.3);
   }
   .lines :global(.qty button) {
     width: 38px;

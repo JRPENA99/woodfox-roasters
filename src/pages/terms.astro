@@ -1,0 +1,66 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../config/site';
+---
+
+<Legal
+  title="Terms & Conditions"
+  description="Terms for using the Woodfox Coffee Company website."
+  updated="October 14, 2026"
+>
+  <p>
+    These terms apply to your use of woodfoxcoffee.com, operated by {site.legalName} of {site.location}. By using the
+    site you agree to them.
+  </p>
+
+  <h2>About this website</h2>
+  <p>
+    This website provides information about Woodfox Coffee, our coffees, our approach and our wholesale programme.
+    <strong>Online ordering is not currently available</strong>, and no purchases can be made through the site. Coffees
+    shown as placeholders or “coming soon” are not offers for sale.
+  </p>
+  <p>
+    When online ordering launches, additional terms covering orders, pricing, payment, subscriptions, shipping and
+    returns will apply, and this page will be updated.
+  </p>
+
+  <h2>Product information</h2>
+  <p>
+    We work to describe our coffees accurately. Tasting notes describe flavour characteristics we perceive when cupping;
+    no flavourings are added. Details may change between harvests and roasts.
+  </p>
+
+  <h2>Intellectual property</h2>
+  <p>
+    The Woodfox name, logo, text and original media on this site belong to {site.legalName} and may not be used without
+    permission. Some photographs are licensed from third parties.
+  </p>
+
+  <h2>Acceptable use</h2>
+  <p>
+    Please don’t misuse the site, including by attempting to disrupt it, gain unauthorised access, or send spam through
+    our forms.
+  </p>
+
+  <h2>Links to other sites</h2>
+  <p>We may link to other websites. We are not responsible for their content or practices.</p>
+
+  <h2>Disclaimer and limitation of liability</h2>
+  <p>
+    The site is provided “as is.” To the extent permitted by law, {site.legalName} is not liable for indirect or
+    consequential losses arising from your use of the site.
+    <mark class="confirm">[owner and counsel to review wording]</mark>
+  </p>
+
+  <h2>Governing law</h2>
+  <p>
+    These terms are governed by the laws of the State of Texas
+    <mark class="confirm">[owner and counsel to confirm venue, e.g. Harris County]</mark>.
+  </p>
+
+  <h2>Changes</h2>
+  <p>We may update these terms from time to time. The date at the top shows the latest version.</p>
+
+  <h2>Contact</h2>
+  <p>Questions? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+</Legal>

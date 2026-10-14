@@ -1,27 +1,42 @@
-# Deploying
+# Deployment and domains
 
-`npm run build` produces a folder of static files (`dist/`) that any static host can serve.
-Nothing has been deployed, and the real domain has not been connected.
+## How the site deploys
 
-## Recommended: Netlify or Cloudflare Pages
+- Hosting: **GitHub Pages**, repository `JRPENA99/woodfox-roasters`, branch `main`.
+- Every push to `main` runs `.github/workflows/deploy.yml`, which builds the Astro site and publishes it
+  (Settings → Pages → Source must stay on **GitHub Actions**).
+- The previous static site is preserved on the `legacy-site` branch.
 
-Both are free at this scale, rebuild automatically when you push to GitHub, and connect a custom
-domain with HTTPS.
+## Primary domain: woodfoxcoffee.com
 
-1. Put the project in a GitHub repository.
-2. In Netlify (or Cloudflare Pages), choose "Import from Git" and pick the repository.
-3. Build command: `npm run build` — Output directory: `dist`.
-4. Deploy. You'll get a preview URL (e.g. `woodfox.netlify.app`) to review before touching the domain.
-5. When you're ready, add `woodfoxroasters.com` as a custom domain and update DNS as instructed.
-   This replaces the current site, so do it deliberately.
+DNS for woodfoxcoffee.com (GoDaddy) already points at GitHub Pages (checked October 14, 2026):
 
-Vercel works the same way.
+| Record | Value |
+| --- | --- |
+| A `@` | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 |
+| CNAME `www` | jrpena99.github.io |
 
-## Before going live
+**Manual step in GitHub:** with Actions-based Pages, the custom domain is set in the repository
+settings, not by the `public/CNAME` file. Go to **Settings → Pages → Custom domain**, enter
+`woodfoxcoffee.com`, save, wait for the DNS check and certificate, then tick **Enforce HTTPS**.
+(The `public/CNAME` file is kept for consistency.)
 
-- [ ] Replace placeholder photos (`docs/MEDIA.md`)
-- [ ] Add the optimized hero video to the project
-- [ ] Confirm the email address and location in `src/config/site.ts`
-- [ ] Connect the forms (`docs/FORMS.md`)
-- [ ] Check `site` in `astro.config.mjs` matches the final domain
-- [ ] Add a privacy note if the email list collects addresses in regions that require one
+## Secondary domains (GoDaddy)
+
+| Domain | Status on Oct 14, 2026 | Recommended |
+| --- | --- | --- |
+| woodfoxcoffeeco.com | Points to GoDaddy (parked page) | GoDaddy → Domain → Forwarding → permanent (301) to `https://woodfoxcoffee.com` |
+| woodfoxcoffeecompany.com | Points to GoDaddy, redirects to itself | Same forwarding to `https://woodfoxcoffee.com` |
+| woodfoxroasters.com | Points to GitHub Pages (old site) | Once woodfoxcoffee.com is the Pages domain, forward this in GoDaddy too, or it will show a GitHub 404 |
+
+Don't add these domains to GitHub Pages; Pages serves one custom domain per site. Don't use
+GoDaddy's website builder for any of them.
+
+## Updating the site
+
+```bash
+npm run build      # check it builds
+git add -A
+git commit -m "Describe the change"
+git push           # deploys in ~1–2 minutes
+```

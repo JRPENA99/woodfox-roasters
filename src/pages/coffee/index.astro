@@ -1,203 +1,156 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageIntro from '../../components/PageIntro.astro';
-import ComingSoon from '../../components/ComingSoon.astro';
-import CoffeeCard from '../../components/CoffeeCard.astro';
-import ListSection from '../../components/ListSection.astro';
-import { getCoffees } from '../../data/coffees';
+import ProductCard from '../../components/ProductCard.astro';
+import { products } from '../../data/products';
+import { commerce } from '../../config/site';
 
-const coffees = await getCoffees();
+const anyPlaceholder = products.some((p) => p.status === 'placeholder');
 
-const criteria = [
-  {
-    title: 'Quality',
-    text: 'A coffee has to be clean, sweet and well balanced before we consider anything else. We taste every coffee before choosing it.',
-  },
-  {
-    title: 'Character',
-    text: 'We look for coffees that are distinct: a clear fruit, a particular sweetness, a texture you remember. Coffees that taste of where they’re from.',
-  },
-  {
-    title: 'Seasonality',
-    text: 'Harvests arrive at different times of year in different places. We follow them, so the list changes as the seasons do.',
-  },
-  {
-    title: 'Availability',
-    text: 'Good lots are finite. We choose from what is genuinely available to a roaster of our size, rather than promising a fixed lineup.',
-  },
-  {
-    title: 'Freshness',
-    text: 'Green coffee fades with time. We buy in quantities we can roast through while it still tastes vibrant.',
-  },
-  {
-    title: 'Roasting fit',
-    text: 'Every coffee needs to suit our approach: roasts developed individually, aiming for clarity and sweetness rather than heavy roast flavor.',
-  },
-];
-
-const anatomy = [
-  ['Country & region', 'Where the coffee was grown, as specifically as we can say.'],
-  ['Producer', 'The farm, producer or cooperative, when that information is available and verified.'],
-  ['Process', 'How the fruit was removed and the seed dried: washed, natural, honey and others. It shapes flavor as much as origin does.'],
-  ['Variety', 'The plant cultivar, when known. Different varieties carry different potential in the cup.'],
-  ['Tasting notes', 'What we taste when we cup it. A guide, not a promise of added flavors.'],
-  ['Roast approach', 'A short note on how we roast that coffee and why.'],
+const details = [
+  ['Origin', 'The country and growing region, as specifically as we can say.'],
+  ['Species & process', 'Arabica, specialty Robusta or a combination, and how the coffee was processed after harvest.'],
+  ['Roast level', 'Light, light-medium or medium. We don’t roast dark.'],
+  ['Tasting notes', 'What we taste when we cup it. A guide, not added flavouring.'],
+  ['Sizes', '12 oz retail bags, with 2 lb and 5 lb bags planned for larger needs.'],
 ];
 ---
 
-<Base title="Coffee" description="How Woodfox Coffee selects coffee: by quality, character, season, availability and freshness.">
+<Base title="Our Coffee" description="Woodfox Coffee's coffee collection: specialty coffees selected by species and origin and roasted light to medium in Houston, Texas.">
   <PageIntro
-    label="Coffee"
-    title="Chosen by <em>season,</em> not by habit."
-    lede="We select each coffee for its quality and character, and offer it while it’s at its best. When it’s gone, something new takes its place."
-    image="cherryPile"
+    label="Our Coffee"
+    title="Selected with care. <em>Roasted with precision.</em>"
+    lede="Each Woodfox coffee is chosen for its species and origin, then given a roast profile developed to bring out what makes it distinct."
   />
 
-  <section class="section" aria-labelledby="criteria-title">
+  <section class="section-sm collection" aria-labelledby="collection-title">
     <div class="wrap">
-      <div class="head grid-12">
-        <p class="kicker label"><span class="num">01</span> What we look for</p>
-        <h2 class="h2" id="criteria-title">Six things every Woodfox coffee has to answer to.</h2>
+      <div class="toolbar">
+        <h2 class="label" id="collection-title">The collection</h2>
+        <p class="muted count">{products.length} coffee{products.length === 1 ? '' : 's'}</p>
       </div>
-      <ol class="criteria" role="list">
-        {criteria.map((c, i) => (
-          <li data-reveal>
-            <span class="n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="h3">{c.title}</h3>
-            <p class="muted">{c.text}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
 
-  <section class="section surface-deep" id="coffees" aria-labelledby="coffees-title">
-    <div class="wrap">
-      <p class="kicker label"><span class="num">02</span> {coffees.length ? 'Current coffees' : 'Upcoming coffees'}</p>
-      {coffees.length > 0 ? (
-        <>
-          <h2 class="h2 list-title" id="coffees-title">Current coffees</h2>
-          <div class="grid">
-            {coffees.map((c) => <CoffeeCard coffee={c} />)}
+      {anyPlaceholder && (
+        <p class="notice">
+          <strong>In development</strong>
+          <span>
+            Our first coffees are still being roasted and profiled. The entries below are layout placeholders, not
+            products for sale. Real coffees, photography and availability will replace them before launch.
+          </span>
+        </p>
+      )}
+
+      <div class="grid">
+        {products.map((p) => <ProductCard product={p} />)}
+      </div>
+
+      {!commerce.enabled && (
+        <div class="ordering">
+          <h3 class="h3">Online ordering is coming soon.</h3>
+          <p class="muted">
+            We’re preparing secure online ordering and coffee subscriptions. Until then, reach out with any questions,
+            or ask about wholesale for your business.
+          </p>
+          <div class="ordering-actions">
+            <a class="btn" href="/contact/">Contact us</a>
+            <a class="link" href="/wholesale/">Wholesale <span class="arrow" aria-hidden="true">→</span></a>
           </div>
-        </>
-      ) : (
-        <>
-          <h2 class="sr-only" id="coffees-title">Upcoming coffees</h2>
-          <ComingSoon headingLevel="h3" />
-        </>
+        </div>
       )}
     </div>
   </section>
 
-  <section class="section" aria-labelledby="anatomy-title">
+  <section class="section surface-deep" aria-labelledby="details-title">
     <div class="wrap grid-12">
-      <div class="anatomy-head">
-        <p class="kicker label"><span class="num">03</span> On every coffee</p>
-        <h2 class="h2" id="anatomy-title">What you’ll know about each coffee we offer.</h2>
-        <p class="muted note">
-          If we don’t know something, we’ll leave it out rather than guess.
-        </p>
+      <div class="d-head">
+        <p class="kicker label"><span class="num">—</span> On every bag</p>
+        <h2 class="h2" id="details-title">What you’ll know about each coffee.</h2>
+        <p class="muted">If we don’t know something, we’ll leave it out rather than guess.</p>
       </div>
-      <dl class="anatomy">
-        {anatomy.map(([term, desc]) => (
-          <div class="a-row" data-reveal>
-            <dt class="h3">{term}</dt>
-            <dd class="muted">{desc}</dd>
+      <dl class="details">
+        {details.map(([t, d]) => (
+          <div>
+            <dt class="h3">{t}</dt>
+            <dd class="muted">{d}</dd>
           </div>
         ))}
       </dl>
     </div>
   </section>
-
-  <ListSection source="coffee" />
 </Base>
 
 <style>
-  .head {
-    row-gap: 0;
-    margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
   }
-  .head .kicker {
-    grid-column: 1 / -1;
+  .count {
+    font-size: var(--step--1);
   }
-  .head h2 {
-    grid-column: 1 / span 8;
-  }
-  .criteria {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0 clamp(1.5rem, 3vw, 3rem);
-  }
-  .criteria li {
-    display: grid;
-    gap: 0.9rem;
-    align-content: start;
-    padding-block: 2rem 2.75rem;
-    border-top: 1px solid var(--line);
-  }
-  .n {
-    font-family: var(--serif);
-    font-style: italic;
-    color: var(--cherry);
-  }
-  .list-title {
-    margin-bottom: 3rem;
+  .collection .notice {
+    margin-bottom: 2.5rem;
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem 2rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.5rem clamp(1rem, 2.5vw, 2rem);
   }
-  .anatomy-head {
+  .ordering {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    margin-top: clamp(3.5rem, 2.5rem + 3vw, 5.5rem);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--paper-light);
+    border: 1px solid var(--line);
+    max-width: 46rem;
+  }
+  .ordering-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: 0.5rem;
+  }
+  .d-head {
     grid-column: 1 / span 5;
-    align-self: start;
-    position: sticky;
-    top: calc(var(--header-h) + 2rem);
     display: grid;
     gap: 1.25rem;
+    align-content: start;
   }
-  .anatomy-head .kicker {
+  .d-head .kicker {
     margin-bottom: 0;
   }
-  .note {
-    max-width: 26rem;
-  }
-  .anatomy {
+  .details {
     grid-column: 7 / span 6;
   }
-  .a-row {
+  .details div {
     display: grid;
-    gap: 0.6rem;
-    padding-block: 1.75rem;
+    gap: 0.5rem;
+    padding-block: 1.5rem;
     border-top: 1px solid var(--line);
   }
-  .a-row:last-child {
-    border-bottom: 1px solid var(--line);
-  }
-  .a-row dt {
+  .details dt {
     font-size: var(--step-1);
   }
-
-  @media (max-width: 960px) {
-    .criteria,
+  @media (max-width: 900px) {
     .grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
-  @media (max-width: 860px) {
-    .head h2,
-    .anatomy-head,
-    .anatomy {
+    .d-head,
+    .details {
       grid-column: 1 / -1;
     }
-    .anatomy-head {
-      position: static;
-      margin-bottom: 2rem;
+    .details {
+      margin-top: 2rem;
     }
   }
-  @media (max-width: 600px) {
-    .criteria,
+  @media (max-width: 560px) {
     .grid {
       grid-template-columns: 1fr;
     }

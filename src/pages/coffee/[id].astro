@@ -1,0 +1,262 @@
+---
+/**
+ * Coffee detail page, generated for every product in src/data/products.ts.
+ * With ordering off, it shows details and an inquiry link only. With ordering
+ * on (src/config/site.ts → commerce.enabled), it adds size/grind/purchase
+ * options and an add-to-cart button for sizes that are available and priced.
+ */
+import Base from '../../layouts/Base.astro';
+import BagArt from '../../components/BagArt.astro';
+import Photo from '../../components/Photo.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, grinds, subscription, money, statusLabel, type Product } from '../../data/products';
+import { commerce } from '../../config/site';
+
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { id: product.id }, props: { product } }));
+}
+
+const { product: p } = Astro.props as { product: Product };
+const placeholder = p.status === 'placeholder';
+const buyable = commerce.enabled && p.status === 'available' && p.sizes.some((s) => s.available && s.price != null);
+const sellSizes = p.sizes.filter((s) => s.available && s.price != null);
+const related = products.filter((x) => x.id !== p.id).slice(0, 3);
+
+const facts = [
+  ['Origin', [p.region, p.origin].filter(Boolean).join(', ') || 'To be announced'],
+  ['Species', p.species || 'To be announced'],
+  ['Process', p.process || 'To be announced'],
+  ['Roast', p.roast],
+  ['Tasting notes', p.notes.length ? p.notes.join(', ') : 'To be announced'],
+  ['Sizes', p.sizes.map((s) => `${s.label}${s.available ? '' : ' (not yet available)'}`).join(' · ')],
+];
+---
+
+<Base
+  title={placeholder ? `${p.name} (placeholder)` : p.name}
+  description={placeholder ? 'Layout placeholder for an upcoming Woodfox coffee.' : p.description}
+  noindex={placeholder}
+>
+  <section class="section-sm pdp">
+    <div class="wrap grid-12">
+      <div class="gallery">
+        {p.image ? (
+          <Photo image={{ src: p.image, alt: p.imageAlt ?? `${p.name} coffee bag` }} ratio="4 / 5" eager sizes="(min-width: 900px) 46vw, 100vw" />
+        ) : (
+          <BagArt name={p.name} colors={p.colors} label={placeholder ? 'Placeholder' : p.roast} />
+        )}
+      </div>
+
+      <div class="info">
+        <a class="back label muted" href="/coffee/">← Our Coffee</a>
+        <p class="status label" data-status={p.status}>{statusLabel[p.status]}</p>
+        <h1 class="h1">{p.name}</h1>
+        <p class="lede desc">{p.description}</p>
+
+        {placeholder && (
+          <p class="notice">
+            <strong>Placeholder</strong>
+            <span>This page shows the layout for an upcoming coffee. It is not a product for sale.</span>
+          </p>
+        )}
+
+        <dl class="facts">
+          {facts.map(([k, v]) => (
+            <div>
+              <dt class="label muted">{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {buyable ? (
+          <form class="buy" data-product={p.id} novalidate>
+            <fieldset class="opt">
+              <legend class="label">Size</legend>
+              <div class="seg">
+                {sellSizes.map((s, i) => (
+                  <label>
+                    <input type="radio" name="size" value={s.id} checked={i === 0} />
+                    <span>{s.label} · {money(s.price!, commerce.currency)}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <div class="opt field">
+              <label class="label" for="grind">Grind</label>
+              <select class="input" id="grind" name="grind">
+                {grinds.map((g) => <option value={g.id}>{g.label}</option>)}
+              </select>
+            </div>
+            {p.subscribable && (
+              <div class="opt field">
+                <label class="label" for="plan">Purchase</label>
+                <select class="input" id="plan" name="plan">
+                  <option value="once">One-time purchase</option>
+                  {subscription.frequencies.map((f) => <option value={f.id}>Subscription · {f.label}</option>)}
+                </select>
+              </div>
+            )}
+            <button class="btn" type="submit">Add to cart</button>
+          </form>
+        ) : (
+          <div class="ask">
+            <p class="muted">Online ordering isn’t available yet.</p>
+            <a class="btn" href="/contact/">Ask about this coffee</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section surface-deep" aria-labelledby="related-title">
+      <div class="wrap">
+        <h2 class="h2 rel-title" id="related-title">More from Woodfox</h2>
+        <div class="related">
+          {related.map((r) => <ProductCard product={r} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>
+
+{buyable && (
+  <script>
+    import { addLine, toast } from '../../scripts/cart';
+    import { getProduct } from '../../data/products';
+    const form = document.querySelector<HTMLFormElement>('form[data-product]');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const product = getProduct(form.dataset.product!)!;
+      const fd = new FormData(form);
+      const plan = String(fd.get('plan') || 'once');
+      addLine({
+        id: product.id,
+        size: String(fd.get('size')),
+        grind: String(fd.get('grind') || 'whole'),
+        qty: 1,
+        sub: plan === 'once' ? null : plan,
+      });
+      toast(`${product.name} added to your cart.`);
+    });
+  </script>
+)}
+
+<style>
+  .grid-12 {
+    row-gap: 3rem;
+    align-items: start;
+  }
+  .gallery {
+    grid-column: 1 / span 6;
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+  }
+  .info {
+    grid-column: 8 / span 5;
+    display: grid;
+    gap: 1.2rem;
+  }
+  .back {
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+  .status {
+    color: var(--moss);
+  }
+  .status[data-status='placeholder'] {
+    color: var(--cherry);
+  }
+  .desc {
+    color: var(--ink-soft);
+    font-size: var(--step-1);
+  }
+  .facts {
+    border-top: 1px solid var(--line);
+  }
+  .facts div {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .facts dt {
+    padding-top: 0.2rem;
+  }
+  .buy,
+  .ask {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    margin-top: 0.5rem;
+  }
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  legend {
+    padding: 0;
+    margin-bottom: 0.7rem;
+  }
+  .seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .seg label {
+    position: relative;
+    cursor: pointer;
+  }
+  .seg input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+  }
+  .seg span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 1.1rem;
+    border: 1px solid rgb(28 34 25 / 0.3);
+  }
+  .seg input:checked + span {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .seg input:focus-visible + span {
+    outline: 2px solid var(--cherry);
+    outline-offset: 3px;
+  }
+  .rel-title {
+    margin-bottom: 2.5rem;
+  }
+  .related {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  @media (max-width: 900px) {
+    .gallery,
+    .info {
+      grid-column: 1 / -1;
+    }
+    .gallery {
+      position: static;
+      max-width: 480px;
+    }
+    .related {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .related {
+      grid-template-columns: 1fr;
+    }
+    .facts div {
+      grid-template-columns: 6.5rem 1fr;
+    }
+  }
+</style>

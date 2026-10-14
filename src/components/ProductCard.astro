@@ -1,46 +1,44 @@
 ---
 import BagArt from './BagArt.astro';
-import { money, fromPrice, subscription, type Product } from '../data/products';
+import Photo from './Photo.astro';
+import { commerce } from '../config/site';
+import { money, fromPrice, statusLabel, type Product } from '../data/products';
 
 interface Props {
   product: Product;
+  headingLevel?: 'h2' | 'h3';
 }
-const { product: p } = Astro.props;
-const multi = p.sizes.length > 1;
+const { product: p, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+const price = fromPrice(p);
+const placeholder = p.status === 'placeholder';
+const origin = [p.region, p.origin].filter(Boolean).join(', ') || 'Origin to be announced';
 ---
 
-<article class="product" data-category={p.category}>
-  <a href={`/shop/${p.id}/`} class="link-wrap">
+<article class:list={['product', { 'is-placeholder': placeholder }]}>
+  <a href={`/coffee/${p.id}/`} class="link-wrap">
     <div class="media">
-      <BagArt name={p.name} colors={p.colors} />
-      {p.subscribable && <span class="badge label">Subscribe &amp; save {subscription.discount * 100}%</span>}
+      {p.image ? (
+        <Photo image={{ src: p.image, alt: p.imageAlt ?? `${p.name} coffee bag` }} ratio="4 / 5" sizes="(min-width: 900px) 33vw, 100vw" />
+      ) : (
+        <BagArt name={p.name} colors={p.colors} label={placeholder ? 'Placeholder' : p.roast} />
+      )}
+      <span class="badge label" data-status={p.status}>{statusLabel[p.status]}</span>
     </div>
     <div class="meta">
+      <p class="label muted">{origin}</p>
       <div class="row">
-        <h3 class="name">{p.name}</h3>
-        <p class="price">{multi ? 'From ' : ''}{money(fromPrice(p))}</p>
+        <H class="name">{p.name}</H>
+        {commerce.enabled && price != null && <p class="price">{money(price, commerce.currency)}</p>}
       </div>
-      <p class="notes muted">{p.notes.join(' · ')}</p>
+      <p class="facts muted">
+        {p.roast} roast{p.notes.length > 0 && <> · {p.notes.join(', ')}</>}
+      </p>
     </div>
   </a>
-  <button
-    class="quick label"
-    type="button"
-    data-add
-    data-id={p.id}
-    data-size={p.sizes[0].id}
-    aria-label={`Add ${p.name}, ${p.sizes[0].label}, to cart`}
-  >
-    + Add {p.sizes[0].label}
-  </button>
 </article>
 
 <style>
-  .product {
-    position: relative;
-    display: grid;
-    gap: 0.9rem;
-  }
   .link-wrap {
     display: grid;
     gap: 1rem;
@@ -50,10 +48,12 @@ const multi = p.sizes.length > 1;
     position: relative;
     overflow: hidden;
   }
-  .media :global(.bag-art) {
+  .media :global(.bag-art),
+  .media :global(img) {
     transition: transform 0.8s var(--ease);
   }
-  .link-wrap:hover :global(.bag-art) {
+  .link-wrap:hover :global(.bag-art),
+  .link-wrap:hover :global(img) {
     transform: scale(1.025);
   }
   .badge {
@@ -65,6 +65,14 @@ const multi = p.sizes.length > 1;
     font-size: 0.625rem;
     color: var(--moss);
   }
+  .badge[data-status='placeholder'] {
+    color: var(--cherry);
+    border: 1px dashed currentColor;
+  }
+  .meta {
+    display: grid;
+    gap: 0.35rem;
+  }
   .row {
     display: flex;
     justify-content: space-between;
@@ -74,38 +82,14 @@ const multi = p.sizes.length > 1;
   .name {
     font-family: var(--serif);
     font-weight: 420;
-    font-size: var(--step-1);
+    font-size: var(--step-2);
+    line-height: 1.15;
     transition: color 0.2s;
   }
   .link-wrap:hover .name {
     color: var(--cherry);
   }
-  .price {
+  .facts {
     font-size: 0.9375rem;
-    white-space: nowrap;
-  }
-  .notes {
-    font-size: 0.875rem;
-    margin-top: 0.2rem;
-  }
-  .quick {
-    justify-self: start;
-    min-height: 40px;
-    padding: 0 0.9rem;
-    background: none;
-    border: 1px solid rgb(31 27 23 / 0.3);
-    font-size: 0.6875rem;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-  }
-  .quick:hover {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
-  .quick[data-added] {
-    background: var(--moss);
-    border-color: var(--moss);
-    color: var(--paper);
   }
 </style>

@@ -1,69 +1,44 @@
-# Shop, cart and checkout
+# Online ordering (not enabled)
 
-The shop is built and running in **preview mode**: products, prices and images are placeholders,
-and the checkout button explains that payment isn't live yet. No payment can be taken.
+Online ordering is **off**. The site shows coffees without prices, carts or checkout, and says
+plainly that ordering isn't open yet. Nothing on the site accepts orders or payments.
 
+Everything needed is already built, behind one switch in `src/config/site.ts`:
+
+```ts
+export const commerce = { enabled: false, provider: 'none', endpoint: '', currency: 'USD' };
 ```
-/shop/            → browse and filter products
-/shop/<product>/  → choose size, grind, one-time or subscription, quantity
-/checkout/        → review cart, edit, see subscription savings, pay
-                     → secure hosted payment page (Stripe, or another provider)
-```
 
-The cart is stored in the visitor's browser, so no accounts, database or server are needed for the
-shop itself. Card details are only ever entered on the payment provider's own page.
+## Pieces in place
 
-## Where things live
-
-| What | File |
+| Piece | File |
 | --- | --- |
-| Products, prices, sizes, subscription discount and frequencies | `src/data/products.ts` |
-| Checkout settings (provider, endpoint) | `src/config/site.ts` → `checkout` |
-| Shop page | `src/pages/shop/index.astro` |
-| Product page | `src/pages/shop/[id].astro` |
+| Coffee catalogue (data-driven) | `src/data/products.ts` |
+| Collection page | `src/pages/coffee/index.astro` |
+| Coffee detail pages (size, grind, one-time or subscription) | `src/pages/coffee/[id].astro` |
+| Cart (stored in the visitor's browser) | `src/scripts/cart.ts` |
 | Cart & checkout page | `src/pages/checkout.astro` |
-| Cart logic | `src/scripts/cart.ts` |
-| Placeholder bag artwork | `src/components/BagArt.astro` |
+| Example Stripe Checkout function | `docs/stripe-checkout-worker.js` |
 
-## Replacing placeholder products
+## Adding real coffees
 
-In `src/data/products.ts`, edit each product's `name`, `notes`, `description`, `sizes` and prices
-(in cents: 2200 = $22). Set `placeholder: false`. Remove the "Preview" notices in
-`shop/index.astro`, `shop/[id].astro` and `checkout.astro` once everything is real.
+In `src/data/products.ts`, replace the three placeholders. For each coffee set `status`, origin,
+region, species, process, roast, notes, description and an `image` (put photos in
+`public/media/images/coffees/`). For sizes that are actually sold, set `price` (cents) and
+`available: true`. Placeholders are excluded from the sitemap and hidden from search engines.
 
-Change the subscription discount in one place: `subscription.discount` (0.15 = 15%).
+## Turning ordering on (needs owner approval)
 
-## Turning on Stripe
+1. **Choose a provider.** The business plan mentions Square or Shopify Payments; Stripe also works.
+   GitHub Pages can't hold secret keys, so a small serverless function creates the checkout session.
+   `docs/stripe-checkout-worker.js` is a ready Cloudflare Worker for Stripe. Square and Shopify
+   follow the same pattern (the function returns the hosted checkout URL).
+2. Create products and prices in the provider; copy their price IDs into `providerPrice` /
+   `providerSubscriptionPrice` on each size.
+3. Deploy the function with the secret key stored as a provider secret (never in this repository).
+4. Set `commerce` to `{ enabled: true, provider: 'endpoint', endpoint: '<function URL>' }`.
+5. Finalise the Shipping, Returns, Terms and Privacy pages (remove the highlighted placeholders).
+6. Test end-to-end in the provider's **test mode** before going live.
 
-GitHub Pages only serves static files, and Stripe needs a tiny piece of server code to create a
-checkout session securely (your secret key must never be in the website itself). The cleanest option
-is a free **Cloudflare Worker** (or a Netlify/Vercel function).
-
-1. **In Stripe**, create a Product for each coffee and size, with:
-   - a one-time Price, and
-   - for subscribable coffees, a recurring Price at the discounted amount for each frequency you offer
-     (or one recurring price per size, and use Stripe's interval settings).
-2. Copy the Price IDs (`price_…`) into `stripePrice` / `stripeSubscriptionPrice` on each size in
-   `products.ts`.
-3. **Deploy the function** in `docs/stripe-checkout-worker.js` as a Cloudflare Worker. Add your Stripe
-   secret key as a Worker secret called `STRIPE_SECRET_KEY`. It is never stored in this repository.
-4. In `src/config/site.ts`, set:
-   ```ts
-   export const checkout = { provider: 'endpoint', endpoint: 'https://<your-worker>.workers.dev', currency: 'USD' };
-   ```
-5. Push. The checkout button now opens Stripe Checkout with the cart's contents. Stripe handles cards,
-   Apple Pay / Google Pay, shipping address, tax, receipts and subscription billing. Customers manage
-   subscriptions (skip, pause, cancel) through Stripe's customer portal.
-
-Test everything with Stripe's **test mode** keys first.
-
-## Using a different provider
-
-The checkout page sends the cart as JSON to whatever `endpoint` you configure and redirects to the
-`url` it returns. Any provider with a hosted checkout works the same way:
-
-- **Shopify**: create a cart with the Storefront API in the function and return its `checkoutUrl`.
-- **Square**: create a Payment Link via the Checkout API and return its URL.
-- **PayPal**: create an Order and return the approval link.
-
-Only the function changes; the website stays the same.
+Subscriptions: `subscription` in `products.ts` holds frequencies and the discount (currently 0%;
+any discount needs owner approval).

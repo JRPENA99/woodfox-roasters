@@ -1,6 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { site, nav, cta } from '../config/site';
+import { site, nav, legal } from '../config/site';
 
 const year = new Date().getFullYear();
 ---
@@ -9,20 +9,26 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="top">
       <p class="statement">
-        Thoughtfully selected coffee.<br />
-        <em>Roasted with intention.</em>
+        Crafted with <em>Intention.</em>
       </p>
-      <a href={cta.href} class="link">{cta.label} <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="/coffee/" class="link">Explore our coffee <span class="arrow" aria-hidden="true">→</span></a>
     </div>
 
     <hr class="rule" />
 
     <div class="cols">
-      <a href="/" class="brand" aria-label="Woodfox Coffee, home"><Wordmark /></a>
+      <div class="about">
+        <a href="/" class="brand" aria-label="Woodfox Coffee, home"><Wordmark /></a>
+        <p class="muted">
+          {site.legalName} is a Houston-based specialty coffee roaster focused on thoughtful sourcing and precision,
+          micro-batch roasting.
+        </p>
+      </div>
 
       <nav class="col" aria-label="Footer">
         <p class="label muted">Explore</p>
         <ul role="list">
+          <li><a href="/">Home</a></li>
           {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
         </ul>
       </nav>
@@ -32,30 +38,29 @@ const year = new Date().getFullYear();
         <ul role="list">
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
           <li><a href="/wholesale/">Wholesale inquiries</a></li>
-          {site.location && <li class="muted">{site.location}</li>}
+          <li class="muted">{site.location}</li>
+          {site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
         </ul>
       </div>
 
-      {site.social.length > 0 && (
-        <div class="col">
-          <p class="label muted">Follow</p>
-          <ul role="list">
-            {site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
-          </ul>
-        </div>
-      )}
+      <nav class="col" aria-label="Policies">
+        <p class="label muted">Policies</p>
+        <ul role="list">
+          {legal.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
     </div>
 
     <div class="bottom muted">
-      <p>© {year} {site.name}</p>
-      <p>Coffee is seasonal. So is this list.</p>
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      <p>Houston, Texas</p>
     </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    background: #221812;
+    background: #22301f;
     padding-block: clamp(4rem, 3rem + 5vw, 7rem) 2rem;
   }
   .top {
@@ -74,17 +79,24 @@ const year = new Date().getFullYear();
     letter-spacing: -0.02em;
   }
   .statement em {
-    color: #e2a28f;
+    color: var(--rust-light);
   }
   .cols {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.6fr 1fr;
+    grid-template-columns: 2fr 1fr 1.4fr 1.2fr;
     gap: 2.5rem;
     padding-block: 3rem;
   }
+  .about {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    max-width: 22rem;
+    font-size: 0.9375rem;
+  }
   .brand {
     text-decoration: none;
-    align-self: start;
+    justify-self: start;
   }
   .brand :global(.wordmark) {
     align-items: flex-start;
@@ -112,15 +124,20 @@ const year = new Date().getFullYear();
     border-top: 1px solid var(--line-light);
     font-size: var(--step--1);
   }
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     .cols {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    .brand {
+    .about {
       grid-column: 1 / -1;
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
+    .cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 420px) {
     .cols {
       grid-template-columns: minmax(0, 1fr);
     }

@@ -1,68 +1,56 @@
-# Woodfox Coffee — website prototype
+# Woodfox Coffee — woodfoxcoffee.com
 
-A fast, static marketing site for Woodfox Coffee, built with [Astro](https://astro.build).
-No database, no backend, no accounts. It builds to plain HTML/CSS with about 3 KB of JavaScript.
+Website for **Woodfox Coffee Company**, a Houston-based specialty coffee roaster. Built with
+[Astro](https://astro.build) as a fast static site and deployed to GitHub Pages.
 
 ## Run it
 
-Requires Node.js 20 or newer.
+Requires Node.js 20+.
 
 ```bash
 npm install
 npm run dev        # local preview at http://localhost:4321
 npm run build      # production build into dist/
-npm run preview    # serve the production build locally
+npx astro check    # type and template checks
 ```
+
+Pushing to `main` deploys automatically (see `docs/DEPLOY.md`).
 
 ## Where things live
 
 | What | Where |
 | --- | --- |
-| Pages (one file per page) | `src/pages/` — `index.astro`, `coffee/`, `sourcing.astro`, `about.astro`, `wholesale.astro`, `contact.astro`, `404.astro` |
-| Site settings: email, location, navigation, form endpoints, hero video | `src/config/site.ts` |
-| Every photo (one list) | `src/data/images.ts` |
-| Shop products, prices, subscription discount | `src/data/products.ts` (see `docs/COMMERCE.md`) |
-| Coffees (one Markdown file each) | `src/content/coffees/` — start from `_TEMPLATE.md` |
+| Company details, navigation, form delivery, ordering switch | `src/config/site.ts` |
+| Coffees (data-driven catalogue) | `src/data/products.ts` |
+| Every photo | `src/data/images.ts` |
+| Pages | `src/pages/` — home, `coffee/`, `sourcing`, `about` (Our Story), `wholesale`, `contact`, `privacy`, `terms`, `shipping`, `returns`, `checkout` |
 | Shared pieces (header, footer, forms, cards) | `src/components/` |
-| Colors, fonts, spacing, buttons | `src/styles/global.css` (variables at the top) |
-| Page-specific styling | the `<style>` block at the bottom of each page or component |
-| The only JavaScript | `src/scripts/site.ts` |
-| Your own images and video | `public/media/images/` and `public/media/video/` |
+| Colours, type, spacing | `src/styles/global.css` (variables at the top) |
+| JavaScript | `src/scripts/site.ts` (menu, video, forms), `src/scripts/cart.ts` (only when ordering is on) |
+| Images and video | `public/media/` |
+| SEO: sitemap, robots, social image | `src/pages/sitemap.xml.ts`, `public/robots.txt`, `public/media/images/og.jpg` |
 
-## Editing text
+## Brand
 
-Page copy is plain text inside each file in `src/pages/`. Open the page, find the sentence,
-change it, and save. The dev server refreshes the browser automatically.
+Colours follow the business plan: Forest Green `#2C3E28`, Rust `#C84B31`, Cream `#F5F4EF`. For small
+text, rust is deepened slightly (`#B4432B`) to meet contrast requirements. Type: Source Serif 4 and
+Inter, self-hosted.
 
-## Adding a coffee
+## Owner to confirm before relying on it
 
-1. Copy `src/content/coffees/_TEMPLATE.md` to e.g. `mexico-chiapas.md`.
-2. Fill in what you know; delete lines you don't.
-3. Set `draft: false`.
+- **Email:** `hello@woodfoxcoffee.com` must exist (forms deliver to it) → `src/config/site.ts`
+- **Logo:** the fox seal artwork isn't in the project yet; the header uses a text wordmark
+- **Coffees:** the three entries are labelled development placeholders → `src/data/products.ts`
+- **Photography:** most images are Unsplash stand-ins (the hero film and still are Woodfox's own) → `docs/MEDIA.md`
+- **Policies:** Privacy, Terms, Shipping and Returns are drafts with highlighted items to confirm
+- **Social links:** none listed until confirmed
+- **Online ordering:** off until a provider is approved → `docs/COMMERCE.md`
 
-The coffee then appears on the homepage and Coffee page, and gets its own page at
-`/coffee/mexico-chiapas/`. The "coming soon" panel disappears automatically once at least
-one coffee is published.
+## Docs
 
-## What is still placeholder
-
-- **All photography** comes from Unsplash (free licence) and should be replaced with Woodfox's own. See `docs/MEDIA.md`.
-- **Hero video** streams from the live woodfoxroasters.com. Add an optimized copy to the project before launch (see `docs/MEDIA.md`).
-- **Email address** `hello@woodfoxroasters.com` in `src/config/site.ts` needs to be confirmed.
-- **Location** "Houston, Texas" comes from the current site. Change or clear it in `src/config/site.ts`.
-- **Forms** are not connected yet. They validate input and then tell the visitor nothing was sent. See `docs/FORMS.md`.
-- **Wordmark** is text. Swap in an SVG logo in `src/components/Wordmark.astro` when one exists.
-- **Harvest calendar** on the Sourcing page shows general, approximate harvest seasons. It is not a claim about what Woodfox buys. Edit it in `src/components/HarvestCalendar.astro`.
-
-## Further docs
-
-- `docs/FORMS.md` — connecting the email list, contact and wholesale forms
-- `docs/MEDIA.md` — replacing photos, preparing the hero video
-- `docs/COMMERCE.md` — adding Stripe or Shopify checkout later
-- `docs/DEPLOY.md` — putting the site online
+`docs/DEPLOY.md` (GitHub Pages, GoDaddy domains) · `docs/FORMS.md` · `docs/COMMERCE.md` · `docs/MEDIA.md`
 
 ## Note on `preserveSymlinks`
 
-`astro.config.mjs` sets `vite.resolve.preserveSymlinks: true`. Without it, the build silently
-drops all CSS when the project sits in a redirected or symlinked folder (as it did while this
-prototype was built). It has no effect elsewhere, so it is safe to keep.
+`astro.config.mjs` sets `vite.resolve.preserveSymlinks: true`; without it, builds from a redirected or
+symlinked folder silently drop CSS. It has no effect elsewhere.

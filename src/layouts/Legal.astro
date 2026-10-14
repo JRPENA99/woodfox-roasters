@@ -1,0 +1,142 @@
+---
+/**
+ * Shared layout for policy pages.
+ * `<mark class="confirm">…</mark>` highlights details the owner must confirm.
+ * Remove `draft` once the page has been reviewed and approved.
+ */
+import Base from './Base.astro';
+import { legal } from '../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  updated: string;
+  draft?: boolean;
+}
+const { title, description, updated, draft = true } = Astro.props;
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+---
+
+<Base title={title} description={description}>
+  <article class="section-sm legal">
+    <div class="wrap grid-12">
+      <aside class="side">
+        <p class="label muted">Policies</p>
+        <nav aria-label="Policies">
+          <ul role="list">
+            {legal.map((l) => (
+              <li><a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="doc">
+        <h1 class="h1">{title}</h1>
+        <p class="muted updated">Last updated {updated}</p>
+        {draft && (
+          <p class="notice draft">
+            <strong>Draft</strong>
+            <span>
+              This policy is a working draft prepared for owner and legal review. Highlighted items still need to be
+              confirmed. It is not legal advice.
+            </span>
+          </p>
+        )}
+        <div class="body">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .grid-12 {
+    row-gap: 2.5rem;
+    align-items: start;
+  }
+  .side {
+    grid-column: 1 / span 3;
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    display: grid;
+    gap: 1rem;
+  }
+  .side ul {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .side a {
+    text-decoration: none;
+    font-size: 0.9375rem;
+  }
+  .side a:hover,
+  .side a[aria-current='page'] {
+    color: var(--cherry);
+  }
+  .side a[aria-current='page'] {
+    font-weight: 560;
+  }
+  .doc {
+    grid-column: 5 / span 7;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .updated {
+    font-size: var(--step--1);
+  }
+  .draft {
+    margin-block: 0.5rem 1rem;
+  }
+  .body {
+    color: var(--ink-soft);
+    max-width: 44rem;
+  }
+  .body :global(h2) {
+    font-family: var(--serif);
+    font-weight: 450;
+    font-size: var(--step-2);
+    color: var(--ink);
+    margin: 2.5rem 0 0.75rem;
+    line-height: 1.2;
+  }
+  .body :global(h3) {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+    margin: 1.5rem 0 0.4rem;
+  }
+  .body :global(p + p),
+  .body :global(ul),
+  .body :global(p + ul),
+  .body :global(ul + p) {
+    margin-top: 0.85rem;
+  }
+  .body :global(ul) {
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .body :global(a) {
+    color: var(--ink);
+  }
+  .body :global(mark.confirm) {
+    background: #f6e3dc;
+    color: var(--ink);
+    padding: 0 0.2em;
+    border-bottom: 1px dashed var(--cherry);
+  }
+  @media (max-width: 900px) {
+    .side,
+    .doc {
+      grid-column: 1 / -1;
+    }
+    .side {
+      position: static;
+      order: 2;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>

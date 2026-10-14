@@ -6,19 +6,38 @@ import '../styles/global.css';
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../config/site';
+import { site, commerce } from '../config/site';
 
 interface Props {
   title?: string;
   description?: string;
   /** Header sits transparently over a full-bleed image at the top of the page. */
   overlayHeader?: boolean;
+  /** Social preview image (path under /public or absolute URL). */
   image?: string;
+  /** Keep the page out of search results (e.g. checkout). */
+  noindex?: boolean;
 }
 
-const { title, description = site.description, overlayHeader = false, image } = Astro.props;
-const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — Thoughtfully selected coffee, roasted with intention`;
+const { title, description = site.description, overlayHeader = false, image = '/media/images/og.jpg', noindex = false } =
+  Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | Specialty Coffee Roaster in Houston, Texas`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+
+// Basic organisation details for search engines. Only facts from the business plan.
+const org = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.legalName,
+  alternateName: site.name,
+  url: site.url,
+  logo: new URL('/favicon.svg', Astro.site).href,
+  description: site.description,
+  address: { '@type': 'PostalAddress', addressLocality: site.city, addressRegion: 'TX', addressCountry: 'US' },
+  ...(site.emailConfirmed ? { email: site.email } : {}),
+  ...(site.social.length ? { sameAs: site.social.map((s) => s.href) } : {}),
+};
 ---
 
 <!doctype html>
@@ -29,17 +48,27 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#f3eee5" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <meta name="theme-color" content="#f5f4ef" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {image && <meta property="og:image" content={image} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
+    <script type="application/ld+json" set:html={JSON.stringify(org)} />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
@@ -52,8 +81,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Footer />
     <script>
       import '../scripts/site';
-      import '../scripts/cart';
     </script>
+    {commerce.enabled && (
+      <script>
+        import '../scripts/cart';
+      </script>
+    )}
   </body>
 </html>
 

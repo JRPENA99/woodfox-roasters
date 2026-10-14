@@ -1,0 +1,54 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../config/site';
+---
+
+<Legal
+  title="Shipping Policy"
+  description="Shipping information for Woodfox Coffee orders."
+  updated="October 14, 2026"
+>
+  <p>
+    <strong>Online ordering is not yet available</strong>, so we are not currently shipping orders placed through this
+    website. This page describes how shipping will work once ordering opens. Every highlighted detail will be confirmed
+    before launch.
+  </p>
+
+  <h2>Where we ship</h2>
+  <p>We plan to ship within the United States <mark class="confirm">[owner to confirm regions and any exclusions]</mark>.</p>
+
+  <h2>Roasting and processing time</h2>
+  <p>
+    Coffee is roasted in small batches. Orders are expected to ship within
+    <mark class="confirm">[owner to confirm, e.g. 2–4 business days]</mark> of being placed. Holidays and roast
+    schedules may affect timing.
+  </p>
+
+  <h2>Shipping costs and carriers</h2>
+  <p>
+    Shipping costs will be shown at checkout before you pay. Orders will ship via
+    <mark class="confirm">[owner to confirm carrier(s)]</mark>, with tracking provided by email.
+    <mark class="confirm">[Owner to confirm any free-shipping threshold.]</mark>
+  </p>
+
+  <h2>Local pickup and events</h2>
+  <p>
+    Houston customers may also find Woodfox at local pop-ups and markets.
+    <mark class="confirm">[Owner to confirm whether local pickup or delivery will be offered.]</mark>
+  </p>
+
+  <h2>Subscriptions</h2>
+  <p>
+    Subscription orders will ship on the schedule you choose at checkout
+    <mark class="confirm">[owner to confirm available frequencies]</mark>.
+  </p>
+
+  <h2>Lost or damaged packages</h2>
+  <p>
+    If a package arrives damaged or doesn’t arrive, email <a href={`mailto:${site.email}`}>{site.email}</a> with your
+    order details and we’ll help put it right. See our <a href="/returns/">Returns &amp; Refunds Policy</a>.
+  </p>
+
+  <h2>Wholesale orders</h2>
+  <p>Delivery for wholesale partners is arranged individually.</p>
+</Legal>

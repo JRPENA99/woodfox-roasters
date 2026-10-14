@@ -1,38 +1,46 @@
-# Connecting the forms
+# Contact and wholesale forms
 
-There are three forms. Each one reads its destination from `src/config/site.ts`:
+Both forms live in `src/components/InquiryForm.astro` and are handled by `src/scripts/site.ts`.
 
-```ts
-export const forms = {
-  newsletter: '',   // "Join the list" signup
-  contact: '',      // Contact page
-  wholesale: '',    // Wholesale page
-};
-```
+## How delivery works today
 
-While a value is empty, the form checks the input and then tells the visitor plainly that
-nothing was sent. Once you paste in a URL, the form sends its fields to that URL (an HTML form
-POST over `fetch`, asking for a JSON reply) and shows a thank-you message.
+No form service is connected, so on submit the form:
 
-## Recommended options (no backend needed)
+1. checks required fields, email format and phone format (highlighting anything wrong);
+2. opens the visitor's email app with a message addressed to `site.email`
+   (`src/config/site.ts`), the subject pre-filled and every field written out as plain text;
+3. shows a confirmation, plus the email address in case no email app opened.
 
-**Contact and wholesale:** any form-to-email service that accepts a standard POST.
+Nothing is stored on the website. **Make sure `hello@woodfoxcoffee.com` exists** (or change
+`site.email`), because every inquiry goes there.
 
-- [Formspree](https://formspree.io): create a form, copy its endpoint (`https://formspree.io/f/xxxx`) into `contact` and `wholesale`. You can use the same endpoint for both. Each submission includes a hidden `form` field (`contact` or `wholesale`) so you can tell them apart.
-- [Basin](https://usebasin.com) works the same way.
-- If the site is hosted on **Netlify**, Netlify Forms can be used instead. Add `data-netlify="true"` and a `name` attribute to the `<form>` tags in `src/components/InquiryForm.astro`.
+Spam protection: a hidden "honeypot" field silently drops bot submissions, inputs have length limits,
+and control characters are stripped.
 
-**Email list:** use the provider you'll send newsletters from.
+## Receiving submissions directly (recommended before launch)
 
-- **Kit (ConvertKit), Buttondown, Mailchimp** all provide a form action URL in their "embed form" settings. Paste that URL into `newsletter`. The email field is named `email`. If your provider expects another name (Mailchimp uses `EMAIL`), change the `name` attribute in `src/components/SignupForm.astro`.
+Visitors without a desktop email app (common on shared or work computers) can't use the email-app
+method. To receive submissions as emails without that step, connect a form service:
 
-## Fields sent
+1. Create a free form at [Formspree](https://formspree.io) (or Basin, Getform, etc.) that forwards to
+   your inbox.
+2. Paste its endpoint into `src/config/site.ts`:
+   ```ts
+   export const forms = {
+     contact: 'https://formspree.io/f/xxxxxxx',
+     wholesale: 'https://formspree.io/f/yyyyyyy',
+   };
+   ```
+3. Push. The forms then post directly, showing "Sending…", success and error states.
+
+## Fields
 
 | Form | Fields |
 | --- | --- |
-| Newsletter | `email`, `source` (which page) |
-| Contact | `form`, `topic` (general / wholesale / collaboration), `name`, `email`, `message` |
-| Wholesale | `form`, `name`, `email`, `business`, `business_type`, `city`, `website`, `message` |
+| Contact | topic (general / wholesale / collaboration), name, email, message |
+| Wholesale | name, business name, email, phone (optional), business type, estimated coffee needs, message |
 
-All forms include a hidden `company_website` field as a simple spam trap. Submissions where it is
-filled are silently ignored.
+## Newsletter
+
+The email signup was removed because no newsletter service is connected yet. Once one is chosen
+(e.g. Kit, Buttondown, Mailchimp), a signup section can be added back.

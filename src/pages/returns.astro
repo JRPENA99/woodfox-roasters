@@ -1,0 +1,59 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { site } from '../config/site';
+---
+
+<Legal
+  title="Returns & Refunds"
+  description="Returns and refunds information for Woodfox Coffee orders."
+  updated="October 14, 2026"
+>
+  <p>
+    <strong>Online ordering is not yet available.</strong> This page describes how returns and refunds will work once
+    it opens. Highlighted details will be confirmed before launch.
+  </p>
+
+  <h2>Our approach</h2>
+  <p>
+    Coffee is a food product, so for safety reasons we can’t accept returns of opened bags. If something isn’t right
+    with your order, we want to know.
+  </p>
+
+  <h2>Damaged, incorrect or missing items</h2>
+  <p>
+    If your order arrives damaged, incorrect or incomplete, email <a href={`mailto:${site.email}`}>{site.email}</a>
+    within <mark class="confirm">[owner to confirm, e.g. 14 days]</mark> of delivery with your order number and, where
+    possible, a photo. We’ll send a replacement or issue a refund.
+  </p>
+
+  <h2>If you don’t enjoy a coffee</h2>
+  <p>
+    <mark class="confirm">[Owner to decide: e.g. one-time credit or replacement for a first-time purchase, or no refunds on
+    taste preference.]</mark>
+  </p>
+
+  <h2>Unopened bags</h2>
+  <p>
+    <mark class="confirm">[Owner to decide whether unopened bags may be returned, the time limit, and who pays return
+    shipping.]</mark>
+  </p>
+
+  <h2>Subscriptions</h2>
+  <p>
+    You’ll be able to skip, pause or cancel a subscription before your next billing date
+    <mark class="confirm">[owner to confirm cut-off, e.g. 2 days before]</mark>. Shipments already processed can’t be
+    cancelled.
+  </p>
+
+  <h2>How refunds are issued</h2>
+  <p>
+    Approved refunds are returned to the original payment method through our payment provider. Timing depends on your
+    bank <mark class="confirm">[owner to confirm typical timeframe]</mark>.
+  </p>
+
+  <h2>Wholesale</h2>
+  <p>Returns and credits for wholesale partners follow the terms agreed with each account.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about an order? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+</Legal>

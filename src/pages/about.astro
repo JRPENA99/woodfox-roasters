@@ -2,54 +2,58 @@
 import Base from '../layouts/Base.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Photo from '../components/Photo.astro';
-import ListSection from '../components/ListSection.astro';
 
 const values = [
   {
-    title: 'Curiosity',
-    text: 'Every origin, process and harvest has something to teach. We want to keep tasting, asking and learning.',
+    title: 'Quality',
+    text: 'Every coffee is cupped and evaluated before it carries the Woodfox name.',
   },
   {
-    title: 'Intentional growth',
-    text: 'We’d rather grow slowly and do each thing properly than grow quickly and cut corners.',
+    title: 'Consistency',
+    text: 'Roast profiles are developed carefully and recorded, so a coffee you love tastes the same next time.',
   },
   {
-    title: 'Respect for origin',
-    text: 'Coffee is grown by people, in particular places, under real conditions. The roast should honor that work, not hide it.',
+    title: 'Respect for the craft',
+    text: 'From the farm to the roaster, coffee passes through many skilled hands. We aim to honour that work, not hide it.',
   },
   {
-    title: 'Attention to detail',
-    text: 'The small decisions add up: what we buy, how much, how it’s roasted, how it’s described.',
+    title: 'Community',
+    text: 'We’re a Houston company, and we want to meet the people who drink our coffee: at pop-ups, markets and cuppings.',
   },
 ];
 ---
 
-<Base title="About" description="Woodfox Coffee is a young specialty coffee roasting company, being built carefully around curiosity and respect for origin.">
+<Base
+  title="Our Story"
+  description="Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing, precision roasting and exceptional coffee."
+>
   <PageIntro
-    label="About"
-    title="A young roasting company, <em>built carefully.</em>"
-    lede="Woodfox is at the beginning. We’re building it deliberately, around a curiosity about coffee and a respect for where it comes from."
+    label="Our Story"
+    title="Rooted in Craft. <em>Driven by Purpose.</em>"
+    lede="Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing, precision roasting and exceptional coffee."
     image="terraces"
   />
 
   <section class="section" aria-labelledby="story-title">
     <div class="wrap grid-12">
-      <p class="kicker label k"><span class="num">01</span> Where we are</p>
+      <p class="kicker label k"><span class="num">01</span> What we believe</p>
       <h2 class="lede story-lede" id="story-title" data-reveal>
-        There’s no long family history here, and we won’t pretend otherwise. What there is: a real appreciation for good
-        coffee, and a commitment to doing each part of this properly.
+        We believe great coffee begins long before the first roast.
       </h2>
       <div class="prose story" data-reveal>
         <p>
-          Woodfox Coffee is a specialty coffee company in its early days. Right now that means selecting our first
-          coffees, developing a roast for each one, and laying the foundations of a business that can grow without
-          losing what it cares about.
+          From the regions where our beans are grown to the careful development of each roast profile, every decision
+          is guided by quality, consistency and respect for the craft.
         </p>
         <p>
-          We started with a particular interest in Mexican coffee. That curiosity has widened to excellent coffees from
-          wherever they’re grown, chosen by season and quality.
+          Our approach brings together distinctive coffee origins and carefully controlled roasting to highlight what
+          makes each coffee unique.
         </p>
-        <a class="link" href="/sourcing/">Read about our sourcing <span class="arrow" aria-hidden="true">→</span></a>
+        <p>
+          Whether you’re brewing at home, discovering us at a local event or partnering with us for your business, our
+          mission is simple: to deliver coffee worth slowing down for.
+        </p>
+        <p class="sign">Woodfox Coffee — <em>Crafted with Intention.</em></p>
       </div>
     </div>
   </section>
@@ -61,7 +65,7 @@ const values = [
   <section class="section" aria-labelledby="values-title">
     <div class="wrap">
       <p class="kicker label"><span class="num">02</span> What guides us</p>
-      <h2 class="h2 values-title" id="values-title" data-reveal>Four things we try to hold onto as we grow.</h2>
+      <h2 class="h2 values-title" id="values-title" data-reveal>The principles behind every bag.</h2>
       <ul class="values" role="list">
         {values.map((v, i) => (
           <li data-reveal style={`transition-delay:${i * 80}ms`}>
@@ -74,11 +78,16 @@ const values = [
     </div>
   </section>
 
-  <section class="section-sm next" aria-label="Continue">
+  <section class="section-sm next" aria-label="Continue exploring">
     <div class="wrap next-grid">
       <a href="/coffee/" class="next-card">
-        <span class="label muted">Coffee</span>
-        <span class="h3">How we choose coffee</span>
+        <span class="label muted">Our Coffee</span>
+        <span class="h3">Explore the collection</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a href="/sourcing/" class="next-card">
+        <span class="label muted">Sourcing &amp; Roasting</span>
+        <span class="h3">How we choose and roast</span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
       <a href="/wholesale/" class="next-card">
@@ -86,15 +95,8 @@ const values = [
         <span class="h3">Serve Woodfox coffee</span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
-      <a href="/contact/" class="next-card">
-        <span class="label muted">Contact</span>
-        <span class="h3">Say hello</span>
-        <span class="arrow" aria-hidden="true">→</span>
-      </a>
     </div>
   </section>
-
-  <ListSection source="about" />
 </Base>
 
 <style>
@@ -102,17 +104,23 @@ const values = [
     grid-column: 1 / -1;
   }
   .story-lede {
-    grid-column: 1 / span 7;
-    font-weight: 360;
+    grid-column: 1 / span 6;
+    font-size: var(--step-3);
+    line-height: 1.15;
   }
   .story {
-    grid-column: 9 / span 4;
+    grid-column: 8 / span 5;
     display: grid;
     gap: 1rem;
-    justify-items: start;
   }
-  .story .link {
+  .sign {
     margin-top: 0.75rem;
+    font-family: var(--serif);
+    font-size: var(--step-1);
+    color: var(--ink) !important;
+  }
+  .sign em {
+    color: var(--cherry);
   }
   .wide :global(.frame) {
     min-height: 240px;
