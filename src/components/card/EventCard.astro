@@ -1,0 +1,333 @@
+---
+/**
+ * Woodfox Coffee event card: typographic branding, Save Contact, four
+ * circular actions and a QR code for this card's own URL.
+ */
+import SilkBackground from './SilkBackground.astro';
+import ContactActions from './ContactActions.astro';
+import CardQR from './CardQR.astro';
+import { site } from '../../config/site';
+import { resolveProfile, eventCardPath, eventVcfPath, type EventCard } from '../../data/eventCards';
+
+interface Props {
+  card: EventCard;
+}
+const { card } = Astro.props;
+const p = resolveProfile(card);
+const url = new URL(eventCardPath(card), site.url).href;
+const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
+---
+
+<div class="event-card">
+  <SilkBackground id={`ev${card.id}`} />
+
+  <main class="wrap" id="main">
+    <header class="brand enter" style="--d:0">
+      <span class="b-main">Woodfox</span>
+      <span class="b-sub">Coffee</span>
+    </header>
+
+    <section class="identity enter" style="--d:1">
+      <span class="rule" aria-hidden="true"></span>
+      <h1 class="name">{p.name}</h1>
+      <p class="subtitle">{p.subtitle}</p>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="tagline">{p.tagline}</p>
+    </section>
+
+    <a class="save enter" style="--d:2" href={eventVcfPath(card)} download={p.vcfName} type="text/vcard">
+      <span>Save Contact</span>
+    </a>
+
+    <div class="enter" style="--d:3">
+      <ContactActions name={p.name} phone={p.phone} email={p.email} website={p.website} />
+    </div>
+
+    <footer class="foot enter" style="--d:4">
+      <CardQR url={url} label={`QR code linking to the ${p.name} event card`} />
+      <p class="scan">Scan or tap to connect.</p>
+      <a class="site" href={p.website}>{websiteLabel}</a>
+      <button type="button" class="share" data-share data-url={url} data-title={`${p.name} | ${p.subtitle}`}>
+        <span data-share-label>Share</span>
+      </button>
+      <p class="share-status" role="status" aria-live="polite" data-share-status></p>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-share]');
+  const status = document.querySelector<HTMLElement>('[data-share-status]');
+  const label = document.querySelector<HTMLElement>('[data-share-label]');
+  if (btn) {
+    const url = btn.dataset.url!;
+    const canShare = typeof navigator.share === 'function';
+    if (!canShare && label) label.textContent = 'Copy link';
+    btn.addEventListener('click', async () => {
+      if (canShare) {
+        try {
+          await navigator.share({ title: btn.dataset.title, url });
+          return;
+        } catch (err) {
+          if ((err as DOMException).name === 'AbortError') return;
+        }
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        if (status) status.textContent = 'Link copied';
+      } catch {
+        if (status) status.textContent = url;
+      }
+      setTimeout(() => status && (status.textContent = ''), 3000);
+    });
+  }
+</script>
+
+<style>
+  .event-card {
+    --cream: #f3eadf;
+    --cream-dim: rgb(243 234 223 / 0.72);
+    --copper: #c48a56;
+    --champagne: #e6c9a6;
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #080706;
+    color: var(--cream);
+    isolation: isolate;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin-inline: auto;
+    padding: max(44px, calc(env(safe-area-inset-top) + 28px)) 24px max(28px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 26px;
+    text-align: center;
+  }
+
+  /* Brand */
+  .brand {
+    display: grid;
+    justify-items: center;
+    line-height: 1;
+  }
+  .b-main {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: 0.36em;
+    padding-left: 0.36em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+  .b-sub {
+    margin-top: 0.55rem;
+    font-family: var(--serif);
+    font-size: 0.7rem;
+    letter-spacing: 0.62em;
+    padding-left: 0.62em;
+    text-transform: uppercase;
+    color: var(--champagne);
+  }
+
+  /* Identity */
+  .identity {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+  }
+  .rule {
+    width: 44px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--champagne), transparent);
+    opacity: 0.8;
+  }
+  .name {
+    margin-top: 6px;
+    font-family: var(--serif);
+    font-weight: 380;
+    font-size: clamp(2.2rem, 10vw, 2.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.005em;
+  }
+  .subtitle {
+    font-size: 0.78rem;
+    font-weight: 560;
+    letter-spacing: 0.3em;
+    padding-left: 0.3em;
+    text-transform: uppercase;
+    color: var(--champagne);
+    margin-bottom: 6px;
+  }
+  .tagline {
+    margin-top: 4px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--cream-dim);
+  }
+
+  /* Save Contact */
+  .save {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 340px;
+    min-height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #e7c39b 0%, #c48a56 42%, #8f5a31 100%);
+    background-size: 160% 160%;
+    color: #160f0a;
+    font-size: 0.92rem;
+    font-weight: 650;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow:
+      0 12px 30px rgb(0 0 0 / 0.45),
+      0 4px 14px rgb(196 138 86 / 0.22),
+      inset 0 1px 0 rgb(255 240 220 / 0.45);
+    animation: metal 9s ease-in-out infinite alternate;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      filter 0.25s ease;
+  }
+  .save span {
+    position: relative;
+    z-index: 1;
+  }
+  /* Slow sheen across the button */
+  .save::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 38%;
+    background: linear-gradient(100deg, transparent, rgb(255 246 232 / 0.55), transparent);
+    transform: translateX(-130%) skewX(-18deg);
+    animation: sheen 6.5s ease-in-out infinite 2.2s;
+  }
+  .save:hover {
+    filter: brightness(1.05);
+  }
+  .save:active {
+    transform: scale(0.985);
+  }
+  .save:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 4px;
+  }
+
+  /* Footer / QR */
+  .foot {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+  }
+  .scan {
+    margin-top: 6px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: var(--cream-dim);
+  }
+  .site {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: -6px;
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--champagne);
+    text-decoration: none;
+  }
+  .site:hover {
+    color: var(--cream);
+  }
+  .share {
+    min-height: 40px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid rgb(230 201 166 / 0.3);
+    background: transparent;
+    color: var(--cream-dim);
+    font: inherit;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.25s ease, color 0.25s ease;
+  }
+  .share:hover {
+    border-color: rgb(230 201 166 / 0.6);
+    color: var(--cream);
+  }
+  .share:focus-visible,
+  .site:focus-visible {
+    outline: 2px solid var(--champagne);
+    outline-offset: 3px;
+  }
+  .share-status {
+    min-height: 1.1em;
+    font-size: 0.78rem;
+    color: var(--champagne);
+    overflow-wrap: anywhere;
+  }
+
+  /* Entrance */
+  .enter {
+    animation: enter 0.9s cubic-bezier(0.22, 0.8, 0.24, 1) both;
+    animation-delay: calc(var(--d, 0) * 90ms + 100ms);
+  }
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes sheen {
+    0% {
+      transform: translateX(-130%) skewX(-18deg);
+    }
+    35%,
+    100% {
+      transform: translateX(300%) skewX(-18deg);
+    }
+  }
+  @keyframes metal {
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 100% 50%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .enter,
+    .save,
+    .save::after {
+      animation: none;
+    }
+    .save::after {
+      display: none;
+    }
+  }
+  @media (max-height: 700px) {
+    .wrap {
+      gap: 18px;
+      padding-top: max(28px, calc(env(safe-area-inset-top) + 16px));
+    }
+  }
+</style>

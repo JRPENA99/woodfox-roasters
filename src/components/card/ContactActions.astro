@@ -1,0 +1,127 @@
+---
+/**
+ * Circular Call / Text / Email / Website buttons.
+ * Phone actions render disabled (no link) until a phone number is configured.
+ */
+interface Props {
+  name: string;
+  phone: string | null;
+  email: string;
+  website: string;
+}
+const { name, phone, email, website } = Astro.props;
+const site = website.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+const icons = {
+  call: '<path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a12 12 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/>',
+  text: '<path d="M4 5h16v11H9l-5 4Z"/>',
+  email: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m4 7 8 6 8-6"/>',
+  web: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/>',
+};
+
+const actions = [
+  { key: 'call', label: 'Call', href: phone ? `tel:${phone}` : null, aria: `Call ${name}` },
+  { key: 'text', label: 'Text', href: phone ? `sms:${phone}` : null, aria: `Text ${name}` },
+  { key: 'email', label: 'Email', href: `mailto:${email}`, aria: `Email ${name} at ${email}` },
+  { key: 'web', label: 'Website', href: website, aria: `Visit ${site}` },
+] as const;
+---
+
+<nav class="actions" aria-label={`Contact ${name}`}>
+  {actions.map((a) =>
+    a.href ? (
+      <a class="action" href={a.href} aria-label={a.aria}>
+        <span class="ring"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={icons[a.key]} /></span>
+        <span class="lbl">{a.label}</span>
+      </a>
+    ) : (
+      <span class="action is-off" aria-disabled="true" title="Number coming soon">
+        <span class="ring"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={icons[a.key]} /></span>
+        <span class="lbl">{a.label}</span>
+        <span class="sr-only">(not available yet)</span>
+      </span>
+    ),
+  )}
+</nav>
+
+<style>
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 320px;
+  }
+  .action {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    min-width: 64px;
+    padding: 4px 0;
+    color: #efe6da;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ring {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgb(20 15 11 / 0.55);
+    border: 1px solid rgb(220 178 138 / 0.4);
+    box-shadow: inset 0 1px 0 rgb(255 240 220 / 0.08);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      background 0.25s ease;
+  }
+  .ring svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: #e2c09a;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .lbl {
+    font-size: 0.68rem;
+    font-weight: 560;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(239 230 218 / 0.82);
+  }
+  a.action:hover .ring {
+    border-color: rgb(226 192 154 / 0.85);
+    background: rgb(168 105 58 / 0.18);
+  }
+  a.action:active .ring {
+    transform: scale(0.94);
+  }
+  a.action:focus-visible {
+    outline: none;
+  }
+  a.action:focus-visible .ring {
+    outline: 2px solid #e2c09a;
+    outline-offset: 3px;
+  }
+  .is-off {
+    opacity: 0.38;
+    cursor: default;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ring {
+      transition: none;
+    }
+  }
+</style>

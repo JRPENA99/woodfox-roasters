@@ -1,0 +1,198 @@
+---
+/**
+ * Animated "flowing silk" background for digital cards.
+ *
+ * Three layers, all compositor-friendly (transform/translate only):
+ *  - soft glows that drift and swell
+ *  - tilted bands that sway up and down
+ *  - ribbons of fine wave lines inside each band that slide sideways and loop
+ * Static under prefers-reduced-motion.
+ */
+interface Props {
+  /** Prefix for gradient ids, so two backgrounds never clash on one page. */
+  id?: string;
+}
+const { id = 'silk' } = Astro.props;
+
+// Ribbon geometry: 1600-unit-wide SVG drawn at 200% width and slid by 50%.
+// The 400-unit wave period divides the 800-unit shift, so the loop is seamless.
+const PERIOD = 400;
+function wave(y: number, amp: number, offset = 0) {
+  const start = -800 + offset;
+  let d = `M${start} ${y}Q${start + PERIOD / 2} ${y - amp} ${start + PERIOD} ${y}`;
+  for (let x = start + PERIOD * 2; x <= 2200; x += PERIOD) d += `T${x} ${y}`;
+  return d;
+}
+function lines(count: number, base: number, amp: number, gap: number) {
+  const mid = (count - 1) / 2;
+  return Array.from({ length: count }, (_, i) => {
+    const t = 1 - Math.abs(i - mid) / (mid + 1);
+    return { d: wave(base + i * gap, amp + i * 3, i * 12), o: (0.07 + t * 0.4).toFixed(2) };
+  });
+}
+const ribbons = [
+  { lines: lines(16, 108, 72, 7), band: wave(162, 98, 80) },
+  { lines: lines(18, 116, 86, 6), band: wave(170, 110, 86) },
+  { lines: lines(14, 128, 62, 8), band: wave(180, 86, 72) },
+];
+---
+
+<div class="silk-bg" aria-hidden="true">
+  <div class="glow glow--a"></div>
+  <div class="glow glow--b"></div>
+  <div class="glow glow--c"></div>
+  {ribbons.map((r, i) => (
+    <div class={`flow flow--${i + 1}`}>
+      <svg class="ribbon" viewBox="0 0 1600 400" preserveAspectRatio="none" focusable="false">
+        <defs>
+          <linearGradient id={`${id}-band-${i}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-opacity="0" />
+            <stop offset=".5" stop-opacity=".34" />
+            <stop offset="1" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <g class="lines">
+          <path class="band" d={r.band} stroke={`url(#${id}-band-${i})`} stroke-width="150" />
+          {r.lines.map((l) => <path d={l.d} stroke-opacity={l.o} />)}
+        </g>
+      </svg>
+    </div>
+  ))}
+  <div class="shade"></div>
+</div>
+
+<style>
+  .silk-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 70% at 50% -10%, #241811 0%, transparent 60%),
+      radial-gradient(90% 60% at 100% 100%, rgb(120 74 38 / 0.28) 0%, transparent 65%),
+      linear-gradient(180deg, #16100c 0%, #080706 72%);
+  }
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform;
+    animation: glow-drift 26s ease-in-out infinite alternate;
+  }
+  .glow--a {
+    width: 90vmax;
+    height: 90vmax;
+    left: -35vmax;
+    top: -32vmax;
+    background: radial-gradient(closest-side, rgb(170 108 58 / 0.3), transparent);
+  }
+  .glow--b {
+    width: 70vmax;
+    height: 70vmax;
+    right: -32vmax;
+    top: 24vh;
+    background: radial-gradient(closest-side, rgb(64 40 22 / 0.85), transparent);
+    animation-duration: 34s;
+    animation-delay: -10s;
+  }
+  .glow--c {
+    width: 60vmax;
+    height: 60vmax;
+    left: -12vmax;
+    bottom: -36vmax;
+    background: radial-gradient(closest-side, rgb(226 196 160 / 0.12), transparent);
+    animation-duration: 30s;
+    animation-delay: -18s;
+  }
+  .flow {
+    position: absolute;
+    left: -25%;
+    width: 150%;
+    height: 46vh;
+    transform: rotate(-14deg);
+    animation: sway 18s ease-in-out infinite alternate;
+  }
+  .flow--1 {
+    top: 0;
+    opacity: 0.5;
+  }
+  .flow--2 {
+    top: 30vh;
+    opacity: 0.8;
+    transform: rotate(-9deg);
+    animation-duration: 22s;
+    animation-delay: -6s;
+  }
+  .flow--3 {
+    top: 62vh;
+    opacity: 0.45;
+    transform: rotate(-18deg);
+    animation-duration: 26s;
+    animation-delay: -12s;
+  }
+  .ribbon {
+    display: block;
+    width: 200%;
+    height: 100%;
+    will-change: transform;
+    animation: flow 60s linear infinite;
+  }
+  .flow--1 .ribbon {
+    animation-duration: 78s;
+  }
+  .flow--2 .ribbon {
+    animation-duration: 54s;
+  }
+  .flow--3 .ribbon {
+    animation-duration: 92s;
+    animation-direction: reverse;
+  }
+  .lines {
+    fill: none;
+    stroke: #dcb28a;
+    stroke-width: 1.1;
+  }
+  .lines path {
+    vector-effect: non-scaling-stroke;
+  }
+  .lines path.band {
+    vector-effect: none;
+    stroke-opacity: 1;
+  }
+  stop {
+    stop-color: #a8693a;
+  }
+  /* Keeps text readable over the moving layers. */
+  .shade {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(75% 50% at 50% 42%, rgb(8 7 6 / 0.5), transparent 78%),
+      linear-gradient(180deg, transparent 60%, rgb(8 7 6 / 0.65) 100%);
+  }
+  @keyframes glow-drift {
+    to {
+      transform: translate3d(6vmax, 4vmax, 0) scale(1.12);
+    }
+  }
+  @keyframes sway {
+    from {
+      translate: 0 -2vh;
+    }
+    to {
+      translate: 0 3vh;
+    }
+  }
+  @keyframes flow {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glow,
+    .flow,
+    .ribbon {
+      animation: none;
+    }
+  }
+</style>

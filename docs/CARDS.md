@@ -47,3 +47,53 @@ Private digital business cards, opened by tapping a PVC NFC card or scanning its
 4. Scan the on-screen QR code with another phone: it should open the same card.
 5. Try **Copy link / Share link**.
 6. Program the chip with the exact URL above (including the trailing slash) and tap it to confirm.
+
+---
+
+# Event cards (Woodfox Coffee, Event Team)
+
+Three identical general-business cards for anyone representing Woodfox at events. They're
+separate from Tony's card: no personal details, separate files, and Tony's card is untouched.
+
+| Card | URL to program on the NFC chip |
+| --- | --- |
+| Event card 1 | `https://woodfoxcoffee.com/card/event-01/` |
+| Event card 2 | `https://woodfoxcoffee.com/card/event-02/` |
+| Event card 3 | `https://woodfoxcoffee.com/card/event-03/` |
+
+Each page has its own QR code pointing to its own URL, and its own `Woodfox-Coffee.vcf`.
+
+## Turning on Call and Text
+
+The Google Voice number isn't set yet, so Call and Text show dimmed with no link and the vCard has
+no phone. To enable them, edit `src/data/eventCards.ts`:
+
+```ts
+phone: '+17135551234',          // E.164 format
+phoneDisplay: '(713) 555-1234',
+```
+
+Then build and push. Every event card (and its vCard) updates at once.
+
+## Assigning a card to a person later
+
+Give that card an override in `eventCards`, e.g.
+
+```ts
+{ id: '02', profile: { name: 'Jane Doe', subtitle: 'Wholesale', email: 'jane@woodfoxcoffee.com', vcfName: 'Jane-Doe-Woodfox-Coffee.vcf' } },
+```
+
+The URL stays the same, so the physical card doesn't need reprogramming.
+
+## Files
+
+| File | Purpose |
+| --- | --- |
+| `src/data/eventCards.ts` | Shared profile, the three cards, per-card overrides |
+| `src/lib/vcard.ts` | vCard 3.0 builder (escaping, folding, CRLF) |
+| `src/components/card/EventCard.astro` | Event card layout |
+| `src/components/card/SilkBackground.astro` | Reusable animated silk background |
+| `src/components/card/ContactActions.astro` | Circular Call/Text/Email/Website buttons |
+| `src/components/card/CardQR.astro` | Build-time QR code |
+| `src/pages/card/event-[n]/index.astro` | The three pages |
+| `src/pages/card/event-[n]/[vcf].ts` | The three vCard files |
