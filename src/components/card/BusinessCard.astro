@@ -1,6 +1,6 @@
 ---
 /**
- * Reusable NFC business card: black, espresso and copper with slow satin swirls.
+ * Reusable NFC business card: black and espresso with slowly flowing copper silk.
  * Data comes from src/data/cards.ts. The QR code is generated at build time
  * (no external service, no client-side library).
  */
@@ -21,44 +21,55 @@ const qrSvg = await QRCode.toString(cardUrl, {
   color: { dark: '#111111ff', light: '#f2f1eeff' },
 });
 const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+/*
+ * Silk ribbons: bundles of fine wave lines inside a 1600-unit-wide SVG that is
+ * drawn at 200% width and slid left by 50% on a loop. The wave period (400)
+ * divides the 800-unit shift exactly, so the loop is seamless.
+ */
+const PERIOD = 400;
+function wave(y: number, amp: number, offset = 0) {
+  const start = -800 + offset;
+  let d = `M${start} ${y}Q${start + PERIOD / 2} ${y - amp} ${start + PERIOD} ${y}`;
+  for (let x = start + PERIOD * 2; x <= 2200; x += PERIOD) d += `T${x} ${y}`;
+  return d;
+}
+function ribbon(lines: number, base: number, amp: number, gap: number) {
+  const mid = (lines - 1) / 2;
+  return Array.from({ length: lines }, (_, i) => {
+    const t = 1 - Math.abs(i - mid) / (mid + 1); // brightest in the middle
+    return { d: wave(base + i * gap, amp + i * 3, i * 12), o: (0.08 + t * 0.42).toFixed(2) };
+  });
+}
+const ribbons = [
+  { id: 'a', lines: ribbon(15, 110, 70, 7), band: wave(160, 96, 78) },
+  { id: 'b', lines: ribbon(17, 120, 84, 6), band: wave(170, 108, 84) },
+  { id: 'c', lines: ribbon(13, 130, 60, 8), band: wave(178, 84, 70) },
+];
 ---
 
 <div class="card-page">
-  <div class="satin" aria-hidden="true">
-    <svg class="ribbons" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="cu1" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#5a3518" stop-opacity="0" />
-          <stop offset="0.45" stop-color="#c68a52" />
-          <stop offset="0.6" stop-color="#e9c193" />
-          <stop offset="1" stop-color="#6b4020" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="cu2" x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#3a2212" stop-opacity="0" />
-          <stop offset="0.5" stop-color="#a86b3a" />
-          <stop offset="1" stop-color="#3a2212" stop-opacity="0" />
-        </linearGradient>
-        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="6" />
-        </filter>
-        <filter id="softer" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="16" />
-        </filter>
-      </defs>
-      <g class="r r1" filter="url(#softer)" opacity="0.55">
-        <path d="M-80 180 C 60 90, 160 300, 300 210 S 520 120, 560 260" stroke="url(#cu2)" stroke-width="70" fill="none" />
-      </g>
-      <g class="r r2" filter="url(#soft)" opacity="0.5">
-        <path d="M-60 330 C 80 250, 180 430, 320 350 S 500 300, 520 420" stroke="url(#cu1)" stroke-width="22" fill="none" />
-        <path d="M-60 352 C 80 272, 180 452, 320 372 S 500 322, 520 442" stroke="url(#cu1)" stroke-width="6" fill="none" opacity="0.7" />
-      </g>
-      <g class="r r3" filter="url(#softer)" opacity="0.4">
-        <path d="M-90 620 C 50 520, 190 720, 330 610 S 520 560, 560 680" stroke="url(#cu2)" stroke-width="90" fill="none" />
-      </g>
-      <g class="r r4" filter="url(#soft)" opacity="0.35">
-        <path d="M480 40 C 360 120, 260 20, 140 110 S -40 170, -80 90" stroke="url(#cu1)" stroke-width="14" fill="none" />
-      </g>
-    </svg>
+  <div class="silk" aria-hidden="true">
+    <div class="glow glow--a"></div>
+    <div class="glow glow--b"></div>
+    <div class="glow glow--c"></div>
+    {ribbons.map((r, i) => (
+      <div class={`flow flow--${i + 1}`}>
+        <svg class="ribbon" viewBox="0 0 1600 400" preserveAspectRatio="none" focusable="false">
+          <defs>
+            <linearGradient id={`band-${r.id}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-opacity="0" />
+              <stop offset=".5" stop-opacity=".32" />
+              <stop offset="1" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <g class="lines">
+            <path class="band" d={r.band} stroke={`url(#band-${r.id})`} stroke-width="150" />
+            {r.lines.map((l) => <path d={l.d} stroke-opacity={l.o} />)}
+          </g>
+        </svg>
+      </div>
+    ))}
     <div class="vignette"></div>
   </div>
 
@@ -178,47 +189,124 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     isolation: isolate;
   }
 
-  /* Satin swirls ---------------------------------------------------------- */
-  .satin {
-    position: absolute;
+  /* Silk background ------------------------------------------------------ */
+  .silk {
+    position: fixed;
     inset: 0;
     z-index: -1;
+    overflow: hidden;
     pointer-events: none;
+    background:
+      radial-gradient(120% 70% at 50% -10%, #2a1c12 0%, transparent 60%),
+      radial-gradient(90% 60% at 100% 100%, rgb(120 72 36 / 0.3) 0%, transparent 65%),
+      linear-gradient(180deg, #1a120d 0%, var(--black) 70%);
   }
-  .ribbons {
-    width: 100%;
-    height: 100%;
-  }
-  .r {
-    transform-box: fill-box;
-    transform-origin: center;
+  .glow {
+    position: absolute;
+    border-radius: 50%;
     will-change: transform;
+    animation: glow-drift 26s ease-in-out infinite alternate;
   }
-  .r1 {
-    animation: drift1 38s ease-in-out infinite alternate;
+  .glow--a {
+    width: 90vmax;
+    height: 90vmax;
+    left: -35vmax;
+    top: -30vmax;
+    background: radial-gradient(closest-side, rgb(176 112 58 / 0.32), transparent);
   }
-  .r2 {
-    animation: drift2 46s ease-in-out infinite alternate;
+  .glow--b {
+    width: 70vmax;
+    height: 70vmax;
+    right: -30vmax;
+    top: 25vh;
+    background: radial-gradient(closest-side, rgb(74 44 22 / 0.8), transparent);
+    animation-duration: 34s;
+    animation-delay: -10s;
   }
-  .r3 {
-    animation: drift3 52s ease-in-out infinite alternate;
+  .glow--c {
+    width: 60vmax;
+    height: 60vmax;
+    left: -10vmax;
+    bottom: -35vmax;
+    background: radial-gradient(closest-side, rgb(233 193 147 / 0.14), transparent);
+    animation-duration: 30s;
+    animation-delay: -18s;
   }
-  .r4 {
-    animation: drift2 60s ease-in-out infinite alternate-reverse;
+  /* Each .flow is a tilted strip that sways; its ribbon slides and loops. */
+  .flow {
+    position: absolute;
+    left: -25%;
+    width: 150%;
+    height: 46vh;
+    transform: rotate(-14deg);
+    animation: sway 18s ease-in-out infinite alternate;
   }
-  @keyframes drift1 {
+  .flow--1 {
+    top: 2vh;
+    opacity: 0.5;
+  }
+  .flow--2 {
+    top: 30vh;
+    opacity: 0.85;
+    transform: rotate(-9deg);
+    animation-duration: 22s;
+    animation-delay: -6s;
+  }
+  .flow--3 {
+    top: 62vh;
+    opacity: 0.45;
+    transform: rotate(-18deg);
+    animation-duration: 26s;
+    animation-delay: -12s;
+  }
+  .ribbon {
+    display: block;
+    width: 200%;
+    height: 100%;
+    will-change: transform;
+    animation: flow 60s linear infinite;
+  }
+  .flow--1 .ribbon {
+    animation-duration: 75s;
+  }
+  .flow--2 .ribbon {
+    animation-duration: 52s;
+  }
+  .flow--3 .ribbon {
+    animation-duration: 90s;
+    animation-direction: reverse;
+  }
+  .ribbon .lines {
+    fill: none;
+    stroke: #e3b98c;
+    stroke-width: 1.1;
+  }
+  .ribbon .lines path {
+    vector-effect: non-scaling-stroke;
+  }
+  .ribbon .lines path.band {
+    vector-effect: none;
+    stroke-opacity: 1;
+  }
+  .ribbon stop {
+    stop-color: #b0703a;
+  }
+  @keyframes glow-drift {
     to {
-      transform: translate(-6%, 3%) rotate(-4deg) scale(1.06);
+      transform: translate3d(6vmax, 4vmax, 0) scale(1.12);
     }
   }
-  @keyframes drift2 {
+  @keyframes sway {
+    from {
+      translate: 0 -2vh;
+    }
     to {
-      transform: translate(5%, -2%) rotate(3deg) scale(1.04);
+      translate: 0 3vh;
     }
   }
-  @keyframes drift3 {
+  @keyframes flow {
     to {
-      transform: translate(-4%, -3%) rotate(5deg) scale(1.08);
+      transform: translate3d(-50%, 0, 0);
     }
   }
   .vignette {
@@ -229,7 +317,9 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
       linear-gradient(180deg, transparent 55%, rgb(11 9 7 / 0.7) 100%);
   }
   @media (prefers-reduced-motion: reduce) {
-    .r {
+    .glow,
+    .flow,
+    .ribbon {
       animation: none;
     }
   }
