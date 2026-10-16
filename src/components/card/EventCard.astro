@@ -22,7 +22,10 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
   <SilkBackground id={`ev${card.id}`} />
 
   <main class="wrap" id="main">
-    <h1 class="name enter" style="--d:0">{p.name}</h1>
+    <h1 class="logo enter" style="--d:0" aria-label={p.name}>
+      <span class="l-main" aria-hidden="true">Woodfox</span>
+      <span class="l-sub" aria-hidden="true">Coffee</span>
+    </h1>
     <p class="subtitle enter" style="--d:1">{p.subtitle}</p>
 
     <a class="save enter" style="--d:2" href={eventVcfPath(card)} download={p.vcfName} type="text/vcard">
@@ -108,22 +111,39 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
     width: 100%;
     max-width: 440px;
     margin-inline: auto;
-    padding: max(64px, calc(env(safe-area-inset-top) + 44px)) 22px max(24px, env(safe-area-inset-bottom));
+    padding: max(96px, calc(env(safe-area-inset-top) + 72px)) 22px max(32px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .name {
-    font-family: var(--serif);
-    font-weight: 380;
-    font-size: clamp(2.3rem, 10vw, 2.85rem);
+  .logo {
+    display: grid;
+    justify-items: center;
     line-height: 1;
-    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .l-main {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.9rem, 9vw, 2.3rem);
+    letter-spacing: 0.3em;
+    padding-left: 0.3em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .l-sub {
+    margin-top: 0.7rem;
+    font-family: var(--serif);
+    font-size: 0.82rem;
+    letter-spacing: 0.6em;
+    padding-left: 0.6em;
+    text-transform: uppercase;
+    color: var(--white-dim);
   }
   .subtitle {
-    margin-top: 12px;
+    margin-top: 22px;
     font-size: 0.78rem;
     font-weight: 560;
     letter-spacing: 0.24em;
@@ -136,7 +156,7 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
   .save {
     position: relative;
     overflow: hidden;
-    margin-top: 30px;
+    margin-top: 44px;
     width: 100%;
     min-height: 58px;
     display: inline-flex;
@@ -190,12 +210,12 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
   .block {
     width: 100%;
-    margin-top: 14px;
+    margin-top: 20px;
   }
 
   /* Details */
   .details {
-    margin-top: 22px;
+    margin-top: 34px;
     width: 100%;
     border-top: 1px solid rgb(236 235 232 / 0.18);
   }
@@ -232,7 +252,7 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
   /* QR */
   .qr-row {
-    margin-top: 24px;
+    margin-top: 34px;
     width: 100%;
     display: grid;
     grid-template-columns: 124px 1fr;
@@ -283,7 +303,7 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
   /* Footer */
   .foot {
-    margin-top: 22px;
+    margin-top: 30px;
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -334,6 +354,11 @@ const websiteLabel = p.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
     }
     .save::after {
       display: none;
+    }
+  }
+  @media (max-height: 740px) {
+    .wrap {
+      padding-top: max(56px, calc(env(safe-area-inset-top) + 40px));
     }
   }
   @media (max-width: 350px) {

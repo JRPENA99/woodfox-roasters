@@ -63,17 +63,11 @@ separate from Tony's card: no personal details, separate files, and Tony's card 
 
 Each page has its own QR code pointing to its own URL, and its own `Woodfox-Coffee.vcf`.
 
-## Turning on Call and Text
+## Phone number
 
-The Google Voice number isn't set yet, so Call and Text show dimmed with no link and the vCard has
-no phone. To enable them, edit `src/data/eventCards.ts`:
-
-```ts
-phone: '+17135551234',          // E.164 format
-phoneDisplay: '(713) 555-1234',
-```
-
-Then build and push. Every event card (and its vCard) updates at once.
+The event cards use the Google Voice business number **(713) 742-4040** for the Call button, the
+details list and the vCard. (There's no Text button.) To change it, edit `phone` and `phoneDisplay` in
+`src/data/eventCards.ts`, then build and push. Every event card and its vCard update at once.
 
 ## Assigning a card to a person later
 

@@ -37,8 +37,8 @@ export const eventProfile: EventProfile = {
   subtitle: 'Event Team',
   tagline: 'Great coffee. Real connections.',
   org: 'Woodfox Coffee',
-  phone: null, // GOOGLE VOICE BUSINESS NUMBER — TO BE PROVIDED
-  phoneDisplay: null,
+  phone: '+17137424040', // Google Voice business number
+  phoneDisplay: '(713) 742-4040',
   email: 'hello@woodfoxcoffee.com',
   website: 'https://woodfoxcoffee.com',
   city: 'Houston',
