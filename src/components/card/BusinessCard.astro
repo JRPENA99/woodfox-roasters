@@ -1,0 +1,550 @@
+---
+/**
+ * Reusable NFC business card: black, espresso and copper with slow satin swirls.
+ * Data comes from src/data/cards.ts. The QR code is generated at build time
+ * (no external service, no client-side library).
+ */
+import QRCode from 'qrcode';
+import { site } from '../../config/site';
+import { fullName, cardPath, vcfPath, type CardProfile } from '../../data/cards';
+
+interface Props {
+  card: CardProfile;
+}
+const { card } = Astro.props;
+const name = fullName(card);
+const cardUrl = new URL(cardPath(card), site.url).href;
+const qrSvg = await QRCode.toString(cardUrl, {
+  type: 'svg',
+  errorCorrectionLevel: 'M',
+  margin: 4,
+  color: { dark: '#17100bff', light: '#f4ece0ff' },
+});
+const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
+---
+
+<div class="card-page">
+  <div class="satin" aria-hidden="true">
+    <svg class="ribbons" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="cu1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5a3518" stop-opacity="0" />
+          <stop offset="0.45" stop-color="#c68a52" />
+          <stop offset="0.6" stop-color="#e9c193" />
+          <stop offset="1" stop-color="#6b4020" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="cu2" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3a2212" stop-opacity="0" />
+          <stop offset="0.5" stop-color="#a86b3a" />
+          <stop offset="1" stop-color="#3a2212" stop-opacity="0" />
+        </linearGradient>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="6" />
+        </filter>
+        <filter id="softer" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="16" />
+        </filter>
+      </defs>
+      <g class="r r1" filter="url(#softer)" opacity="0.55">
+        <path d="M-80 180 C 60 90, 160 300, 300 210 S 520 120, 560 260" stroke="url(#cu2)" stroke-width="70" fill="none" />
+      </g>
+      <g class="r r2" filter="url(#soft)" opacity="0.5">
+        <path d="M-60 330 C 80 250, 180 430, 320 350 S 500 300, 520 420" stroke="url(#cu1)" stroke-width="22" fill="none" />
+        <path d="M-60 352 C 80 272, 180 452, 320 372 S 500 322, 520 442" stroke="url(#cu1)" stroke-width="6" fill="none" opacity="0.7" />
+      </g>
+      <g class="r r3" filter="url(#softer)" opacity="0.4">
+        <path d="M-90 620 C 50 520, 190 720, 330 610 S 520 560, 560 680" stroke="url(#cu2)" stroke-width="90" fill="none" />
+      </g>
+      <g class="r r4" filter="url(#soft)" opacity="0.35">
+        <path d="M480 40 C 360 120, 260 20, 140 110 S -40 170, -80 90" stroke="url(#cu1)" stroke-width="14" fill="none" />
+      </g>
+    </svg>
+    <div class="vignette"></div>
+  </div>
+
+  <main class="card" id="main">
+    <header class="brand">
+      <span class="wm-main">Woodfox</span>
+      <span class="wm-sub">Coffee</span>
+    </header>
+
+    <div class="monogram" aria-hidden="true">
+      <span>{card.initials}</span>
+    </div>
+
+    <h1 class="name">{name}</h1>
+    <p class="title">{card.title}</p>
+    <p class="org">{card.org}</p>
+
+    <a class="save" href={vcfPath(card)} download={card.vcfName} type="text/vcard">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"></path><path d="M19 3v6M16 6h6"></path></svg>
+      Save Contact
+    </a>
+
+    <nav class="actions" aria-label={`Contact ${name}`}>
+      <a href={`tel:${card.phone}`} aria-label={`Call ${name} at ${card.phoneDisplay}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4.1-2 1.3a12 12 0 0 0 6.5 6.5l1.3-2 4.1 1.4v2.6a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"></path></svg>
+        <span>Call</span>
+      </a>
+      <a href={`sms:${card.phone}`} aria-label={`Text ${name} at ${card.phoneDisplay}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"></path></svg>
+        <span>Text</span>
+      </a>
+      <a href={`mailto:${card.email}`} aria-label={`Email ${name} at ${card.email}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"></rect><path d="m4 7 8 6 8-6"></path></svg>
+        <span>Email</span>
+      </a>
+      <a href={card.website} aria-label={`Visit ${websiteLabel}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"></path></svg>
+        <span>Website</span>
+      </a>
+    </nav>
+
+    <dl class="details">
+      <div><dt>Mobile</dt><dd><a href={`tel:${card.phone}`}>{card.phoneDisplay}</a></dd></div>
+      <div><dt>Email</dt><dd><a href={`mailto:${card.email}`}>{card.email}</a></dd></div>
+      {card.secondaryEmail && (
+        <div><dt>General</dt><dd><a href={`mailto:${card.secondaryEmail}`}>{card.secondaryEmail}</a></dd></div>
+      )}
+    </dl>
+
+    <section class="qr" aria-labelledby="qr-label">
+      <div class="qr-code" role="img" aria-label={`QR code linking to ${name}'s digital card`} set:html={qrSvg} />
+      <div class="qr-side">
+        <p id="qr-label" class="qr-label">Scan to share this card</p>
+        <button type="button" class="share" data-share data-url={cardUrl} data-title={`${name} | ${card.org}`}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5"></path><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"></path></svg>
+          <span data-share-label>Share link</span>
+        </button>
+        <p class="share-status" role="status" aria-live="polite" data-share-status></p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <a href={card.website}>{websiteLabel}</a>
+      <span aria-hidden="true">·</span>
+      <span>Houston, Texas</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-share]');
+  const status = document.querySelector<HTMLElement>('[data-share-status]');
+  const label = document.querySelector<HTMLElement>('[data-share-label]');
+  if (btn) {
+    const url = btn.dataset.url!;
+    const canShare = typeof navigator.share === 'function';
+    if (!canShare && label) label.textContent = 'Copy link';
+    btn.addEventListener('click', async () => {
+      if (canShare) {
+        try {
+          await navigator.share({ title: btn.dataset.title, url });
+          return;
+        } catch (err) {
+          if ((err as DOMException).name === 'AbortError') return;
+        }
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        if (status) status.textContent = 'Link copied';
+      } catch {
+        // Last resort: show the link so it can be copied by hand.
+        if (status) status.textContent = url;
+      }
+      setTimeout(() => status && (status.textContent = ''), 3000);
+    });
+  }
+</script>
+
+<style>
+  .card-page {
+    --black: #0b0907;
+    --espresso: #1a120d;
+    --copper: #c68a52;
+    --copper-hi: #e9c193;
+    --bronze: #8a5a32;
+    --cream: #f4ece0;
+    --cream-dim: rgb(244 236 224 / 0.7);
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: radial-gradient(120% 80% at 50% 0%, #22170f 0%, var(--espresso) 35%, var(--black) 100%);
+    color: var(--cream);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Satin swirls ---------------------------------------------------------- */
+  .satin {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .ribbons {
+    width: 100%;
+    height: 100%;
+  }
+  .r {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform;
+  }
+  .r1 {
+    animation: drift1 38s ease-in-out infinite alternate;
+  }
+  .r2 {
+    animation: drift2 46s ease-in-out infinite alternate;
+  }
+  .r3 {
+    animation: drift3 52s ease-in-out infinite alternate;
+  }
+  .r4 {
+    animation: drift2 60s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes drift1 {
+    to {
+      transform: translate(-6%, 3%) rotate(-4deg) scale(1.06);
+    }
+  }
+  @keyframes drift2 {
+    to {
+      transform: translate(5%, -2%) rotate(3deg) scale(1.04);
+    }
+  }
+  @keyframes drift3 {
+    to {
+      transform: translate(-4%, -3%) rotate(5deg) scale(1.08);
+    }
+  }
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(70% 45% at 50% 38%, rgb(11 9 7 / 0.55), transparent 75%),
+      linear-gradient(180deg, transparent 55%, rgb(11 9 7 / 0.7) 100%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .r {
+      animation: none;
+    }
+  }
+
+  /* Layout ---------------------------------------------------------------- */
+  .card {
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+    padding: max(28px, env(safe-area-inset-top)) 22px max(24px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .brand {
+    display: grid;
+    justify-items: center;
+    line-height: 1;
+    color: var(--copper-hi);
+  }
+  .wm-main {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.05rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding-left: 0.22em;
+  }
+  .wm-sub {
+    margin-top: 0.3rem;
+    font-family: var(--serif);
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+    opacity: 0.8;
+  }
+
+  .monogram {
+    position: relative;
+    margin-top: clamp(26px, 6vh, 46px);
+    width: 132px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 35% 28%, rgb(233 193 147 / 0.18), transparent 60%),
+      radial-gradient(circle, #1e150e 0%, #120c08 100%);
+    box-shadow:
+      0 18px 40px rgb(0 0 0 / 0.55),
+      inset 0 1px 0 rgb(233 193 147 / 0.25);
+  }
+  /* Copper ring via masked conic gradient */
+  .monogram::before,
+  .monogram::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: conic-gradient(from 200deg, var(--bronze), var(--copper-hi), var(--copper), #5a3518, var(--copper-hi), var(--bronze));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+  }
+  .monogram::before {
+    inset: 0;
+  }
+  .monogram::after {
+    inset: 9px;
+    opacity: 0.45;
+  }
+  .monogram span {
+    font-family: var(--serif);
+    font-weight: 380;
+    font-size: 3.1rem;
+    letter-spacing: 0.04em;
+    padding-left: 0.04em;
+    background: linear-gradient(160deg, var(--copper-hi) 10%, var(--copper) 55%, var(--bronze) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .name {
+    margin-top: 22px;
+    font-family: var(--serif);
+    font-weight: 380;
+    font-size: clamp(2.3rem, 10vw, 2.85rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .title {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    font-weight: 560;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--copper-hi);
+  }
+  .org {
+    margin-top: 6px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--cream-dim);
+  }
+
+  /* Actions --------------------------------------------------------------- */
+  .save {
+    margin-top: 26px;
+    width: 100%;
+    min-height: 58px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #e9c193 0%, #c68a52 45%, #9b6435 100%);
+    color: #17100b;
+    font-size: 0.95rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow:
+      0 10px 28px rgb(198 138 82 / 0.28),
+      inset 0 1px 0 rgb(255 255 255 / 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+  .save:hover {
+    filter: brightness(1.05);
+    box-shadow:
+      0 14px 34px rgb(198 138 82 / 0.36),
+      inset 0 1px 0 rgb(255 255 255 / 0.35);
+  }
+  .save:active {
+    transform: scale(0.985);
+  }
+
+  .actions {
+    margin-top: 14px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .actions a {
+    min-height: 72px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 6px;
+    border-radius: 16px;
+    background: rgb(244 236 224 / 0.05);
+    border: 1px solid rgb(233 193 147 / 0.22);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 560;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  }
+  .actions a:hover {
+    background: rgb(233 193 147 / 0.1);
+    border-color: rgb(233 193 147 / 0.45);
+  }
+  .actions a:active {
+    transform: scale(0.97);
+  }
+  .actions svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: var(--copper-hi);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .details {
+    margin-top: 22px;
+    width: 100%;
+    border-top: 1px solid rgb(233 193 147 / 0.18);
+  }
+  .details div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    min-height: 48px;
+    border-bottom: 1px solid rgb(233 193 147 / 0.12);
+  }
+  .details dt {
+    font-size: 0.68rem;
+    font-weight: 560;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(233 193 147 / 0.85);
+  }
+  .details dd {
+    min-width: 0;
+  }
+  .details a {
+    display: inline-block;
+    padding-block: 12px;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+  .details a:hover {
+    color: var(--copper-hi);
+  }
+
+  /* QR -------------------------------------------------------------------- */
+  .qr {
+    margin-top: 24px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 124px 1fr;
+    gap: 18px;
+    align-items: center;
+    text-align: left;
+  }
+  .qr-code {
+    width: 124px;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f4ece0;
+    box-shadow: 0 0 0 1px rgb(233 193 147 / 0.35);
+  }
+  .qr-code :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .qr-side {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+  }
+  .qr-label {
+    font-size: 0.85rem;
+    color: var(--cream-dim);
+  }
+  .share {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid rgb(233 193 147 / 0.4);
+    background: transparent;
+    color: var(--copper-hi);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .share:hover {
+    background: rgb(233 193 147 / 0.1);
+  }
+  .share-status {
+    min-height: 1.2em;
+    font-size: 0.8rem;
+    color: var(--copper-hi);
+    overflow-wrap: anywhere;
+  }
+
+  .foot {
+    margin-top: 22px;
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(244 236 224 / 0.55);
+  }
+  .foot {
+    align-items: center;
+  }
+  .foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: inherit;
+    text-decoration: none;
+  }
+  .foot a:hover {
+    color: var(--copper-hi);
+  }
+
+  .card-page :focus-visible {
+    outline: 2px solid var(--copper-hi);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 350px) {
+    .actions {
+      gap: 6px;
+    }
+    .actions a {
+      min-height: 64px;
+      font-size: 0.65rem;
+    }
+    .qr {
+      grid-template-columns: 104px 1fr;
+      gap: 14px;
+    }
+    .qr-code {
+      width: 104px;
+    }
+  }
+</style>
