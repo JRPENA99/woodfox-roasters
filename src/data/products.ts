@@ -67,7 +67,7 @@ const pkg = (slug: string, alt: string) => ({
 });
 
 const conceptDescription =
-  'Packaging concept for an upcoming Woodfox coffee. The coffee itself is still being selected and profiled; origin, roast and tasting details will be published once they are final.';
+  'This is the bag. The coffee inside is still being picked out and dialed in. Once we’re happy with it, this page will tell you where it grew, how we roast it and what it tastes like.';
 
 /** Order matters: the first product is featured on the homepage. */
 export const products: Product[] = [

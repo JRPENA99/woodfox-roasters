@@ -13,9 +13,9 @@ export const site = {
   legalName: 'Woodfox Coffee Company',
   shortName: 'Woodfox',
   url: 'https://woodfoxcoffee.com',
-  tagline: 'Crafted with Intention.',
+  tagline: 'Coffee you can actually taste.',
   description:
-    'Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing and precision roasting. Crafted with intention.',
+    'Woodfox Coffee is a small-batch specialty coffee roaster in Houston, Texas. Light-to-medium roasts, first bags coming soon.',
 
   /** General and public contact. */
   email: 'hello@woodfoxcoffee.com',

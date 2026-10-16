@@ -5,55 +5,56 @@ import Photo from '../components/Photo.astro';
 
 const values = [
   {
-    title: 'Quality',
-    text: 'Every coffee is cupped and evaluated before it carries the Woodfox name.',
+    title: 'Taste it first',
+    text: 'Nothing gets the Woodfox name until we’ve cupped it, argued about it and liked it.',
   },
   {
-    title: 'Consistency',
-    text: 'Roast profiles are developed carefully and recorded, so a coffee you love tastes the same next time.',
+    title: 'Same bag, same coffee',
+    text: 'Every roast is logged, so the coffee you liked last month tastes the same this month.',
   },
   {
-    title: 'Respect for the craft',
-    text: 'From the farm to the roaster, coffee passes through many skilled hands. We aim to honour that work, not hide it.',
+    title: 'Credit the farm',
+    text: 'A lot of skilled people touch a coffee before we do. A good roast shows off their work instead of covering it up.',
   },
   {
-    title: 'Community',
-    text: 'We’re a Houston company, and we want to meet the people who drink our coffee: at pop-ups, markets and cuppings.',
+    title: 'Stay local',
+    text: 'We want to meet the people drinking our coffee. Expect to find us at Houston markets, pop-ups and cuppings.',
   },
 ];
 ---
 
 <Base
   title="Our Story"
-  description="Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing, precision roasting and exceptional coffee."
+  description="Woodfox Coffee is a small-batch specialty coffee roaster in Houston, Texas. Here’s who we are and what we care about."
 >
   <PageIntro
     label="Our Story"
-    title="Rooted in Craft. <em>Driven by Purpose.</em>"
-    lede="Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing, precision roasting and exceptional coffee."
+    title="A Houston roaster, <em>just getting started.</em>"
+    lede="Woodfox is a small coffee company with a simple goal: roast coffee we’d be proud to hand to a friend, and do it right here in Houston."
     image="terraces"
   />
 
   <section class="section" aria-labelledby="story-title">
     <div class="wrap grid-12">
-      <p class="kicker label k"><span class="num">01</span> What we believe</p>
+      <p class="kicker label k"><span class="num">01</span> Why we do this</p>
       <h2 class="lede story-lede" id="story-title" data-reveal>
-        We believe great coffee begins long before the first roast.
+        By the time coffee reaches a roaster, most of the hard work is already done. Our job is not to mess it up.
       </h2>
       <div class="prose story" data-reveal>
         <p>
-          From the regions where our beans are grown to the careful development of each roast profile, every decision
-          is guided by quality, consistency and respect for the craft.
+          Somebody grew those beans, picked them by hand and dried them carefully. Then they crossed an ocean. The
+          least we can do is roast them well.
         </p>
         <p>
-          Our approach brings together distinctive coffee origins and carefully controlled roasting to highlight what
-          makes each coffee unique.
+          So we keep it simple. We look for coffees from places that grow great ones, roast them in small batches, keep
+          notes on every roast, and taste the results before anything goes in a bag.
         </p>
         <p>
-          Whether you’re brewing at home, discovering us at a local event or partnering with us for your business, our
-          mission is simple: to deliver coffee worth slowing down for.
+          We’re still early. The roaster is new, the first coffees are being chosen, and the bags you see on this site
+          are designs, not finished products. If you want to follow along, or just talk coffee, we’d love to hear from
+          you.
         </p>
-        <p class="sign">Woodfox Coffee — <em>Crafted with Intention.</em></p>
+        <p class="sign">— The Woodfox team, <em>Houston</em></p>
       </div>
     </div>
   </section>
@@ -64,8 +65,8 @@ const values = [
 
   <section class="section" aria-labelledby="values-title">
     <div class="wrap">
-      <p class="kicker label"><span class="num">02</span> What guides us</p>
-      <h2 class="h2 values-title" id="values-title" data-reveal>The principles behind every bag.</h2>
+      <p class="kicker label"><span class="num">02</span> House rules</p>
+      <h2 class="h2 values-title" id="values-title" data-reveal>A few things we won’t budge on.</h2>
       <ul class="values" role="list">
         {values.map((v, i) => (
           <li data-reveal style={`transition-delay:${i * 80}ms`}>
@@ -82,17 +83,17 @@ const values = [
     <div class="wrap next-grid">
       <a href="/coffee/" class="next-card">
         <span class="label muted">Our Coffee</span>
-        <span class="h3">Explore the collection</span>
+        <span class="h3">See the coffee</span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
       <a href="/sourcing/" class="next-card">
         <span class="label muted">Sourcing &amp; Roasting</span>
-        <span class="h3">How we choose and roast</span>
+        <span class="h3">How we pick and roast</span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
       <a href="/wholesale/" class="next-card">
         <span class="label muted">Wholesale</span>
-        <span class="h3">Serve Woodfox coffee</span>
+        <span class="h3">Pour it at your place</span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
     </div>

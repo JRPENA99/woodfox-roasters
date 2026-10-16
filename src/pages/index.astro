@@ -12,20 +12,20 @@ const [lead, ...rest] = products;
 const pillars = [
   {
     n: '01',
-    title: 'Species selection',
-    text: 'We look beyond a single species, choosing high-grade Arabica and specialty Robusta for what each brings to the cup.',
+    title: 'The plant',
+    text: 'Most roasters stick to Arabica and never look back. We use it too, but we also go looking for good Robusta, the kind that adds body and backbone instead of bitterness.',
     image: 'cherriesRipe',
   },
   {
     n: '02',
-    title: 'Geographic origin',
-    text: 'We favour high-elevation, equatorial growing regions, such as Ethiopia and Kenya, where altitude and climate shape distinctive coffees.',
+    title: 'The place',
+    text: 'High up and close to the equator, places like Ethiopia and Kenya. Cherries ripen slowly there, and you can taste the difference.',
     image: 'valley',
   },
   {
     n: '03',
-    title: 'Precision roasting',
-    text: 'Light-to-medium roasts, developed in micro-batches and tracked curve by curve, so every bag tastes the way we intended.',
+    title: 'The roast',
+    text: 'Small batches, light to medium, every roast logged. Dark roasting hides a coffee. We’d rather you taste it.',
     image: 'roasterCooling',
   },
 ] as const;
@@ -37,17 +37,16 @@ const pillars = [
   <!-- Introduction -->
   <section class="section intro" id="intro" aria-labelledby="intro-title">
     <div class="wrap grid-12">
-      <p class="kicker label intro-kicker"><span class="num">01</span> Woodfox Coffee</p>
+      <p class="kicker label intro-kicker"><span class="num">01</span> Hello, Houston</p>
       <h2 class="intro-statement" id="intro-title" data-reveal>
-        A Houston-based specialty coffee company dedicated to <em>thoughtful sourcing</em> and precision roasting.
+        We’re a small coffee roaster in Houston, and we’re <em>a little obsessive</em> about what ends up in your cup.
       </h2>
       <div class="intro-aside prose" data-reveal>
         <p>
-          Great coffee begins long before the first roast. From the regions where our beans are grown to the
-          development of each roast profile, every decision is guided by quality, consistency and respect for the
-          craft.
+          That means knowing where the beans grew, roasting them in batches small enough to keep an eye on, and
+          tasting everything before it goes in a bag. It takes longer. It’s worth it.
         </p>
-        <a class="link" href="/about/">Discover our story <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="link" href="/about/">Who we are <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -64,12 +63,12 @@ const pillars = [
           <p class="label status">{statusLabel[lead.status]}</p>
           <h2 class="display" id="featured-title"><a href={`/coffee/${lead.id}/`}>{lead.name}</a></h2>
           <p class="body-lg">
-            The first Woodfox coffees are being selected and profiled now. These packaging concepts show where the
-            collection is heading; each coffee’s origin, roast and tasting notes will be published once they’re final.
+            Our first coffees are still being picked out and dialed in, so what you’re looking at is the bag, not the
+            coffee. We’ll fill in the origin, roast and tasting notes once we’re happy with what’s inside.
           </p>
           <div class="feature-actions">
-            <a class="btn" href="/coffee/">Explore our coffee</a>
-            {!commerce.enabled && <span class="muted soon">Online ordering coming soon</span>}
+            <a class="btn" href="/coffee/">See all three</a>
+            {!commerce.enabled && <span class="muted soon">Not on sale yet</span>}
           </div>
 
           <ul class="also" role="list" aria-label="Also in development">
@@ -103,7 +102,7 @@ const pillars = [
     <div class="wrap">
       <div class="pillars-head grid-12">
         <p class="kicker label"><span class="num">03</span> Sourcing &amp; Roasting</p>
-        <h2 class="h2" id="pillars-title" data-reveal>Three decisions shape every coffee we roast.</h2>
+        <h2 class="h2" id="pillars-title" data-reveal>Good coffee comes down to three things.</h2>
       </div>
       <ol class="cols" role="list">
         {pillars.map((p, i) => (
@@ -117,7 +116,7 @@ const pillars = [
           </li>
         ))}
       </ol>
-      <a class="link more" href="/sourcing/">How we source and roast <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="link more" href="/sourcing/">The longer version <span class="arrow" aria-hidden="true">→</span></a>
     </div>
   </section>
 
@@ -128,12 +127,12 @@ const pillars = [
       <div class="story-shade" aria-hidden="true"></div>
       <div class="wrap story-head">
         <p class="kicker label"><span class="num">04</span> Our Story</p>
-        <h2 class="h1" id="story-title" data-reveal>Rooted in Craft. Driven by Purpose.</h2>
+        <h2 class="h1" id="story-title" data-reveal>Coffee worth slowing down for.</h2>
         <p class="body-lg" data-reveal>
-          Whether you’re brewing at home, finding us at a local event or partnering with us for your business, our
-          mission is simple: coffee worth slowing down for.
+          That’s the whole idea. Whether it’s your first cup at home, a bag you picked up at a market, or what’s
+          pouring at your favorite café, it should be worth a minute of your attention.
         </p>
-        <a class="btn btn-light" href="/about/">Read our story</a>
+        <a class="btn btn-light" href="/about/">More about us</a>
       </div>
     </div>
   </section>
@@ -143,14 +142,14 @@ const pillars = [
     <div class="wrap grid-12">
       <div class="ws-text" data-reveal>
         <p class="kicker label"><span class="num">05</span> Wholesale</p>
-        <h2 class="h1" id="wholesale-title">Partner with Woodfox.</h2>
+        <h2 class="h1" id="wholesale-title">Pour Woodfox at your place.</h2>
         <p class="body-lg">
-          Freshly roasted, carefully profiled coffee for independent cafés, restaurants, specialty grocers, offices and
-          hospitality across Houston.
+          Cafés, restaurants, grocers, offices. If you serve coffee in Houston and care how it tastes, we should talk.
+          You’ll be dealing with the people who roast it, not a sales rep.
         </p>
         <div class="ws-actions">
-          <a class="btn" href="/wholesale/">Wholesale inquiries</a>
-          <a class="link" href="/contact/">Ask a question <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn" href="/wholesale/">Talk wholesale</a>
+          <a class="link" href="/contact/">Just a question? <span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
       <div class="ws-photos">

@@ -5,41 +5,41 @@ import InquiryForm from '../components/InquiryForm.astro';
 import { site } from '../config/site';
 
 const partners = [
-  ['Independent coffee shops', 'Seasonal, carefully profiled coffees for espresso and filter.'],
-  ['Restaurants', 'A coffee that holds its own at the end of a well-made meal.'],
-  ['Specialty grocers', 'Locally roasted Houston coffee for your shelves.'],
-  ['Offices', 'Better coffee for teams who notice the difference.'],
-  ['Hospitality', 'Hotels, venues and guest experiences where details matter.'],
-  ['Other partners', 'If coffee matters to what you do, we’d be glad to talk.'],
+  ['Coffee shops', 'Espresso and filter coffees that change with the seasons, so your menu doesn’t go stale.'],
+  ['Restaurants', 'The last thing your guests taste. It should be as good as everything before it.'],
+  ['Grocers & shops', 'A Houston-roasted bag your regulars will come back for.'],
+  ['Offices', 'Because the break room deserves better than a tin of pre-ground.'],
+  ['Hotels & venues', 'For places where the little details are the whole point.'],
+  ['Something else?', 'If coffee is part of what you do, we’re happy to talk.'],
 ];
 
 const benefits = [
-  ['Roasted fresh in Houston', 'Micro-batch roasting close to you, so coffee arrives fresh rather than sitting in a warehouse.'],
-  ['Consistent from bag to bag', 'Recorded roast profiles and cupping-based quality checks keep each coffee dependable.'],
-  ['Formats that fit', 'Retail-ready 12 oz bags, with larger 2 lb and 5 lb bags planned for café and kitchen use.'],
-  ['A direct relationship', 'You’ll work with the people who source and roast your coffee, not a call centre.'],
+  ['Roasted down the road', 'We roast in small batches right here in Houston, so your coffee shows up fresh instead of sitting in a warehouse.'],
+  ['No surprises', 'Every roast is logged and tasted, so the coffee your customers liked last week tastes the same this week.'],
+  ['Sizes that make sense', '12 oz bags for the shelf, with bigger 2 lb and 5 lb bags planned for hoppers and kitchens.'],
+  ['Real people', 'Call or email and you’ll get the person who roasted your coffee, not a call center.'],
 ];
 ---
 
 <Base
   title="Wholesale"
-  description="Wholesale specialty coffee from Woodfox Coffee for Houston coffee shops, restaurants, specialty grocers, offices and hospitality businesses."
+  description="Wholesale coffee from Woodfox, a small-batch roaster in Houston, for coffee shops, restaurants, grocers, offices and hotels."
 >
   <PageIntro
     label="Wholesale"
-    title="Coffee for businesses that <em>care what they serve.</em>"
-    lede="Woodfox Coffee partners with Houston businesses that want freshly roasted, carefully profiled specialty coffee. Tell us about your business and we’ll start the conversation."
+    title="Good coffee for <em>your business.</em>"
+    lede="If you serve coffee in Houston and you care how it tastes, we should talk. Tell us a little about your place and we’ll take it from there."
     image="roaster"
   >
     <div class="intro-cta">
-      <a class="btn" href="#inquiry">Start a wholesale inquiry</a>
+      <a class="btn" href="#inquiry">Let’s talk</a>
     </div>
   </PageIntro>
 
   <section class="section" aria-labelledby="who-title">
     <div class="wrap">
-      <p class="kicker label"><span class="num">01</span> Who we work with</p>
-      <h2 class="h2 who-title" id="who-title" data-reveal>Partners who see coffee as part of what they offer.</h2>
+      <p class="kicker label"><span class="num">01</span> Who it’s for</p>
+      <h2 class="h2 who-title" id="who-title" data-reveal>Anyone who pours coffee and wants it to be good.</h2>
       <ul class="partners" role="list">
         {partners.map(([t, d]) => (
           <li data-reveal>
@@ -55,9 +55,9 @@ const benefits = [
     <div class="wrap grid-12">
       <div class="why-head">
         <p class="kicker label"><span class="num">02</span> Why Woodfox</p>
-        <h2 class="h2" id="why-title" data-reveal>A roaster that’s close to home.</h2>
+        <h2 class="h2" id="why-title" data-reveal>Your roaster, a short drive away.</h2>
         <p class="body-lg" data-reveal>
-          Pricing, quantities and delivery are tailored to each partner. Get in touch and we’ll walk you through the
+          Every business is different, so pricing, amounts and delivery get worked out together. Reach out and we’ll walk you through the
           options.
         </p>
       </div>
@@ -79,9 +79,9 @@ const benefits = [
     <div class="wrap grid-12">
       <div class="form-head">
         <p class="kicker label"><span class="num">03</span> Inquiry</p>
-        <h2 class="h2" id="inquiry-title">Start the conversation.</h2>
+        <h2 class="h2" id="inquiry-title">Tell us about your place.</h2>
         <p class="muted">
-          Share a few details and we’ll follow up personally. Prefer email? Write to
+          A few details is all we need. We’ll get back to you ourselves. Rather just email? Write to
           <a href={site.ordersHref + "?subject=Wholesale%20inquiry"}>{site.ordersEmail}</a>.
         </p>
       </div>

@@ -8,19 +8,19 @@ import { commerce } from '../../config/site';
 const anyPlaceholder = products.some((p) => p.status === 'placeholder');
 
 const details = [
-  ['Origin', 'The country and growing region, as specifically as we can say.'],
-  ['Species & process', 'Arabica, specialty Robusta or a combination, and how the coffee was processed after harvest.'],
-  ['Roast level', 'Light, light-medium or medium. We don’t roast dark.'],
-  ['Tasting notes', 'What we taste when we cup it. A guide, not added flavouring.'],
-  ['Sizes', '12 oz retail bags, with 2 lb and 5 lb bags planned for larger needs.'],
+  ['Where it grew', 'Country and region, and the farm or co-op when we can confirm it.'],
+  ['Plant & process', 'Arabica, Robusta or both, and what happened to the cherries after they were picked.'],
+  ['Roast', 'Light, light-medium or medium. We don’t do dark.'],
+  ['Tasting notes', 'What we taste in the cup. “Cherry” means it tastes a bit like cherry, not that we added any.'],
+  ['Sizes', '12 oz bags to start. Bigger 2 lb and 5 lb bags are planned for cafés and heavy drinkers.'],
 ];
 ---
 
-<Base title="Our Coffee" description="Woodfox Coffee's coffee collection: specialty coffees selected by species and origin and roasted light to medium in Houston, Texas.">
+<Base title="Our Coffee" description="The first Woodfox coffees: a Single Origin, a House Blend and an Espresso Blend, roasted light to medium in Houston. Coming soon.">
   <PageIntro
     label="Our Coffee"
-    title="Selected with care. <em>Roasted with precision.</em>"
-    lede="Each Woodfox coffee is chosen for its species and origin, then given a roast profile developed to bring out what makes it distinct."
+    title="Three coffees, <em>almost ready.</em>"
+    lede="A single origin for the curious, a house blend for every day, and an espresso blend for the machine on your counter. Here’s a first look."
   />
 
   <section class="section-sm collection" aria-labelledby="collection-title">
@@ -34,9 +34,9 @@ const details = [
         <p class="notice">
           <strong>In development</strong>
           <span>
-            The collection is in development. These are packaging concepts for our first coffees, not finished
-            products: text printed on the bags is illustrative, and none is available to buy yet. Origin, roast and
-            tasting details will be published as each coffee is finalised.
+            These are bag designs for our first three coffees. The coffees themselves are still being chosen and
+            roasted, so anything printed on the bags (like tasting notes) is a placeholder, and nothing is for sale yet.
+            We’ll post the real details as each one is ready.
           </span>
         </p>
       )}
@@ -47,10 +47,10 @@ const details = [
 
       {!commerce.enabled && (
         <div class="ordering">
-          <h3 class="h3">Online ordering is coming soon.</h3>
+          <h3 class="h3">Not for sale just yet.</h3>
           <p class="muted">
-            We’re preparing secure online ordering and coffee subscriptions. Until then, reach out with any questions,
-            or ask about wholesale for your business.
+            Online ordering and subscriptions are on the way. Want to know the moment they’re live, or talk about
+            coffee for your business? Get in touch.
           </p>
           <div class="ordering-actions">
             <a class="btn" href="/contact/">Contact us</a>
@@ -65,8 +65,8 @@ const details = [
     <div class="wrap grid-12">
       <div class="d-head">
         <p class="kicker label"><span class="num">—</span> On every bag</p>
-        <h2 class="h2" id="details-title">What you’ll know about each coffee.</h2>
-        <p class="muted">If we don’t know something, we’ll leave it out rather than guess.</p>
+        <h2 class="h2" id="details-title">What every bag will tell you.</h2>
+        <p class="muted">And if we don’t know something, we’ll leave it off instead of guessing.</p>
       </div>
       <dl class="details">
         {details.map(([t, d]) => (
