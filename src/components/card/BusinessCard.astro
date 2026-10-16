@@ -18,7 +18,7 @@ const qrSvg = await QRCode.toString(cardUrl, {
   type: 'svg',
   errorCorrectionLevel: 'M',
   margin: 4,
-  color: { dark: '#17100bff', light: '#f4ece0ff' },
+  color: { dark: '#111111ff', light: '#f2f1eeff' },
 });
 const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
 ---
@@ -347,22 +347,22 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     justify-content: center;
     gap: 0.6rem;
     border-radius: 999px;
-    background: linear-gradient(135deg, #e9c193 0%, #c68a52 45%, #9b6435 100%);
-    color: #17100b;
+    background: linear-gradient(135deg, #ffffff 0%, #dcdbd8 45%, #a9a7a3 100%);
+    color: #121212;
     font-size: 0.95rem;
     font-weight: 650;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
     box-shadow:
-      0 10px 28px rgb(198 138 82 / 0.28),
+      0 10px 28px rgb(0 0 0 / 0.45),
       inset 0 1px 0 rgb(255 255 255 / 0.35);
     transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
   }
   .save:hover {
     filter: brightness(1.05);
     box-shadow:
-      0 14px 34px rgb(198 138 82 / 0.36),
+      0 14px 34px rgb(255 255 255 / 0.12),
       inset 0 1px 0 rgb(255 255 255 / 0.35);
   }
   .save:active {
@@ -384,7 +384,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     gap: 6px;
     border-radius: 16px;
     background: rgb(244 236 224 / 0.05);
-    border: 1px solid rgb(233 193 147 / 0.22);
+    border: 1px solid rgb(236 235 232 / 0.22);
     color: var(--cream);
     text-decoration: none;
     font-size: 0.72rem;
@@ -396,8 +396,8 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
   }
   .actions a:hover {
-    background: rgb(233 193 147 / 0.1);
-    border-color: rgb(233 193 147 / 0.45);
+    background: rgb(236 235 232 / 0.1);
+    border-color: rgb(236 235 232 / 0.45);
   }
   .actions a:active {
     transform: scale(0.97);
@@ -406,7 +406,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     width: 22px;
     height: 22px;
     fill: none;
-    stroke: var(--copper-hi);
+    stroke: var(--silver);
     stroke-width: 1.6;
     stroke-linejoin: round;
     stroke-linecap: round;
@@ -415,7 +415,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
   .details {
     margin-top: 22px;
     width: 100%;
-    border-top: 1px solid rgb(233 193 147 / 0.18);
+    border-top: 1px solid rgb(236 235 232 / 0.18);
   }
   .details div {
     display: flex;
@@ -423,7 +423,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     align-items: center;
     gap: 1rem;
     min-height: 48px;
-    border-bottom: 1px solid rgb(233 193 147 / 0.12);
+    border-bottom: 1px solid rgb(236 235 232 / 0.12);
   }
   .details dt {
     font-size: 0.68rem;
@@ -462,8 +462,8 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     aspect-ratio: 1;
     border-radius: 12px;
     overflow: hidden;
-    background: #f4ece0;
-    box-shadow: 0 0 0 1px rgb(233 193 147 / 0.35);
+    background: #f2f1ee;
+    box-shadow: 0 0 0 1px rgb(236 235 232 / 0.35);
   }
   .qr-code :global(svg) {
     display: block;
@@ -530,7 +530,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
   }
 
   .card-page :focus-visible {
-    outline: 2px solid var(--copper-hi);
+    outline: 2px solid var(--silver);
     outline-offset: 3px;
   }
 
