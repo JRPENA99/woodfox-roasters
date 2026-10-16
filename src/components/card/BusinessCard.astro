@@ -166,6 +166,9 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     --bronze: #8a5a32;
     --cream: #f4ece0;
     --cream-dim: rgb(244 236 224 / 0.7);
+    --silver: #ecebe8;
+    --silver-dim: #c9c7c3;
+    --steel: #8f8d8a;
     position: relative;
     min-height: 100vh;
     min-height: 100dvh;
@@ -236,7 +239,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     width: 100%;
     max-width: 440px;
     margin-inline: auto;
-    padding: max(28px, env(safe-area-inset-top)) 22px max(24px, env(safe-area-inset-bottom));
+    padding: max(56px, calc(env(safe-area-inset-top) + 32px)) 22px max(24px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -246,7 +249,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     display: grid;
     justify-items: center;
     line-height: 1;
-    color: var(--copper-hi);
+    color: var(--silver);
   }
   .wm-main {
     font-family: var(--serif);
@@ -268,18 +271,18 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
 
   .monogram {
     position: relative;
-    margin-top: clamp(26px, 6vh, 46px);
+    margin-top: clamp(22px, 4.5vh, 36px);
     width: 132px;
     aspect-ratio: 1;
     border-radius: 50%;
     display: grid;
     place-items: center;
     background:
-      radial-gradient(circle at 35% 28%, rgb(233 193 147 / 0.18), transparent 60%),
-      radial-gradient(circle, #1e150e 0%, #120c08 100%);
+      radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.12), transparent 60%),
+      radial-gradient(circle, #1c1c1c 0%, #0e0e0e 100%);
     box-shadow:
       0 18px 40px rgb(0 0 0 / 0.55),
-      inset 0 1px 0 rgb(233 193 147 / 0.25);
+      inset 0 1px 0 rgb(255 255 255 / 0.18);
   }
   /* Copper ring via masked conic gradient */
   .monogram::before,
@@ -287,7 +290,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     content: '';
     position: absolute;
     border-radius: 50%;
-    background: conic-gradient(from 200deg, var(--bronze), var(--copper-hi), var(--copper), #5a3518, var(--copper-hi), var(--bronze));
+    background: conic-gradient(from 200deg, #6f6d6a, #ffffff, #b9b7b3, #4a4947, #f2f1ee, #6f6d6a);
     -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
     mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
   }
@@ -304,7 +307,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     font-size: 3.1rem;
     letter-spacing: 0.04em;
     padding-left: 0.04em;
-    background: linear-gradient(160deg, var(--copper-hi) 10%, var(--copper) 55%, var(--bronze) 100%);
+    background: linear-gradient(160deg, #ffffff 10%, #e2e0dc 55%, #a9a7a3 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -324,14 +327,14 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     font-weight: 560;
     letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--copper-hi);
+    color: var(--silver);
   }
   .org {
     margin-top: 6px;
     font-family: var(--serif);
     font-style: italic;
     font-size: 1.05rem;
-    color: var(--cream-dim);
+    color: var(--silver-dim);
   }
 
   /* Actions --------------------------------------------------------------- */
@@ -427,7 +430,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     font-weight: 560;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgb(233 193 147 / 0.85);
+    color: var(--silver-dim);
   }
   .details dd {
     min-width: 0;
@@ -441,7 +444,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     overflow-wrap: anywhere;
   }
   .details a:hover {
-    color: var(--copper-hi);
+    color: #ffffff;
   }
 
   /* QR -------------------------------------------------------------------- */
@@ -474,7 +477,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
   }
   .qr-label {
     font-size: 0.85rem;
-    color: var(--cream-dim);
+    color: var(--silver-dim);
   }
   .share {
     display: inline-flex;
@@ -483,9 +486,9 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     min-height: 44px;
     padding: 0 16px;
     border-radius: 999px;
-    border: 1px solid rgb(233 193 147 / 0.4);
+    border: 1px solid rgb(236 235 232 / 0.4);
     background: transparent;
-    color: var(--copper-hi);
+    color: var(--silver);
     font: inherit;
     font-size: 0.78rem;
     font-weight: 600;
@@ -494,12 +497,12 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     cursor: pointer;
   }
   .share:hover {
-    background: rgb(233 193 147 / 0.1);
+    background: rgb(255 255 255 / 0.08);
   }
   .share-status {
     min-height: 1.2em;
     font-size: 0.8rem;
-    color: var(--copper-hi);
+    color: var(--silver);
     overflow-wrap: anywhere;
   }
 
@@ -510,7 +513,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgb(244 236 224 / 0.55);
+    color: var(--steel);
   }
   .foot {
     align-items: center;
@@ -523,7 +526,7 @@ const websiteLabel = card.website.replace(/^https?:\/\//, '').replace(/\/$/, '')
     text-decoration: none;
   }
   .foot a:hover {
-    color: var(--copper-hi);
+    color: var(--silver);
   }
 
   .card-page :focus-visible {
