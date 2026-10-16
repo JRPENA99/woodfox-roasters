@@ -132,6 +132,8 @@ const ribbons = [
   }
   .ribbon {
     display: block;
+    /* Override the global svg max-width:100% so the ribbon can be 2x wide and loop seamlessly. */
+    max-width: none;
     width: 200%;
     height: 100%;
     will-change: transform;
