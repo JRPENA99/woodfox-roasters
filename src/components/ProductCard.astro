@@ -1,6 +1,5 @@
 ---
-import BagArt from './BagArt.astro';
-import Photo from './Photo.astro';
+import ProductImage from './ProductImage.astro';
 import { commerce } from '../config/site';
 import { money, fromPrice, statusLabel, type Product } from '../data/products';
 
@@ -12,27 +11,22 @@ const { product: p, headingLevel = 'h3' } = Astro.props;
 const H = headingLevel;
 const price = fromPrice(p);
 const placeholder = p.status === 'placeholder';
-const origin = [p.region, p.origin].filter(Boolean).join(', ') || 'Origin to be announced';
+const origin = [p.region, p.origin].filter(Boolean).join(', ') || (placeholder ? 'Packaging concept' : 'Origin to be announced');
 ---
 
 <article class:list={['product', { 'is-placeholder': placeholder }]}>
   <a href={`/coffee/${p.id}/`} class="link-wrap">
     <div class="media">
-      {p.image ? (
-        <Photo image={{ src: p.image, alt: p.imageAlt ?? `${p.name} coffee bag` }} ratio="4 / 5" sizes="(min-width: 900px) 33vw, 100vw" />
-      ) : (
-        <BagArt name={p.name} colors={p.colors} label={placeholder ? 'Placeholder' : p.roast} />
-      )}
-      <span class="badge label" data-status={p.status}>{statusLabel[p.status]}</span>
+      <ProductImage product={p} />
     </div>
     <div class="meta">
-      <p class="label muted">{origin}</p>
+      <p class="label kicker-line"><span class="status" data-status={p.status}>{statusLabel[p.status]}</span><span class="sep" aria-hidden="true">·</span><span class="muted">{origin}</span></p>
       <div class="row">
         <H class="name">{p.name}</H>
         {commerce.enabled && price != null && <p class="price">{money(price, commerce.currency)}</p>}
       </div>
       <p class="facts muted">
-        {p.roast} roast{p.notes.length > 0 && <> · {p.notes.join(', ')}</>}
+        {placeholder ? 'Details to be announced' : <>{p.roast} roast{p.notes.length > 0 && <> · {p.notes.join(', ')}</>}</>}
       </p>
     </div>
   </a>
@@ -48,26 +42,22 @@ const origin = [p.region, p.origin].filter(Boolean).join(', ') || 'Origin to be 
     position: relative;
     overflow: hidden;
   }
-  .media :global(.bag-art),
-  .media :global(img) {
-    transition: transform 0.8s var(--ease);
-  }
-  .link-wrap:hover :global(.bag-art),
   .link-wrap:hover :global(img) {
-    transform: scale(1.025);
+    transform: translateY(-6px);
   }
-  .badge {
-    position: absolute;
-    left: 0.75rem;
-    top: 0.75rem;
-    padding: 0.35rem 0.6rem;
-    background: var(--paper-light);
-    font-size: 0.625rem;
+  .kicker-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .status {
     color: var(--moss);
   }
-  .badge[data-status='placeholder'] {
+  .status[data-status='placeholder'] {
     color: var(--cherry);
-    border: 1px dashed currentColor;
+  }
+  .sep {
+    color: var(--muted);
   }
   .meta {
     display: grid;

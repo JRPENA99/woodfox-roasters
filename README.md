@@ -32,15 +32,16 @@ Pushing to `main` deploys automatically (see `docs/DEPLOY.md`).
 
 ## Brand
 
-Colours follow the business plan: Forest Green `#2C3E28`, Rust `#C84B31`, Cream `#F5F4EF`. For small
-text, rust is deepened slightly (`#B4432B`) to meet contrast requirements. Type: Source Serif 4 and
-Inter, self-hosted.
+Forest green `#2C3E28` and warm ivory `#F4F0E7` as the foundation, with restrained copper accents:
+`#A9692F` for large type, `#8C5627` for small text (meets contrast on ivory), `#D4AE85` on green.
+Type: Source Serif 4 and Inter, self-hosted. Product imagery uses the packaging mockups in
+`public/media/images/products/`.
 
 ## Owner to confirm before relying on it
 
-- **Email:** `hello@woodfoxcoffee.com` must exist (forms deliver to it) → `src/config/site.ts`
+- **Contact:** hello@woodfoxcoffee.com (general), orders@woodfoxcoffee.com (orders, shipping, wholesale), 713-742-2709 → `src/config/site.ts`; both inboxes must exist (see `docs/FORMS.md`)
 - **Logo:** the fox seal artwork isn't in the project yet; the header uses a text wordmark
-- **Coffees:** the three entries are labelled development placeholders → `src/data/products.ts`
+- **Coffees:** the three entries are packaging concepts, labelled "In development" → `src/data/products.ts`
 - **Photography:** most images are Unsplash stand-ins (the hero film and still are Woodfox's own) → `docs/MEDIA.md`
 - **Policies:** Privacy, Terms, Shipping and Returns are drafts with highlighted items to confirm
 - **Social links:** none listed until confirmed

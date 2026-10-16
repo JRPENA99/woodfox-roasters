@@ -17,10 +17,16 @@ export const site = {
   description:
     'Woodfox Coffee is a Houston-based specialty coffee company dedicated to thoughtful sourcing and precision roasting. Crafted with intention.',
 
-  // OWNER TO CONFIRM — the business plan names hello@woodfoxcoffee.com as the intended
-  // address. Make sure this inbox exists: contact and wholesale forms deliver to it.
+  /** General and public contact. */
   email: 'hello@woodfoxcoffee.com',
-  emailConfirmed: false,
+  /** Orders, shipping and wholesale. */
+  ordersEmail: 'orders@woodfoxcoffee.com',
+  emailHref: 'mailto:hello@woodfoxcoffee.com',
+  ordersHref: 'mailto:orders@woodfoxcoffee.com',
+  emailConfirmed: true,
+  phone: '713-742-2709',
+  phoneHref: 'tel:+17137422709',
+  phoneE164: '+17137422709',
 
   city: 'Houston',
   region: 'Texas',
@@ -50,7 +56,9 @@ export const legal = [
  * Form delivery.
  *
  * With no endpoint set, contact and wholesale forms open the visitor's email
- * app with their message addressed to `site.email` (a working delivery
+ * app with their message addressed by category: general and collaboration
+ * messages to `site.email`, wholesale and order/shipping messages to
+ * `site.ordersEmail` (a working delivery
  * method that needs no third-party service). To receive submissions directly,
  * paste a form-service URL here (Formspree, Basin, etc.). See docs/FORMS.md.
  */

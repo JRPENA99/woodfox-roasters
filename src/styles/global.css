@@ -5,20 +5,20 @@
 
 :root {
   /* Palette */
-  --paper: #f5f4ef;
-  --paper-deep: #e8e6dc;
-  --paper-light: #fbfaf7;
-  --ink: #1c2219;
+  --paper: #f4f0e7;
+  --paper-deep: #e9e2d4;
+  --paper-light: #faf8f3;
+  --ink: #1b2419;
   --ink-soft: #3f463c;
   --muted: #5f675b;
   --coffee: #2c3e28;
   --coffee-2: #354a31;
   --moss: #4f6b47;
   --moss-pale: #dfe4d6;
-  --terracotta: #c84b31;
-  --cherry: #b4432b; /* rust, deepened for small text (5:1 on cream) */
-  --rust: #c84b31; /* brand rust, for large type and fills */
-  --rust-light: #e9a48f; /* rust on forest backgrounds */
+  --terracotta: #a9692f;
+  --cherry: #8c5627; /* copper, deep enough for small text (5.3:1 on ivory) */
+  --rust: #a9692f; /* copper for large type and rules */
+  --rust-light: #d4ae85; /* copper on forest backgrounds */
   --forest: #2c3e28;
   --line: rgb(28 34 25 / 0.14);
   --line-light: rgb(245 244 239 / 0.22);

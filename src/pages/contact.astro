@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import InquiryForm from '../components/InquiryForm.astro';
-import Photo from '../components/Photo.astro';
 import { site } from '../config/site';
 ---
 
@@ -12,8 +11,25 @@ import { site } from '../config/site';
         <p class="label muted">Contact</p>
         <h1 class="h1 title">We’d like to <em>hear from you.</em></h1>
         <p class="body-lg">
-          Questions about our coffee, wholesale, events or collaborations: we read every message and reply personally.
+          Choose the inbox that fits, call us, or use the form. We read every message and reply personally.
         </p>
+
+        <div class="channels">
+          <div class="channel">
+            <h2 class="label">General inquiries</h2>
+            <p class="muted">Questions about Woodfox, our coffee, events or collaborations.</p>
+            <a class="ch-link" href={site.emailHref}>{site.email}</a>
+          </div>
+          <div class="channel">
+            <h2 class="label">Orders, shipping &amp; wholesale</h2>
+            <p class="muted">Wholesale accounts, order support and shipping questions.</p>
+            <a class="ch-link" href={site.ordersHref}>{site.ordersEmail}</a>
+          </div>
+          <div class="channel">
+            <h2 class="label">Phone</h2>
+            <a class="ch-link" href={site.phoneHref}>{site.phone}</a>
+          </div>
+        </div>
 
         <dl class="details">
           <div>
@@ -24,14 +40,6 @@ import { site } from '../config/site';
             <dt class="label muted">Location</dt>
             <dd>{site.location}</dd>
           </div>
-          <div>
-            <dt class="label muted">Email</dt>
-            <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
-          </div>
-          <div>
-            <dt class="label muted">Wholesale</dt>
-            <dd><a href="/wholesale/">Wholesale inquiries</a></dd>
-          </div>
           {site.social.length > 0 && (
             <div>
               <dt class="label muted">Follow</dt>
@@ -39,8 +47,6 @@ import { site } from '../config/site';
             </div>
           )}
         </dl>
-
-        <Photo image="cherriesRipe" ratio="3 / 2" sizes="(min-width: 900px) 34vw, 100vw" class="side-photo" />
       </div>
 
       <div class="form-col">
@@ -80,6 +86,34 @@ import { site } from '../config/site';
   .title em {
     color: var(--cherry);
   }
+  .channels {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .channel {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .channel h2 {
+    color: var(--cherry);
+  }
+  .channel p {
+    font-size: 0.9375rem;
+  }
+  .ch-link {
+    font-family: var(--serif);
+    font-size: var(--step-1);
+    text-decoration: none;
+    justify-self: start;
+    overflow-wrap: anywhere;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  }
+  .ch-link:hover {
+    color: var(--cherry);
+  }
   .details {
     border-top: 1px solid var(--line);
   }
@@ -96,9 +130,6 @@ import { site } from '../config/site';
   .details a {
     overflow-wrap: anywhere;
   }
-  .side-photo {
-    margin-top: 1rem;
-  }
   .form-col {
     grid-column: 7 / span 6;
     padding: clamp(1.5rem, 1rem + 2vw, 3rem);
@@ -109,9 +140,6 @@ import { site } from '../config/site';
     .side,
     .form-col {
       grid-column: 1 / -1;
-    }
-    .side-photo {
-      display: none;
     }
   }
 </style>

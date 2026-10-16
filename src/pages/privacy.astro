@@ -63,7 +63,7 @@ import { site } from '../config/site';
   <h2>Your choices</h2>
   <p>
     You can ask us what information we hold about you, or ask us to correct or delete it, by emailing
-    <a href={`mailto:${site.email}`}>{site.email}</a>.
+    <a href={site.emailHref}>{site.email}</a>.
   </p>
 
   <h2>Children</h2>
@@ -75,7 +75,7 @@ import { site } from '../config/site';
   <h2>Contact</h2>
   <p>
     {site.legalName}, {site.location}.
-    Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+    Email: <a href={site.emailHref}>{site.email}</a> · Phone: <a href={site.phoneHref}>{site.phone}</a>
     {!site.emailConfirmed && <mark class="confirm">[owner to confirm address]</mark>}
   </p>
 </Legal>

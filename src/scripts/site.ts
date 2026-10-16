@@ -137,7 +137,9 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
 
     const endpoint = form.dataset.endpoint;
     if (!endpoint) {
-      const to = form.dataset.mailto;
+      // Route by category: the selected topic's address wins over the form default.
+      const topicInput = form.querySelector<HTMLInputElement>('input[name="topic"]:checked');
+      const to = topicInput?.dataset.mailto || form.dataset.mailto;
       if (!to) return say('This form is not available right now. Please try again later.', 'error');
       const labels: Record<string, string> = {
         topic: 'Topic', name: 'Name', email: 'Email', business: 'Business', phone: 'Phone',
@@ -148,7 +150,8 @@ document.querySelectorAll<HTMLFormElement>('form[data-form]').forEach((form) => 
         if (!(k in labels) || typeof v !== 'string' || !v.trim()) continue;
         // Plain text only; trimmed and length-capped by the inputs' maxlength.
         const clean = v.replace(/[\u0000-\u0008\u000B-\u001F]/g, '').trim();
-        lines.push(k === 'message' ? `\n${clean}` : `${labels[k]}: ${clean}`);
+        const shown = k === 'topic' ? topicInput?.nextElementSibling?.textContent?.trim() || clean : clean;
+        lines.push(k === 'message' ? `\n${shown}` : `${labels[k]}: ${shown}`);
       }
       const business = data.get('business');
       const subject = `${form.dataset.subject || 'Website inquiry'}${business ? ` – ${String(business).slice(0, 80)}` : ''}`;

@@ -3,7 +3,7 @@
  * NOT deployed. See docs/COMMERCE.md for setup.
  *
  * Secrets (set with `wrangler secret put`): STRIPE_SECRET_KEY
- * Vars: SITE_URL (e.g. https://woodfoxroasters.com)
+ * Vars: SITE_URL (e.g. https://woodfoxcoffee.com)
  *
  * Note: Stripe Checkout can't mix one-time and subscription items that bill on
  * different intervals in one session. This example uses subscription mode when

@@ -21,7 +21,7 @@ import { site } from '../config/site';
 
   <h2>Damaged, incorrect or missing items</h2>
   <p>
-    If your order arrives damaged, incorrect or incomplete, email <a href={`mailto:${site.email}`}>{site.email}</a>
+    If your order arrives damaged, incorrect or incomplete, email <a href={site.ordersHref}>{site.ordersEmail}</a>
     within <mark class="confirm">[owner to confirm, e.g. 14 days]</mark> of delivery with your order number and, where
     possible, a photo. We’ll send a replacement or issue a refund.
   </p>
@@ -55,5 +55,5 @@ import { site } from '../config/site';
   <p>Returns and credits for wholesale partners follow the terms agreed with each account.</p>
 
   <h2>Contact</h2>
-  <p>Questions about an order? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  <p>Questions about an order? Email <a href={site.ordersHref}>{site.ordersEmail}</a>.</p>
 </Legal>

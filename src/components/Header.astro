@@ -52,7 +52,8 @@ const right = nav.slice(3);
         ))}
       </ul>
     </nav>
-    <a href={`mailto:${site.email}`} class="btn mobile-cta">Email us</a>
+    <a href={site.phoneHref} class="mobile-phone">Call {site.phone}</a>
+    <a href={site.emailHref} class="btn mobile-cta">Email us</a>
   </div>
 </header>
 
@@ -216,7 +217,7 @@ const right = nav.slice(3);
     padding: 2rem var(--gutter) 2.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     overflow-y: auto;
   }
   .mobile-menu[hidden] {
@@ -241,8 +242,16 @@ const right = nav.slice(3);
     font-style: italic;
     color: var(--cherry);
   }
+  .mobile-phone {
+    display: block;
+    margin-top: auto;
+    padding-top: 2rem;
+    font-family: var(--serif);
+    font-size: var(--step-1);
+    text-decoration: none;
+  }
   .mobile-cta {
-    margin-top: 2rem;
+    margin-top: 1rem;
     width: 100%;
   }
 

@@ -82,7 +82,7 @@ const benefits = [
         <h2 class="h2" id="inquiry-title">Start the conversation.</h2>
         <p class="muted">
           Share a few details and we’ll follow up personally. Prefer email? Write to
-          <a href={`mailto:${site.email}?subject=Wholesale%20inquiry`}>{site.email}</a>.
+          <a href={site.ordersHref + "?subject=Wholesale%20inquiry"}>{site.ordersEmail}</a>.
         </p>
       </div>
       <div class="form-col">

@@ -3,8 +3,9 @@
  * Contact and wholesale form.
  *
  * Delivery: if a form-service URL is set in src/config/site.ts (forms.*), the
- * form posts there. Otherwise it opens the visitor's email app with the
- * message addressed to site.email. Both paths validate first.
+ * form posts there. Otherwise it opens the visitor's email app, addressed by
+ * category: wholesale and order/shipping messages to site.ordersEmail,
+ * everything else to site.email. Both paths validate first.
  */
 import { forms, site } from '../config/site';
 
@@ -17,8 +18,9 @@ const endpoint = variant === 'wholesale' ? forms.wholesale : forms.contact;
 const id = variant;
 
 const topics = [
-  { value: 'general', label: 'General' },
-  { value: 'wholesale', label: 'Wholesale' },
+  { value: 'general', label: 'General' } as { value: string; label: string; to?: string },
+  { value: 'orders', label: 'Orders & shipping', to: site.ordersEmail },
+  { value: 'wholesale', label: 'Wholesale', to: site.ordersEmail },
   { value: 'collaboration', label: 'Collaboration or event' },
 ];
 const businessTypes = [
@@ -44,7 +46,7 @@ const needs = [
   action={endpoint || undefined}
   data-form
   data-endpoint={endpoint}
-  data-mailto={site.email}
+  data-mailto={variant === 'wholesale' ? site.ordersEmail : site.email}
   data-subject={variant === 'wholesale' ? 'Wholesale inquiry' : 'Website inquiry'}
   novalidate
 >
@@ -56,7 +58,7 @@ const needs = [
       <div class="chips">
         {topics.map((t) => (
           <label class="chip">
-            <input type="radio" name="topic" value={t.value} checked={t.value === defaultTopic} />
+            <input type="radio" name="topic" value={t.value} checked={t.value === defaultTopic} data-mailto={t.to ?? site.email} />
             <span>{t.label}</span>
           </label>
         ))}
@@ -116,8 +118,15 @@ const needs = [
   </div>
   {!endpoint && (
     <p class="delivery muted">
-      Sending opens your email app with your message ready to go. Prefer to write directly? Email{' '}
-      <a href={`mailto:${site.email}`}>{site.email}</a>.
+      Sending opens your email app with your message ready to go.{' '}
+      {variant === 'wholesale' ? (
+        <>Prefer to write directly? Email <a href={site.ordersHref}>{site.ordersEmail}</a>.</>
+      ) : (
+        <>
+          Prefer to write directly? Email <a href={site.emailHref}>{site.email}</a>, or{' '}
+          <a href={site.ordersHref}>{site.ordersEmail}</a> for orders, shipping and wholesale.
+        </>
+      )}
     </p>
   )}
 

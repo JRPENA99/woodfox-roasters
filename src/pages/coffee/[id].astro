@@ -6,8 +6,7 @@
  * options and an add-to-cart button for sizes that are available and priced.
  */
 import Base from '../../layouts/Base.astro';
-import BagArt from '../../components/BagArt.astro';
-import Photo from '../../components/Photo.astro';
+import ProductImage from '../../components/ProductImage.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import { products, grinds, subscription, money, statusLabel, type Product } from '../../data/products';
 import { commerce } from '../../config/site';
@@ -33,18 +32,14 @@ const facts = [
 ---
 
 <Base
-  title={placeholder ? `${p.name} (placeholder)` : p.name}
-  description={placeholder ? 'Layout placeholder for an upcoming Woodfox coffee.' : p.description}
+  title={placeholder ? `${p.name} (in development)` : p.name}
+  description={placeholder ? `${p.name}: packaging concept for an upcoming Woodfox coffee, currently in development.` : p.description}
   noindex={placeholder}
 >
   <section class="section-sm pdp">
     <div class="wrap grid-12">
       <div class="gallery">
-        {p.image ? (
-          <Photo image={{ src: p.image, alt: p.imageAlt ?? `${p.name} coffee bag` }} ratio="4 / 5" eager sizes="(min-width: 900px) 46vw, 100vw" />
-        ) : (
-          <BagArt name={p.name} colors={p.colors} label={placeholder ? 'Placeholder' : p.roast} />
-        )}
+        <ProductImage product={p} variant="hero" eager sizes="(min-width: 900px) 46vw, 92vw" />
       </div>
 
       <div class="info">
@@ -55,8 +50,11 @@ const facts = [
 
         {placeholder && (
           <p class="notice">
-            <strong>Placeholder</strong>
-            <span>This page shows the layout for an upcoming coffee. It is not a product for sale.</span>
+            <strong>In development</strong>
+            <span>
+              This is a packaging concept, not a finished product. Text printed on the bag, such as tasting notes or
+              weight, is illustrative and not a confirmed specification. It isn’t available to buy yet.
+            </span>
           </p>
         )}
 

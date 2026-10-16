@@ -2,14 +2,15 @@
  * Coffee catalogue — the single source for the Our Coffee page, product
  * pages and (later) checkout.
  *
- * CURRENT ENTRIES ARE DEVELOPMENT PLACEHOLDERS. They exist to show the layout
- * and are labelled on the site so they can't be mistaken for real inventory.
- * Replace them with real coffees when the first roasts are ready:
+ * CURRENT ENTRIES ARE PACKAGING CONCEPTS IN DEVELOPMENT, not finished products.
+ * Names come from the concept bags; tasting notes, weights and other text
+ * printed on the mockups are NOT confirmed specifications, so they are not
+ * repeated here. When a coffee is final:
  *
  *  - set `status` to 'available' (or 'upcoming' / 'sold-out')
- *  - fill in origin, region, roast, notes, description and image
+ *  - fill in origin, region, species, process, roast, notes and description
  *  - give each size a `price` (in cents: 2000 = $20) and `available: true`
- *  - add Stripe/Square/Shopify IDs when checkout is connected (docs/COMMERCE.md)
+ *  - add payment-provider price IDs when checkout is connected (docs/COMMERCE.md)
  *
  * Sizes follow the business plan's packaging (12 oz, 2 lb, 5 lb); none is
  * marked available until confirmed.
@@ -40,9 +41,13 @@ export type Product = {
   notes: string[];
   description: string;
   sizes: Size[];
-  /** Path under /public, e.g. /media/images/coffees/ethiopia.jpg */
-  image?: string;
-  imageAlt?: string;
+  /**
+   * Packaging image. `base` is the path without size/extension; the site expects
+   * `<base>-560.webp`, `<base>-1120.webp` and `<base>.png` (transparent background).
+   */
+  image?: { base: string; alt: string; width: number; height: number };
+  /** Soft backdrop behind the bag. */
+  backdrop: string;
   subscribable: boolean;
   /** Placeholder bag colours while there's no photo: [background, ink]. */
   colors: [string, string];
@@ -54,47 +59,61 @@ const planSizes = (): Size[] => [
   { id: '5lb', label: '5 lb', available: false },
 ];
 
+const pkg = (slug: string, alt: string) => ({
+  base: `/media/images/products/${slug}`,
+  alt,
+  width: 1122,
+  height: 1402,
+});
+
+const conceptDescription =
+  'Packaging concept for an upcoming Woodfox coffee. The coffee itself is still being selected and profiled; origin, roast and tasting details will be published once they are final.';
+
+/** Order matters: the first product is featured on the homepage. */
 export const products: Product[] = [
   {
     id: 'coffee-01',
-    name: 'Coffee 01',
+    name: 'Single Origin',
     status: 'placeholder',
-    roast: 'Light',
+    roast: 'To be announced',
     notes: [],
-    description:
-      'Development placeholder. This space will describe a real Woodfox coffee: where it was grown, how it was processed, and how we roast it.',
+    description: conceptDescription,
     sizes: planSizes(),
+    image: pkg('single-origin', 'Woodfox Coffee Single Origin packaging concept: a forest-green bag with a copper fox and mountain landscape'),
+    backdrop: '#e6e0d1',
     subscribable: true,
-    colors: ['#f5f4ef', '#2c3e28'],
+    colors: ['#2c3e28', '#f4f0e7'],
   },
   {
     id: 'coffee-02',
-    name: 'Coffee 02',
+    name: 'House Blend No. 01',
     status: 'placeholder',
-    roast: 'Light-medium',
+    roast: 'To be announced',
     notes: [],
-    description:
-      'Development placeholder. This space will describe a real Woodfox coffee: where it was grown, how it was processed, and how we roast it.',
+    description: conceptDescription,
     sizes: planSizes(),
+    image: pkg('house-blend-01', 'Woodfox Coffee House Blend No. 01 packaging concept: a cream bag with an engraved forest and lake scene'),
+    backdrop: '#dfe3d6',
     subscribable: true,
-    colors: ['#2c3e28', '#f5f4ef'],
+    colors: ['#f4f0e7', '#2c3e28'],
   },
   {
     id: 'coffee-03',
-    name: 'Coffee 03',
+    name: 'Espresso Blend',
     status: 'placeholder',
-    roast: 'Medium',
+    roast: 'To be announced',
     notes: [],
-    description:
-      'Development placeholder. This space will describe a real Woodfox coffee: where it was grown, how it was processed, and how we roast it.',
+    description: conceptDescription,
     sizes: planSizes(),
+    image: pkg('espresso-blend', 'Woodfox Coffee Espresso Blend packaging concept: a black bag with a copper fox and snow-capped mountains'),
+    backdrop: '#ebe4d6',
     subscribable: true,
-    colors: ['#c84b31', '#f5f4ef'],
+    colors: ['#1b1b1b', '#f4f0e7'],
   },
 ];
 
 export const statusLabel: Record<Status, string> = {
-  placeholder: 'Development placeholder',
+  placeholder: 'In development',
   upcoming: 'Coming soon',
   available: 'Available',
   'sold-out': 'Sold out',

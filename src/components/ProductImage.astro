@@ -1,0 +1,89 @@
+---
+/**
+ * Packaging image on a soft backdrop. The bag is never cropped or stretched:
+ * it's contained within a fixed 4:5 frame with consistent padding, so every
+ * product sits at the same visual scale.
+ */
+import type { Product } from '../data/products';
+
+interface Props {
+  product: Product;
+  sizes?: string;
+  eager?: boolean;
+  /** 'card' for grids, 'hero' for large single presentations. */
+  variant?: 'card' | 'hero';
+  class?: string;
+}
+const { product: p, sizes = '(min-width: 900px) 30vw, 90vw', eager = false, variant = 'card', class: className } = Astro.props;
+const img = p.image;
+---
+
+<figure class:list={['pimg', `pimg--${variant}`, className]} style={`--backdrop:${p.backdrop}`}>
+  {img ? (
+    <picture>
+      <source
+        type="image/webp"
+        srcset={`${img.base}-560.webp 560w, ${img.base}-1120.webp ${img.width}w`}
+        sizes={sizes}
+      />
+      <img
+        src={`${img.base}.png`}
+        alt={img.alt}
+        width={img.width}
+        height={img.height}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding="async"
+      />
+    </picture>
+  ) : (
+    <div class="empty" aria-hidden="true"><span>{p.name}</span></div>
+  )}
+</figure>
+
+<style>
+  .pimg {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background: var(--backdrop);
+    overflow: hidden;
+  }
+  /* A soft floor shadow so the bag sits on the backdrop rather than floating. */
+  .pimg::after {
+    content: '';
+    position: absolute;
+    left: 22%;
+    right: 22%;
+    bottom: 7.5%;
+    height: 3.5%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(27 36 25 / 0.22), transparent);
+    pointer-events: none;
+  }
+  picture {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 78%;
+    height: 86%;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    transition: transform 0.8s var(--ease);
+  }
+  .pimg--hero picture {
+    width: 74%;
+    height: 84%;
+  }
+  .empty {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: var(--step-2);
+    color: var(--muted);
+  }
+</style>

@@ -1,51 +1,35 @@
-# Photos and video
+# Photos, packaging and video
 
-## Replacing a photo
+## Product packaging images
 
-Every photo is listed once in `src/data/images.ts`, e.g.
+Coffee bags live in `public/media/images/products/`, three files per product:
 
-```ts
-cherriesRipe: {
-  src: 'https://images.unsplash.com/photo-…',   // placeholder
-  alt: 'Ripe red coffee cherries among dark green leaves',
-  position: '50% 50%',
-  placeholder: true,
-},
+| File | Use |
+| --- | --- |
+| `<name>-560.webp` | cards, thumbnails, phones |
+| `<name>-1120.webp` | large displays and high-density screens |
+| `<name>.png` | fallback for browsers without WebP (original, transparent) |
+
+Current images are packaging concepts: House Blend No. 01, Single Origin and Espresso Blend.
+To add or replace one, export a transparent PNG at about 1122 × 1402 px, then create the WebP files:
+
+```bash
+ffmpeg -i bag.png -c:v libwebp -quality 88 -pix_fmt yuva420p name-1120.webp
+ffmpeg -i bag.png -vf scale=560:-2 -c:v libwebp -quality 88 -pix_fmt yuva420p name-560.webp
 ```
 
-To replace it:
+Then point the product's `image.base` in `src/data/products.ts` at `/media/images/products/name`.
+Every bag is shown on its `backdrop` colour at the same scale and is never cropped or stretched.
 
-1. Export your photo as JPEG or WebP, about **2400 px on the long edge**, quality around 80%.
-2. Put it in `public/media/images/`, e.g. `public/media/images/cherries-ripe.jpg`.
-3. Set `src: '/media/images/cherries-ripe.jpg'`, update `alt` to describe the new photo, and remove `placeholder: true`.
-4. If the crop cuts off the subject on phones, adjust `position` (e.g. `'30% 50%'` moves the focus left).
+## Photography
 
-Current placeholders are free-licence Unsplash images, loaded at a size that fits each screen. They are
-stand-ins only and should be replaced with Woodfox-owned photography before launch.
-
-### Photos that would help most
-
-- Ripe cherries on the plant (hero still, "How we choose", contact page)
-- A wide landscape of a growing region (homepage Origin section, Sourcing header)
-- Hands picking or sorting cherries
-- Green coffee, close up
-- Your roaster, and coffee in the cooling tray
-- Brewing, used sparingly
+Other photos are listed in `src/data/images.ts`. Most are Unsplash stand-ins used for context
+(farms, cherries, roasting). Replace them with Woodfox photography by putting the file in
+`public/media/images/` and changing its `src` and `alt`.
 
 ## Hero video
 
-The homepage hero currently streams `hero-harvest.mp4` from the live woodfoxroasters.com
-(a 4K file of about 73 MB). For production, add a web-sized copy to the project:
-
-1. Re-encode to 1920×1080 H.264, no audio, about 4–8 MB. With [ffmpeg](https://ffmpeg.org):
-
-   ```bash
-   ffmpeg -i hero-harvest.mp4 -vf "scale=1920:-2" -c:v libx264 -crf 26 -preset slow -an -movflags +faststart hero-harvest-1080.mp4
-   ```
-
-2. Save it as `public/media/video/hero-harvest-1080.mp4`.
-3. In `src/config/site.ts`, set `heroVideo.src` to `'/media/video/hero-harvest-1080.mp4'`.
-
-The video is only loaded on screens 768 px and wider, and never for visitors who have asked their
-device to reduce motion or save data. Everyone else sees the still photo (`heroPoster` in
-`images.ts`). A pause button is included for accessibility.
+The homepage film is Woodfox's own harvest footage, served from
+`public/media/video/hero-harvest-1080.mp4` (1080p, about 8 MB). It loads only on screens 768 px and
+wider, and never for visitors who prefer reduced motion or have data saver on; everyone else sees
+the still frame `public/media/images/hero-poster.jpg`.

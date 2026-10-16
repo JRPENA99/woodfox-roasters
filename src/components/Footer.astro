@@ -33,14 +33,31 @@ const year = new Date().getFullYear();
         </ul>
       </nav>
 
-      <div class="col">
+      <div class="col contact">
         <p class="label muted">Contact</p>
-        <ul role="list">
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li><a href="/wholesale/">Wholesale inquiries</a></li>
-          <li class="muted">{site.location}</li>
-          {site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
-        </ul>
+        <dl>
+          <div>
+            <dt>Phone</dt>
+            <dd><a href={site.phoneHref}>{site.phone}</a></dd>
+          </div>
+          <div>
+            <dt>General inquiries</dt>
+            <dd><a href={site.emailHref}>{site.email}</a></dd>
+          </div>
+          <div>
+            <dt>Orders, shipping &amp; wholesale</dt>
+            <dd><a href={site.ordersHref}>{site.ordersEmail}</a></dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>{site.location}</dd>
+          </div>
+        </dl>
+        {site.social.length > 0 && (
+          <ul role="list" class="social">
+            {site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}
+          </ul>
+        )}
       </div>
 
       <nav class="col" aria-label="Policies">
@@ -83,7 +100,7 @@ const year = new Date().getFullYear();
   }
   .cols {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.4fr 1.2fr;
+    grid-template-columns: 1.7fr 1fr 1.5fr 1.1fr;
     gap: 2.5rem;
     padding-block: 3rem;
   }
@@ -105,6 +122,19 @@ const year = new Date().getFullYear();
     display: grid;
     gap: 0.55rem;
     margin-top: 1rem;
+  }
+  .contact dl {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+  .contact dt {
+    font-size: 0.75rem;
+    color: rgb(245 244 239 / 0.6);
+    margin-bottom: 0.1rem;
+  }
+  .contact dd {
+    font-size: 0.9375rem;
   }
   .col a {
     text-decoration: none;

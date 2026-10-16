@@ -2,12 +2,12 @@
 import Base from '../layouts/Base.astro';
 import HomeHero from '../components/HomeHero.astro';
 import Photo from '../components/Photo.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { products } from '../data/products';
+import ProductImage from '../components/ProductImage.astro';
+import { products, statusLabel } from '../data/products';
 import { commerce } from '../config/site';
 
-const featured = products.slice(0, 3);
-const anyPlaceholder = featured.some((p) => p.status === 'placeholder');
+// The first product (Single Origin) leads; the rest are listed beside it.
+const [lead, ...rest] = products;
 
 const pillars = [
   {
@@ -53,27 +53,48 @@ const pillars = [
   </section>
 
   <!-- Featured coffee -->
-  <section class="section-sm surface-deep featured" aria-labelledby="featured-title">
+  <section class="section featured" aria-labelledby="featured-title">
     <div class="wrap">
-      <div class="head">
-        <div>
+      <div class="feature grid-12">
+        <a class="feature-media" href={`/coffee/${lead.id}/`} tabindex="-1" aria-hidden="true">
+          <ProductImage product={lead} variant="hero" sizes="(min-width: 900px) 48vw, 92vw" />
+        </a>
+        <div class="feature-text">
           <p class="kicker label"><span class="num">02</span> Our Coffee</p>
-          <h2 class="h2" id="featured-title">Featured coffee</h2>
+          <p class="label status">{statusLabel[lead.status]}</p>
+          <h2 class="display" id="featured-title"><a href={`/coffee/${lead.id}/`}>{lead.name}</a></h2>
+          <p class="body-lg">
+            The first Woodfox coffees are being selected and profiled now. These packaging concepts show where the
+            collection is heading; each coffee’s origin, roast and tasting notes will be published once they’re final.
+          </p>
+          <div class="feature-actions">
+            <a class="btn" href="/coffee/">Explore our coffee</a>
+            {!commerce.enabled && <span class="muted soon">Online ordering coming soon</span>}
+          </div>
+
+          <ul class="also" role="list" aria-label="Also in development">
+            {rest.map((p) => (
+              <li>
+                <a href={`/coffee/${p.id}/`}>
+                  <span class="thumb" style={`--backdrop:${p.backdrop}`}>
+                    {p.image && (
+                      <picture>
+                        <source type="image/webp" srcset={`${p.image.base}-560.webp`} />
+                        <img src={`${p.image.base}.png`} alt="" width={p.image.width} height={p.image.height} loading="lazy" decoding="async" />
+                      </picture>
+                    )}
+                  </span>
+                  <span class="also-text">
+                    <span class="also-name">{p.name}</span>
+                    <span class="label muted">{statusLabel[p.status]}</span>
+                  </span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-        <a class="link" href="/coffee/">View all coffee <span class="arrow" aria-hidden="true">→</span></a>
       </div>
-      {anyPlaceholder && (
-        <p class="notice">
-          <strong>In development</strong>
-          <span>Our first coffees are still being roasted and profiled. The cards below are layout placeholders, not products for sale.</span>
-        </p>
-      )}
-      <div class="grid">
-        {featured.map((p) => <ProductCard product={p} />)}
-      </div>
-      {!commerce.enabled && (
-        <p class="muted soon">Online ordering is coming soon. In the meantime, <a href="/contact/">get in touch</a> with any questions.</p>
-      )}
     </div>
   </section>
 
@@ -133,8 +154,7 @@ const pillars = [
         </div>
       </div>
       <div class="ws-photos">
-        <Photo image="dryingBeds" ratio="1 / 1" sizes="(min-width: 900px) 24vw, 50vw" class="ws-a" />
-        <Photo image="roaster" ratio="3 / 4" sizes="(min-width: 900px) 24vw, 50vw" class="ws-b" />
+        {rest.slice(0, 2).map((p, i) => <ProductImage product={p} sizes="(min-width: 900px) 22vw, 45vw" class={i === 0 ? 'ws-a' : 'ws-b'} />)}
       </div>
     </div>
   </section>
@@ -167,30 +187,91 @@ const pillars = [
     justify-items: start;
   }
 
-  .featured .head {
+  .feature {
+    align-items: center;
+    row-gap: 3rem;
+  }
+  .feature-media {
+    grid-column: 1 / span 6;
+    display: block;
+  }
+  .feature-media :global(img) {
+    transition: transform 0.9s var(--ease);
+  }
+  .feature-media:hover :global(img) {
+    transform: translateY(-8px);
+  }
+  .feature-text {
+    grid-column: 8 / span 5;
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+  .feature-text .kicker {
+    margin-bottom: 0.5rem;
+  }
+  .feature-text .status {
+    color: var(--cherry);
+  }
+  .feature-text h2 a {
+    text-decoration: none;
+  }
+  .feature-text h2 a:hover {
+    color: var(--rust);
+  }
+  .feature-actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: end;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .featured .head .kicker {
-    margin-bottom: 1rem;
-  }
-  .featured .notice {
-    margin-bottom: 2.5rem;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 3rem clamp(1rem, 2.5vw, 2rem);
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 0.5rem;
   }
   .soon {
-    margin-top: 2.5rem;
+    font-size: var(--step--1);
   }
-  .soon a {
-    color: var(--ink);
+  .also {
+    width: 100%;
+    margin-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .also a {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .thumb {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    background: var(--backdrop);
+  }
+  .thumb picture {
+    width: 80%;
+    height: 88%;
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .also-text {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .also-name {
+    font-family: var(--serif);
+    font-size: var(--step-1);
+  }
+  .also .arrow {
+    transition: transform 0.3s var(--ease);
+  }
+  .also a:hover .arrow {
+    transform: translateX(4px);
+    color: var(--cherry);
   }
 
   .pillars-head {
@@ -298,6 +379,8 @@ const pillars = [
   }
 
   @media (max-width: 900px) {
+    .feature-media,
+    .feature-text,
     .intro-statement,
     .intro-aside,
     .pillars-head h2,
@@ -305,8 +388,8 @@ const pillars = [
     .ws-photos {
       grid-column: 1 / -1;
     }
-    .grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .feature-media {
+      max-width: 560px;
     }
     .cols {
       grid-template-columns: 1fr;
@@ -326,9 +409,6 @@ const pillars = [
     }
   }
   @media (max-width: 600px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
     .cols li {
       grid-template-columns: 1fr;
     }
