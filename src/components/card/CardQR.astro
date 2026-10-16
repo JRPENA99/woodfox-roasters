@@ -12,7 +12,7 @@ const svg = await QRCode.toString(url, {
   type: 'svg',
   errorCorrectionLevel: 'M',
   margin: 4,
-  color: { dark: '#14100cff', light: '#f3eee6ff' },
+  color: { dark: '#111111ff', light: '#f2f1eeff' },
 });
 ---
 
@@ -22,11 +22,11 @@ const svg = await QRCode.toString(url, {
   .qr {
     width: var(--qr-size);
     aspect-ratio: 1;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
-    background: #f3eee6;
+    background: #f2f1ee;
     box-shadow:
-      0 0 0 1px rgb(220 178 138 / 0.35),
+      0 0 0 1px rgb(236 235 232 / 0.35),
       0 12px 30px rgb(0 0 0 / 0.45);
   }
   .qr :global(svg) {
