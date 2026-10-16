@@ -79,11 +79,11 @@ const ribbons = [
     </div>
 
     <h1 class="name">{name}</h1>
+    <p class="title">{card.title}</p>
     <p class="brand" aria-label={card.org}>
       <span class="wm-main" aria-hidden="true">Woodfox</span>
       <span class="wm-sub" aria-hidden="true">Coffee</span>
     </p>
-    <p class="title">{card.title}</p>
 
     <a class="save" href={vcfPath(card)} download={card.vcfName} type="text/vcard">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"></path><path d="M19 3v6M16 6h6"></path></svg>
@@ -336,7 +336,7 @@ const ribbons = [
   .brand {
     display: grid;
     justify-items: center;
-    margin-top: 16px;
+    margin-top: 18px;
     line-height: 1;
     color: var(--silver);
   }
