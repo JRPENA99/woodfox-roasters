@@ -18,7 +18,7 @@ export function getStaticPaths() {
 const { card } = Astro.props as { card: Card };
 const p = resolveProfile(card);
 const title = `${p.name} | ${p.subtitle}`;
-const description = `Connect with ${p.name} in ${p.city}, ${p.region}. ${p.tagline}`;
+const description = `Connect with the ${p.name} ${p.subtitle.toLowerCase()} in ${p.city}, ${p.region}.`;
 const url = new URL(eventCardPath(card), site.url).href;
 const ogImage = new URL('/media/images/og.jpg', site.url).href;
 ---
